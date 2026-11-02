@@ -1,0 +1,79 @@
+{
+  "name": "Motion Promo",
+  "description": "Snappy two-colour motion graphics: pills, circle wipes, whip pans, a runner and a map → app end card, with its own soundtrack",
+  "duration": 18.4,
+  "thumbnail": "preview.svg",
+  "fields": [
+    { "type": "group", "label": "Brand" },
+    { "key": "brand", "label": "Brand color", "type": "color" },
+    { "key": "background", "label": "Light background", "type": "color" },
+    { "key": "soft", "label": "Soft accent (rings, blobs)", "type": "color" },
+    { "key": "gray", "label": "Map & dots", "type": "color" },
+    { "key": "ink", "label": "Title text", "type": "color" },
+    { "key": "muted", "label": "Muted text", "type": "color" },
+    { "key": "font", "label": "Font", "type": "select", "options": ["Plus Jakarta Sans", "Poppins", "Manrope", "Inter", "Montserrat", "Sora", "Nunito"] },
+    { "key": "logo", "label": "App logo", "type": "image", "hint": "Empty uses the sample logo." },
+    { "key": "logoLetter", "label": "Letter tile (if the logo can’t load)", "type": "text" },
+    { "key": "screenshot", "label": "App screenshot", "type": "image", "hint": "Empty uses the sample screen." },
+
+    { "type": "group", "label": "1 · Hook" },
+    { "key": "s1Top", "label": "Small line", "type": "text" },
+    { "key": "s1Big", "label": "Big line", "type": "text" },
+
+    { "type": "group", "label": "2 · Open the app" },
+    { "key": "s2Top", "label": "Small line", "type": "text" },
+    { "key": "s2Big", "label": "App name line", "type": "text" },
+    { "key": "s3", "label": "Feature after the whip", "type": "text" },
+
+    { "type": "group", "label": "3 · Pills" },
+    { "key": "pillSmall", "label": "Small pill", "type": "text" },
+    { "key": "pillBig", "label": "Big pill", "type": "text" },
+
+    { "type": "group", "label": "4 · Circle" },
+    { "key": "whip", "label": "Whip word", "type": "text" },
+    { "key": "aiBig", "label": "Circle big text", "type": "text" },
+    { "key": "aiSmall", "label": "Circle small text", "type": "text" },
+    { "key": "everyWeek", "label": "Text after the wipe", "type": "text" },
+
+    { "type": "group", "label": "5 · Button" },
+    { "key": "logCap", "label": "Caption above", "type": "text" },
+    { "key": "typeFull", "label": "Typed text", "type": "text" },
+    { "key": "logged", "label": "Done text", "type": "text" },
+
+    { "type": "group", "label": "6 · Speed" },
+    { "key": "secTop", "label": "Small line", "type": "text" },
+    { "key": "secBig", "label": "Big word (an O becomes a clock)", "type": "text" },
+
+    { "type": "group", "label": "7 · Runner & map" },
+    { "key": "move", "label": "Outline word", "type": "text" },
+    { "key": "movePill", "label": "Pill", "type": "text" },
+    { "key": "steps", "label": "Steps pill", "type": "text" },
+    { "key": "coins", "label": "Coins collected", "type": "range", "min": 0, "max": 500, "step": 1 },
+
+    { "type": "group", "label": "8 · End card" },
+    { "key": "endTitle", "label": "App name", "type": "text" },
+    { "key": "endSub", "label": "Tagline", "type": "text" },
+    { "key": "endFoot", "label": "Footer", "type": "text" },
+    { "key": "rating", "label": "Store rating (stars)", "type": "range", "min": 0, "max": 5, "step": 0.1, "zeroLabel": "Off", "hint": "Only show a rating your app really has. Off shows App Store / Google Play pills." },
+
+    { "type": "group", "label": "Soundtrack" },
+    { "key": "sound", "label": "Built-in music & effects", "type": "boolean", "hint": "Exported with the MP4. Mix it with Video → Audio → Template soundtrack." },
+    { "key": "musicVolume", "label": "Music", "type": "range", "min": 0, "max": 2, "step": 0.05, "percent": true },
+    { "key": "sfxVolume", "label": "Sound effects", "type": "range", "min": 0, "max": 2, "step": 0.05, "percent": true },
+    { "key": "bpm", "label": "Tempo", "type": "range", "min": 90, "max": 150, "step": 1, "unit": " bpm" }
+  ],
+  "defaults": {
+    "brand": "#2FB350", "background": "#FFFFFF", "soft": "#C9F5D4", "gray": "#E5E5E5", "ink": "#1C1C1E", "muted": "#9A9C9B",
+    "font": "Plus Jakarta Sans", "logo": "", "logoLetter": "Y", "screenshot": "",
+    "s1Top": "still guessing", "s1Big": "calories?",
+    "s2Top": "open", "s2Big": "your app", "s3": "scan any food",
+    "pillSmall": "protein", "pillBig": "calories",
+    "whip": "smart", "aiBig": "AI", "aiSmall": "meal plans", "everyWeek": "every week",
+    "logCap": "log any meal", "typeFull": "oats & berries", "logged": "logged",
+    "secTop": "log it in", "secBig": "SECONDS",
+    "move": "MOVE", "movePill": "every step earns coins", "steps": "8,432 steps", "coins": 84,
+    "endTitle": "Your App", "endSub": "Your one-line tagline here", "endFoot": "free on iOS & Android",
+    "rating": 0,
+    "sound": true, "musicVolume": 0.9, "sfxVolume": 1.2, "bpm": 124
+  }
+}

@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Motion Promo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; background: #000; }
+  body { font-family: var(--font, "Plus Jakarta Sans"), Poppins, sans-serif; -webkit-font-smoothing: antialiased; cursor: none; }
+  /* 540x960 stage = 1080x1920 at 2x, scaled to fit the window */
+  #stage {
+    position: absolute; left: 50%; top: 50%; width: 540px; height: 960px;
+    transform-origin: center center; overflow: hidden; background: var(--white);
+  }
+  .scene { position: absolute; inset: 0; overflow: hidden; display: none; }
+  .bg-white { background: var(--white); }
+  .bg-brand { background: var(--brand); }
+  /* .c elements are positioned by their centre via JS */
+  .c { position: absolute; left: 0; top: 0; transform-origin: center center; will-change: transform, filter, opacity; white-space: nowrap; }
+  .lo { text-transform: lowercase; }
+
+  .dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, var(--gray) 2px, transparent 2.5px);
+    background-size: 26px 26px; opacity: .8;
+  }
+  .word { font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 12px;
+    border-radius: 999px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .pill.solid { background: var(--brand); color: var(--white); }
+  .pill.white { background: var(--white); color: var(--brand); }
+  .pill.outline { border: 3px solid currentColor; background: transparent; }
+  .pill svg { flex: none; }
+
+  .phone {
+    width: 210px; height: 440px; border-radius: 36px; padding: 8px; background: #0E0E10;
+    box-shadow: 0 30px 60px rgba(0,0,0,.28), inset 0 0 0 2px #2A2A2E;
+  }
+  .phone img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top; border-radius: 29px; background: var(--white); }
+  .phone::after {
+    content: ""; position: absolute; left: 50%; top: 17px; width: 64px; height: 18px; margin-left: -32px;
+    background: #000; border-radius: 10px;
+  }
+  .icon-card {
+    width: 92px; height: 92px; border-radius: 24px; background: var(--white); overflow: hidden;
+    display: grid; place-items: center; box-shadow: 0 16px 36px rgba(0,0,0,.2);
+  }
+  .icon-card img { width: 100%; height: 100%; object-fit: contain; }
+  .icon-card b { font-size: 52px; font-weight: 800; color: var(--white); }
+
+  .move-word {
+    font-family: Anton, var(--font, "Plus Jakarta Sans"), sans-serif; font-size: 250px; letter-spacing: .01em; line-height: 1;
+    color: transparent; -webkit-text-stroke: 3px rgba(255,255,255,.9);
+  }
+  .speed { position: absolute; left: 0; top: 0; height: 5px; border-radius: 3px; background: var(--white); }
+  .bg-pill { position: absolute; width: 150px; height: 56px; border-radius: 999px; border: 2px solid rgba(255,255,255,.22); }
+
+  .seconds { font-weight: 300; font-size: 52px; letter-spacing: .16em; color: var(--white); display: inline-flex; align-items: center; }
+  .clock {
+    position: relative; display: inline-block; width: 40px; height: 40px; margin: 0 .16em 0 0;
+    border: 4px solid var(--white); border-radius: 50%;
+  }
+  .clock i {
+    position: absolute; left: 50%; bottom: 50%; width: 4px; height: 14px; margin-left: -2px;
+    background: var(--white); border-radius: 2px; transform-origin: 50% 100%;
+  }
+  .clock::after { content: ""; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: var(--white); }
+
+  #map { position: absolute; left: 0; top: 0; width: 1200px; height: 1200px; transform-origin: 0 0; }
+  .block { position: absolute; width: 110px; height: 110px; border-radius: 22px; background: var(--gray); }
+  .coin {
+    position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%;
+    background: var(--white); border: 4px solid var(--brand); color: var(--brand);
+    display: grid; place-items: center; font-weight: 800; font-size: 16px; line-height: 1;
+  }
+  .ring-pulse { width: 168px; height: 168px; border-radius: 50%; border: 6px solid var(--brand); }
+  .store-pill { height: 54px; padding: 0 20px; font-size: 16px; }
+
+  #replay {
+    position: fixed; top: 16px; right: 16px; z-index: 20; border: none; border-radius: 99px;
+    padding: 10px 16px; background: rgba(255,255,255,.92); font: 700 13px var(--font, "Plus Jakarta Sans"), sans-serif;
+    box-shadow: 0 6px 20px rgba(0,0,0,.15); cursor: pointer; transition: opacity .3s;
+  }
+  #replay.off { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<button id="replay" type="button">↻ Replay</button>
+<div id="stage">
+
+  <!-- 1 · Floating foods (white) -->
+  <div class="scene bg-white" id="s1">
+    <div class="dots"></div>
+    <div id="foods"></div>
+    <div class="c word lo" id="s1Top" style="font-size:32px;color:var(--muted)"></div>
+    <div class="c word lo" id="s1Big" style="font-size:66px;color:var(--brand);text-shadow:0 0 18px #fff,0 0 18px #fff"></div>
+    <svg class="c" id="swoosh" width="270" height="40" viewBox="0 0 270 40"><path d="M8 28 C 80 8, 170 6, 262 22" fill="none" stroke="var(--brand)" stroke-width="9" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>
+  </div>
+
+  <!-- 2 + 3 · Open the app → scan any food (brand) -->
+  <div class="scene bg-brand" id="s2">
+    <svg class="c" id="rings" width="620" height="620" viewBox="0 0 620 620">
+      <circle id="ringA" cx="310" cy="310" r="270" fill="none" stroke="var(--soft)" stroke-opacity=".3" stroke-width="44" stroke-dasharray="520 330" />
+      <circle id="ringB" cx="310" cy="310" r="190" fill="none" stroke="var(--soft)" stroke-opacity=".22" stroke-width="30" stroke-dasharray="300 300" />
+    </svg>
+    <div class="c phone" id="phone"><img id="shot" alt=""></div>
+    <div class="c icon-card" id="iconCard"></div>
+    <div class="c word lo" id="s2Top" style="font-size:42px;color:var(--white)"></div>
+    <div class="c word lo" id="s2Big" style="font-size:54px;color:var(--white)"></div>
+    <div class="c word lo" id="s3Word" style="font-size:52px;color:var(--white)"></div>
+    <svg class="c" id="barcode" width="150" height="96" viewBox="0 0 150 96" fill="none" stroke="var(--white)" stroke-linecap="round">
+      <path d="M8 24V8h16M126 8h16v16M142 72v16h-16M24 88H8V72" stroke-width="6" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/>
+      <g stroke-width="5" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100">
+        <path d="M34 26v44" pathLength="100"/><path d="M48 26v44" pathLength="100"/><path d="M58 26v44" pathLength="100"/>
+        <path d="M74 26v44" pathLength="100"/><path d="M88 26v44" pathLength="100"/><path d="M98 26v44" pathLength="100"/><path d="M114 26v44" pathLength="100"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- 4 · Pills (white) -->
+  <div class="scene bg-white" id="s4">
+    <div class="c" id="blob" style="width:640px;height:440px;border-radius:50%;background:var(--soft)"></div>
+    <div class="c pill solid lo" id="pillSmall" style="height:88px;padding:0 34px 0 22px;font-size:38px"></div>
+    <div class="c pill outline lo" id="pillBig" style="height:120px;padding:0 42px 0 28px;font-size:56px;color:var(--brand);background:var(--white)"></div>
+  </div>
+
+  <!-- 5 · AI meal plans (brand → white) -->
+  <div class="scene bg-brand" id="s5">
+    <div class="c word lo" id="whipWord" style="font-size:130px;color:var(--white)"></div>
+    <svg class="c" id="arc" width="700" height="300" viewBox="0 0 700 300"><path d="M10 260 Q 350 -60 690 200" fill="none" stroke="var(--white)" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="34 100" stroke-dashoffset="34"/></svg>
+    <div class="c" id="aiCircle" style="width:330px;height:330px;border-radius:50%;background:var(--white);box-shadow:0 0 0 18px var(--soft)"></div>
+    <div class="c word" id="aiBig" style="font-size:118px;color:var(--brand)"></div>
+    <div class="c word lo" id="aiSmall" style="font-size:32px;color:var(--brand)"></div>
+    <div class="c word lo" id="everyWeek" style="font-size:36px;color:var(--muted)"></div>
+  </div>
+
+  <!-- 6 · Log a meal (brand) -->
+  <div class="scene bg-brand" id="s6">
+    <div id="bgPills"></div>
+    <div class="c word lo" id="logCap" style="font-size:30px;color:var(--white)"></div>
+    <div class="c pill white" id="logBtn" style="height:88px;min-width:340px;padding:0 30px 0 16px;font-size:30px">
+      <span id="logIcon" style="width:56px;height:56px;border-radius:50%;background:var(--brand);color:var(--white);display:grid;place-items:center;font-size:36px;font-weight:700;line-height:1">+</span>
+      <span id="logText" class="lo"></span>
+    </div>
+  </div>
+
+  <!-- 7 + 8 · Log it in seconds → MOVE (brand) -->
+  <div class="scene bg-brand" id="s7">
+    <div class="c move-word" id="moveWord"></div>
+    <div id="speedLines"></div>
+    <div class="c" id="secGroup" style="width:380px;height:380px">
+      <svg id="secRing" width="380" height="380" viewBox="0 0 380 380" style="position:absolute;left:0;top:0">
+        <circle cx="190" cy="190" r="176" fill="none" stroke="var(--white)" stroke-width="6" stroke-dasharray="820 286" stroke-linecap="round"/>
+      </svg>
+      <div class="word lo" id="secTop" style="position:absolute;left:0;right:0;top:132px;text-align:center;font-size:28px;color:var(--white)"></div>
+      <div id="secBig" style="position:absolute;left:0;right:0;top:176px;text-align:center"></div>
+    </div>
+    <svg class="c" id="runner" width="220" height="260" viewBox="0 0 200 240">
+      <ellipse cx="100" cy="234" rx="54" ry="6" fill="#000" opacity=".14"/>
+      <g id="body" transform="rotate(8 100 140)">
+        <g id="armB"><line x1="100" y1="98" x2="100" y2="128" stroke="var(--soft)" stroke-width="13" stroke-linecap="round"/><g id="foreB"><line x1="100" y1="128" x2="100" y2="152" stroke="var(--soft)" stroke-width="12" stroke-linecap="round"/></g></g>
+        <g id="legB"><line x1="100" y1="142" x2="100" y2="184" stroke="var(--soft)" stroke-width="16" stroke-linecap="round"/><g id="shinB"><line x1="100" y1="184" x2="100" y2="222" stroke="var(--soft)" stroke-width="14" stroke-linecap="round"/><rect x="94" y="218" width="30" height="13" rx="6" fill="var(--soft)"/></g></g>
+        <line x1="100" y1="100" x2="100" y2="142" stroke="var(--white)" stroke-width="36" stroke-linecap="round"/>
+        <path d="M86 118h28" stroke="var(--soft)" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="108" cy="66" r="21" fill="var(--white)"/>
+        <path d="M88 60 q20 -14 41 -2" stroke="var(--soft)" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <g id="legF"><line x1="100" y1="142" x2="100" y2="184" stroke="var(--white)" stroke-width="16" stroke-linecap="round"/><g id="shinF"><line x1="100" y1="184" x2="100" y2="222" stroke="var(--white)" stroke-width="14" stroke-linecap="round"/><rect x="94" y="218" width="30" height="13" rx="6" fill="var(--white)"/></g></g>
+        <g id="armF"><line x1="100" y1="98" x2="100" y2="128" stroke="var(--white)" stroke-width="13" stroke-linecap="round"/><g id="foreF"><line x1="100" y1="128" x2="100" y2="152" stroke="var(--white)" stroke-width="12" stroke-linecap="round"/></g></g>
+      </g>
+    </svg>
+    <div class="c pill white lo" id="movePill" style="height:58px;padding:0 24px;font-size:22px"></div>
+  </div>
+
+  <!-- 9 · Walking route map (white) -->
+  <div class="scene bg-white" id="s9">
+    <div id="map"></div>
+    <div class="c" id="walker" style="width:58px;height:58px;border-radius:50%;background:var(--brand);border:5px solid var(--white);box-shadow:0 8px 20px rgba(0,0,0,.18);display:grid;place-items:center">
+      <svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 3l7 16-7-4-7 4z" fill="var(--white)"/></svg>
+    </div>
+    <div class="c pill solid lo" id="stepsPill" style="height:56px;padding:0 22px;font-size:20px"></div>
+    <div class="c pill outline lo" id="coinsPill" style="height:56px;padding:0 22px;font-size:20px;color:var(--brand);background:var(--white)"></div>
+  </div>
+
+  <!-- 10 · End card (white) -->
+  <div class="scene bg-white" id="s10">
+    <div class="c ring-pulse" id="pulseA"></div>
+    <div class="c ring-pulse" id="pulseB"></div>
+    <div class="c icon-card" id="endIcon" style="width:150px;height:150px;border-radius:38px;box-shadow:0 18px 40px rgba(36,138,61,.25),0 0 0 1px rgba(0,0,0,.04)"></div>
+    <div class="c" id="endText" style="text-align:left">
+      <div class="word" id="endTitle" style="font-size:32px;color:var(--ink)"></div>
+      <div id="endSub" style="margin-top:8px;font-size:17px;font-weight:600;color:var(--muted);white-space:normal;width:236px;line-height:1.35"></div>
+    </div>
+    <div class="c" id="stars" style="display:flex;gap:6px"></div>
+    <div class="c" id="stores" style="display:flex;gap:10px"></div>
+    <div class="c" id="endFoot" style="font-size:16px;font-weight:700;color:var(--muted)"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — all text, colours and image paths
+   ============================================================ */
+// Studio fields arrive in window.__PROJECT__ (see meta.json); defaults keep the file playable on its own
+const D = Object.assign({
+  font: "Plus Jakarta Sans",
+  brand: "#2FB350", background: "#FFFFFF", soft: "#C9F5D4", gray: "#E5E5E5", ink: "#1C1C1E", muted: "#9A9C9B",
+  screenshot: "", logo: "", logoLetter: "Y",
+  s1Top: "still guessing", s1Big: "calories?",
+  s2Top: "open", s2Big: "your app", s3: "scan any food",
+  pillSmall: "protein", pillBig: "calories",
+  whip: "smart", aiBig: "AI", aiSmall: "meal plans", everyWeek: "every week",
+  logCap: "log any meal", typeFull: "oats & berries", logged: "logged",
+  secTop: "log it in", secBig: "SECONDS",
+  move: "MOVE", movePill: "every step earns coins", steps: "8,432 steps", coins: 84,
+  endTitle: "Your App", endSub: "Your one-line tagline here", endFoot: "free on iOS & Android",
+  rating: 0,
+  sound: true, musicVolume: 0.9, sfxVolume: 1.2, bpm: 124,
+}, window.__PROJECT__ || {});
+
+const FONT_Q = {
+  "Plus Jakarta Sans": "Plus+Jakarta+Sans:wght@300;500;700;800", Poppins: "Poppins:wght@300;500;700;800",
+  Manrope: "Manrope:wght@300;500;700;800", Inter: "Inter:wght@300;500;700;800", Montserrat: "Montserrat:wght@300;500;700;800",
+  Sora: "Sora:wght@300;500;700;800", Nunito: "Nunito:wght@300;500;700;800",
+};
+(() => {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = `https://fonts.googleapis.com/css2?family=${FONT_Q[D.font] || FONT_Q["Plus Jakarta Sans"]}&family=Anton&display=block`;
+  document.head.appendChild(link);
+  document.documentElement.style.setProperty("--font", `"${FONT_Q[D.font] ? D.font : "Plus Jakarta Sans"}"`);
+})();
+
+/** Neutral phone screen shown until the user uploads their own screenshot. */
+function placeholderShot() {
+  const b = D.brand || "#2FB350";
+  const card = (y, h) => `<rect x="24" y="${y}" width="408" height="${h}" rx="26" fill="#fff"/>`;
+  const bar = (x, y, w, c = "#D9DCE3", h = 14) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h / 2}" fill="${c}"/>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 456 1024"><rect width="456" height="1024" fill="#F4F6F8"/>
+    ${bar(24, 90, 140)}${bar(24, 120, 230, "#1C1C1E", 30)}
+    ${card(190, 250)}<circle cx="228" cy="300" r="56" fill="${b}" opacity=".18"/>
+    <path d="M228 270v60M198 300h60" stroke="${b}" stroke-width="10" stroke-linecap="round"/>
+    <text x="228" y="400" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="700" fill="#1C1C1E">Upload your app screenshot</text>
+    ${[0, 1, 2].map((k) => card(470 + k * 112, 92) + `<circle cx="78" cy="${516 + k * 112}" r="22" fill="${b}" opacity="${1 - k * 0.25}"/>` + bar(116, 500 + k * 112, 190, "#1C1C1E") + bar(116, 526 + k * 112, 120)).join("")}
+    <rect x="24" y="900" width="408" height="80" rx="30" fill="#fff"/>
+    ${[0, 1, 2, 3, 4].map((k) => `<circle cx="${70 + k * 79}" cy="940" r="12" fill="${k === 0 ? b : "#D9DCE3"}"/>`).join("")}</svg>`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
+
+const CONFIG = {
+  appName: D.endTitle,
+  logoLetter: D.logoLetter || "Y",
+  LOGO: D.logo || "",                                // empty = app initial on the brand color
+  APP_SCREENSHOT: D.screenshot || placeholderShot(), // empty = neutral placeholder screen
+  colors: { brand: D.brand, white: D.background, soft: D.soft, gray: D.gray, ink: D.ink, muted: D.muted },
+  text: {
+    s1Top: D.s1Top, s1Big: D.s1Big, s2Top: D.s2Top, s2Big: D.s2Big, s3: D.s3,
+    pillSmall: D.pillSmall, pillBig: D.pillBig,
+    whip: D.whip, aiBig: D.aiBig, aiSmall: D.aiSmall, everyWeek: D.everyWeek,
+    logCap: D.logCap, typeFull: D.typeFull || " ", typePause: Math.min(3, String(D.typeFull || " ").length), logged: D.logged,
+    secTop: D.secTop, secBig: D.secBig,
+    move: D.move, movePill: D.movePill, steps: D.steps, coins: Number(D.coins) || 0,
+    endTitle: D.endTitle, endSub: D.endSub, endFoot: D.endFoot,
+  },
+  rating: Number(D.rating) > 0 ? Math.min(5, Number(D.rating)) : null, // stars instead of store pills
+  sound: D.sound !== false,
+  speed: 1,
+};
+// In the studio (preview iframe or export page) the editor drives time and audio; the soundtrack is exported separately
+const EMBED = !!window.__PROJECT__ || window.parent !== window;
+
+const DUR = 18.4;
+const C = CONFIG.colors, T = CONFIG.text;
+const root = document.documentElement.style;
+Object.entries(C).forEach(([k, v]) => root.setProperty("--" + k, v));
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = {
+  out: (p) => 1 - Math.pow(1 - p, 3),
+  inOut: (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2),
+  back: (p) => { const c1 = 2.2, c3 = c1 + 1; return p >= 1 ? 1 : 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); },
+  spring: (p) => (p <= 0 ? 0 : p >= 1 ? 1 : 1 - Math.exp(-6.5 * p) * Math.cos(13 * p)),
+};
+// Decaying wobble that settles at 0
+const wobble = (t, t0, amp, freq = 9, damp = 4) => (t < t0 ? amp : amp * Math.exp(-damp * (t - t0)) * Math.cos(freq * (t - t0)));
+// Motion blur from horizontal speed: sample the same motion one frame earlier
+const mblur = (fx, t, k = 0.18, max = 16) => Math.min(max, Math.abs(fx(t) - fx(t - 1 / 60)) * k);
+
+// Place element centre at (x, y)
+function put(el, x, y, s = 1, r = 0, o = 1, blur = 0, extra = "") {
+  el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) ${extra} scale(${s}) rotate(${r}deg)`;
+  el.style.opacity = o;
+  el.style.filter = blur > 0.4 ? `blur(${blur.toFixed(1)}px)` : "none";
+}
+function show(id, on) { $(id).style.display = on ? "block" : "none"; }
+function wipe(el, p, cx = 270, cy = 470) {
+  el.style.clipPath = p >= 1 ? "none" : `circle(${(p * 1150).toFixed(1)}px at ${cx}px ${cy}px)`;
+}
+function setText(el, s) { if (el.textContent !== s) el.textContent = s; }
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const CX = 262;   // visual centre of the Instagram safe area (x 36–464)
+const CY = 450;
+
+function fit() {
+  const s = Math.min(innerWidth / 540, innerHeight / 960);
+  $("stage").style.transform = `translate(-50%, -50%) scale(${s})`;
+}
+addEventListener("resize", fit); fit();
+
+/* ============================================================
+   Illustrations (inline SVG, flat with soft 3D shading)
+   ============================================================ */
+const FOODS = {
+  apple: `<svg viewBox="0 0 100 100"><defs><radialGradient id="fa" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#8BEAA2"/><stop offset="1" stop-color="#1F9A42"/></radialGradient></defs>
+    <path d="M50 32c-9-8-32-6-34 17-2 21 14 40 27 40 4 0 4-2 7-2s3 2 7 2c13 0 29-19 27-40-2-23-25-25-34-17z" fill="url(#fa)"/>
+    <path d="M50 32c0-8 3-14 8-19" stroke="#16692D" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M55 22c7-9 17-8 21-4-6 7-15 9-21 4z" fill="#B8F5C8"/><ellipse cx="35" cy="47" rx="6" ry="11" fill="#fff" opacity=".4"/></svg>`,
+  avocado: `<svg viewBox="0 0 100 100"><defs><linearGradient id="fv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4CC46A"/><stop offset="1" stop-color="#17763A"/></linearGradient></defs>
+    <path d="M50 8c-14 0-18 18-24 32-6 14-8 26-2 36 6 10 16 16 26 16s20-6 26-16c6-10 4-22-2-36C68 26 64 8 50 8z" fill="url(#fv)"/>
+    <path d="M50 18c-9 0-12 14-17 25-5 11-6 20-1 28 4 7 11 11 18 11s14-4 18-11c5-8 4-17-1-28-5-11-8-25-17-25z" fill="#DDF8E4"/>
+    <circle cx="50" cy="62" r="13" fill="#2FB350"/><circle cx="46" cy="57" r="4" fill="#fff" opacity=".5"/></svg>`,
+  broccoli: `<svg viewBox="0 0 100 100"><defs><radialGradient id="fb" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#7DE397"/><stop offset="1" stop-color="#1E8C3E"/></radialGradient></defs>
+    <path d="M42 56h16l6 34H36z" fill="#BDF0CB"/><path d="M47 60l-2 28" stroke="#9ADDB0" stroke-width="3"/>
+    <circle cx="32" cy="46" r="17" fill="url(#fb)"/><circle cx="68" cy="46" r="17" fill="url(#fb)"/><circle cx="50" cy="32" r="21" fill="url(#fb)"/>
+    <circle cx="43" cy="25" r="5" fill="#fff" opacity=".35"/></svg>`,
+  egg: `<svg viewBox="0 0 100 100"><defs><radialGradient id="fe" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C9EBD3"/></radialGradient></defs>
+    <path d="M50 8C32 8 18 40 18 60c0 18 14 32 32 32s32-14 32-32C82 40 68 8 50 8z" fill="url(#fe)" stroke="#BFE6CB" stroke-width="2"/>
+    <ellipse cx="38" cy="38" rx="6" ry="12" fill="#fff"/></svg>`,
+  bowl: `<svg viewBox="0 0 100 100"><defs><linearGradient id="fw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#CDEFD7"/></linearGradient></defs>
+    <circle cx="34" cy="44" r="13" fill="#4CC46A"/><circle cx="52" cy="38" r="15" fill="#2FB350"/><circle cx="68" cy="45" r="12" fill="#7FE29A"/>
+    <path d="M10 50h80c0 22-18 38-40 38S10 72 10 50z" fill="url(#fw)" stroke="#BFE6CB" stroke-width="2"/>
+    <path d="M10 50h80" stroke="#2FB350" stroke-width="5" stroke-linecap="round"/></svg>`,
+  bottle: `<svg viewBox="0 0 100 100"><defs><linearGradient id="fo" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#E6FAEC"/><stop offset=".5" stop-color="#FFFFFF"/><stop offset="1" stop-color="#C8EED4"/></linearGradient></defs>
+    <rect x="40" y="6" width="20" height="12" rx="4" fill="#2FB350"/>
+    <path d="M38 18h24l6 12v56a8 8 0 01-8 8H40a8 8 0 01-8-8V30z" fill="url(#fo)" stroke="#BFE6CB" stroke-width="2"/>
+    <rect x="32" y="46" width="36" height="22" fill="#2FB350"/><path d="M42 57c4-6 12-6 16 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`,
+  pear: `<svg viewBox="0 0 100 100"><defs><radialGradient id="fp" cx=".38" cy=".35" r=".8"><stop offset="0" stop-color="#C6F3A8"/><stop offset="1" stop-color="#3FAE4A"/></radialGradient></defs>
+    <path d="M50 14c-10 0-12 14-14 22-2 8-16 14-16 32 0 14 13 24 30 24s30-10 30-24c0-18-14-24-16-32-2-8-4-22-14-22z" fill="url(#fp)"/>
+    <path d="M50 14c0-5 2-8 5-10" stroke="#16692D" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="38" cy="60" rx="6" ry="11" fill="#fff" opacity=".35"/></svg>`,
+};
+const FOOD_KEYS = Object.keys(FOODS);
+$("foods").innerHTML = FOOD_KEYS.map((k) => `<div class="c" style="width:86px;height:86px;filter:drop-shadow(0 10px 14px rgba(36,138,61,.22))">${FOODS[k]}</div>`).join("");
+const foodEls = [...$("foods").children];
+
+const ICONS = {
+  egg: `<svg width="40" height="40" viewBox="0 0 24 24"><path d="M12 3C8 3 5 10 5 14a7 7 0 0014 0c0-4-3-11-7-11z" fill="currentColor"/></svg>`,
+  flame: `<svg width="60" height="60" viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 01-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4-1-6 1-9z" fill="currentColor"/></svg>`,
+  check: `<svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="26" fill="var(--white)"/><path d="M17 29l7 7 15-16" stroke="var(--brand)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  apple: `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 12.64c-.03-2.98 2.43-4.41 2.54-4.48-1.39-2.03-3.55-2.31-4.31-2.34-1.84-.19-3.58 1.08-4.51 1.08-.95 0-2.4-1.06-3.95-1.03-2.03.03-3.9 1.18-4.94 3-2.12 3.67-.54 9.1 1.52 12.08 1.01 1.46 2.21 3.09 3.79 3.03 1.52-.06 2.09-.98 3.93-.98 1.82 0 2.35.98 3.95.95 1.64-.03 2.67-1.48 3.66-2.95 1.16-1.68 1.63-3.31 1.66-3.39-.04-.02-3.17-1.22-3.2-4.84zM14.3 4.3c.83-1.01 1.39-2.41 1.24-3.8-1.2.05-2.65.8-3.51 1.8-.77.89-1.44 2.32-1.26 3.68 1.33.1 2.69-.68 3.53-1.68z"/></svg>`,
+  play: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 2.5v19c0 .8.9 1.3 1.6.9l16-9.5c.7-.4.7-1.4 0-1.8l-16-9.5C4.9 1.2 4 1.7 4 2.5z"/></svg>`,
+  pin: `<svg width="56" height="70" viewBox="0 0 56 70"><path d="M28 2C14 2 4 12 4 26c0 18 24 40 24 40s24-22 24-40C52 12 42 2 28 2z" fill="var(--brand)"/><circle cx="28" cy="26" r="10" fill="var(--white)"/></svg>`,
+};
+
+/* ============================================================
+   Static content
+   ============================================================ */
+setText($("s1Top"), T.s1Top);
+setText($("s1Big"), T.s1Big);
+setText($("s2Top"), T.s2Top);
+setText($("s2Big"), T.s2Big);
+setText($("s3Word"), T.s3);
+$("shot").src = CONFIG.APP_SCREENSHOT;
+$("pillSmall").innerHTML = `${ICONS.egg}<span>${esc(T.pillSmall)}</span>`;
+$("pillBig").innerHTML = `${ICONS.flame}<span>${esc(T.pillBig)}</span>`;
+setText($("whipWord"), T.whip);
+setText($("aiBig"), T.aiBig);
+setText($("aiSmall"), T.aiSmall);
+setText($("everyWeek"), T.everyWeek);
+setText($("logCap"), T.logCap);
+setText($("secTop"), T.secTop);
+// The "O" in SECONDS becomes a clock
+$("secBig").innerHTML = `<span class="seconds">${T.secBig.split("").map((ch) =>
+  ch.toUpperCase() === "O" ? `<span class="clock" id="clock" style="opacity:0"><i id="hand"></i></span>` : esc(ch)).join("")}</span>`;
+// Words without an "O" still need the clock element the animation drives
+if (!$("clock")) $("secBig").insertAdjacentHTML("beforeend", `<span class="clock" id="clock" style="opacity:0;display:none"><i id="hand"></i></span>`);
+setText($("moveWord"), T.move);
+setText($("movePill"), T.movePill);
+setText($("stepsPill"), T.steps);
+setText($("endTitle"), T.endTitle);
+setText($("endSub"), T.endSub);
+setText($("endFoot"), T.endFoot);
+
+function logoInto(el, letterSize) {
+  const letter = () => { el.style.background = "var(--brand)"; el.innerHTML = `<b style="font-size:${letterSize}px">${CONFIG.logoLetter}</b>`; };
+  if (!CONFIG.LOGO) return letter();
+  const img = new Image();
+  img.alt = "";
+  img.onerror = letter;
+  img.src = CONFIG.LOGO;
+  el.appendChild(img);
+}
+logoInto($("iconCard"), 52);
+logoInto($("endIcon"), 72);
+
+// Background pills drifting in rows (scene 6)
+const BG_ROWS = 7, BG_COLS = 5;
+$("bgPills").innerHTML = Array.from({ length: BG_ROWS * BG_COLS }, () => `<div class="bg-pill"></div>`).join("");
+const bgPills = [...$("bgPills").children];
+
+// Speed lines (scene 8)
+const SPEED = [[260, 160], [330, 90], [400, 220], [560, 120], [610, 200], [680, 140], [300, 70], [520, 180]];
+$("speedLines").innerHTML = SPEED.map(([y, w]) => `<div class="speed" style="width:${w}px"></div>`).join("");
+const speedEls = [...$("speedLines").children];
+
+// Map (scene 9): grey rounded blocks, streets between them
+const PITCH = 144, BLOCK = 110, ST = PITCH - BLOCK / 2 - 17; // street centre offset inside a pitch
+let mapHTML = "";
+for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) mapHTML += `<div class="block" style="left:${c * PITCH}px;top:${r * PITCH}px"></div>`;
+const street = (i) => i * PITCH + BLOCK + (PITCH - BLOCK) / 2;
+const ROUTE = [[street(3), street(5)], [street(3), street(2)], [street(5), street(2)], [street(5), street(0)]];
+const SEG = ROUTE.slice(1).map((p, i) => Math.hypot(p[0] - ROUTE[i][0], p[1] - ROUTE[i][1]));
+const ROUTE_LEN = SEG.reduce((a, b) => a + b, 0);
+const COIN_AT = [0.18, 0.4, 0.62, 0.84].map((f) => f * ROUTE_LEN);
+function along(d) {
+  for (let i = 0; i < SEG.length; i++) {
+    if (d <= SEG[i] || i === SEG.length - 1) {
+      const f = clamp(d / SEG[i]);
+      const [a, b] = [ROUTE[i], ROUTE[i + 1]];
+      return { x: lerp(a[0], b[0], f), y: lerp(a[1], b[1], f), ang: Math.atan2(b[1] - a[1], b[0] - a[0]) };
+    }
+    d -= SEG[i];
+  }
+}
+// Route trace + coins + pin
+const routePath = "M" + ROUTE.map((p) => p.join(" ")).join(" L");
+mapHTML += `<svg width="1200" height="1200" style="position:absolute;left:0;top:0"><path id="routeLine" d="${routePath}" fill="none" stroke="var(--brand)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 16" opacity=".35"/></svg>`;
+mapHTML += COIN_AT.map((d) => { const p = along(d); return `<div class="coin" style="left:${p.x}px;top:${p.y}px">+</div>`; }).join("");
+const end = ROUTE[ROUTE.length - 1];
+mapHTML += `<div id="pin" style="position:absolute;left:${end[0] - 28}px;top:${end[1] - 66}px;transform-origin:50% 100%">${ICONS.pin}</div>`;
+$("map").innerHTML = mapHTML;
+const coinEls = [...$("map").querySelectorAll(".coin")];
+
+// End card: stars or store pills
+if (typeof CONFIG.rating === "number") {
+  $("stars").innerHTML = Array.from({ length: 5 }, (_, i) =>
+    `<svg width="34" height="34" viewBox="0 0 24 24"><defs><linearGradient id="sg${i}"><stop offset="0" stop-color="var(--brand)"/><stop offset="0" stop-color="var(--gray)" id="sgs${i}"/></linearGradient></defs><path d="M12 2l3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z" fill="url(#sg${i})"/></svg>`).join("");
+} else {
+  $("stores").innerHTML = `<div class="pill solid store-pill">${ICONS.apple}App Store</div><div class="pill outline store-pill" style="color:var(--brand)">${ICONS.play}Google Play</div>`;
+}
+
+/* ============================================================
+   Soundtrack — synthesized music + sound effects timed to the
+   animation. Rendered once (deterministically) into an audio
+   buffer so playback is sample-locked to the picture and the
+   same audio can be exported for the MP4.
+   ============================================================ */
+const ROUTE_T0 = 12.65, ROUTE_T1 = 14.8;
+const routeDist = (t) => ROUTE_LEN * ease.inOut(prog(t, ROUTE_T0, ROUTE_T1));
+// When the walker reaches each coin on the map
+const COIN_TIMES = COIN_AT.map((d) => {
+  let lo = ROUTE_T0, hi = ROUTE_T1;
+  for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2; if (routeDist(m) < d) lo = m; else hi = m; }
+  return hi;
+});
+// When each typed character appears in the log button
+const TYPE_TIMES = (() => {
+  const full = T.typeFull.length, k = T.typePause, out = [];
+  for (let i = 1; i <= k; i++) out.push(6.95 + (i / k) * 0.25);
+  for (let j = k + 1; j <= full; j++) out.push(7.3 + ((j - k) / (full - k)) * 0.3);
+  return out;
+})();
+
+const SR = 44100;
+const BPM = Math.min(160, Math.max(80, Number(D.bpm) || 124)), BEAT = 60 / BPM, BAR = BEAT * 4;
+// C – G – Am – F, one bar each (bright, upbeat)
+const CHORDS = [[60, 64, 67], [55, 59, 62], [57, 60, 64], [53, 57, 60]];
+const BASS = [36, 31, 33, 29];
+const midi = (n) => 440 * Math.pow(2, (n - 69) / 12);
+
+async function buildSoundtrack() {
+  const ctx = new OfflineAudioContext(2, Math.ceil(SR * DUR), SR);
+
+  // Seeded noise so every render is identical
+  let seed = 7;
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647) * 2 - 1;
+  const noise = ctx.createBuffer(1, SR * 2, SR);
+  noise.getChannelData(0).forEach((_, i, d) => { d[i] = rnd(); });
+
+  // Glue compressor → makeup gain → brick-wall limiter (loud like a Reel, never clips)
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -20; comp.ratio.value = 5; comp.attack.value = 0.004; comp.release.value = 0.18;
+  const master = ctx.createGain();
+  master.gain.setValueAtTime(0.0001, 0);
+  master.gain.exponentialRampToValueAtTime(1.9, 0.08);
+  master.gain.setValueAtTime(1.9, DUR - 0.5);
+  master.gain.linearRampToValueAtTime(0.0001, DUR); // clean loop point
+  const limit = ctx.createDynamicsCompressor();
+  limit.threshold.value = -3; limit.knee.value = 0; limit.ratio.value = 20; limit.attack.value = 0.001; limit.release.value = 0.08;
+  comp.connect(master).connect(limit).connect(ctx.destination);
+  const music = ctx.createGain(); music.gain.value = Math.max(0, Number(D.musicVolume) || 0); music.connect(comp);
+  const sfx = ctx.createGain(); sfx.gain.value = Math.max(0, Number(D.sfxVolume) || 0); sfx.connect(comp);
+
+  // ---------- building blocks ----------
+  const env = (g, t, peak, a, d) => {
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + a);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + a + d);
+  };
+  function tone(t, freq, { type = "sine", peak = 0.3, a = 0.005, d = 0.2, to = null, bus = sfx, pan = 0 } = {}) {
+    const o = ctx.createOscillator(), g = ctx.createGain(), p = ctx.createStereoPanner();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + a + d);
+    env(g, t, peak, a, d); p.pan.value = pan;
+    o.connect(g).connect(p).connect(bus); o.start(t); o.stop(t + a + d + 0.05);
+  }
+  function hiss(t, dur, { type = "bandpass", f0 = 400, f1 = 3000, q = 1, peak = 0.3, a = 0.06, bus = sfx, pan = 0 } = {}) {
+    const s = ctx.createBufferSource(); s.buffer = noise; s.loop = true;
+    const f = ctx.createBiquadFilter(); f.type = type; f.Q.value = q;
+    f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    const g = ctx.createGain(), p = ctx.createStereoPanner(); p.pan.value = pan;
+    env(g, t, peak, a, Math.max(0.02, dur - a));
+    s.connect(f).connect(g).connect(p).connect(bus); s.start(t, (t * 0.37) % 1.5); s.stop(t + dur + 0.05);
+  }
+
+  // ---------- music ----------
+  const kick = (t, peak = 0.9) => tone(t, 150, { peak, d: 0.22, to: 42, bus: music });
+  const hat = (t, peak = 0.12) => hiss(t, 0.05, { type: "highpass", f0: 8000, f1: 9000, peak, a: 0.002, bus: music, pan: 0.15 });
+  const clap = (t) => { hiss(t, 0.16, { f0: 1800, f1: 1200, q: 0.8, peak: 0.32, a: 0.003, bus: music }); hiss(t + 0.012, 0.12, { f0: 1500, f1: 1100, q: 0.8, peak: 0.2, a: 0.003, bus: music }); };
+  const pluck = (t, n, peak = 0.07) => {
+    tone(t, midi(n), { type: "triangle", peak, d: 0.22, bus: music, pan: -0.2 });
+    tone(t, midi(n + 12), { type: "sine", peak: peak * 0.4, d: 0.12, bus: music, pan: 0.2 });
+  };
+  const bass = (t, n, len) => {
+    const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = "sawtooth"; o.frequency.value = midi(n);
+    f.type = "lowpass"; f.frequency.setValueAtTime(900, t); f.frequency.exponentialRampToValueAtTime(220, t + len);
+    env(g, t, 0.22, 0.008, len);
+    o.connect(f).connect(g).connect(music); o.start(t); o.stop(t + len + 0.05);
+  };
+  const pad = (t, notes, len, peak = 0.05) => notes.forEach((n, i) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "triangle"; o.frequency.value = midi(n + 12); o.detune.value = (i - 1) * 7;
+    g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + 0.4); g.gain.linearRampToValueAtTime(0.0001, t + len);
+    o.connect(g).connect(music); o.start(t); o.stop(t + len + 0.05);
+  });
+
+  const DROP = 1.3, PEAK0 = 10.2, PEAK1 = 12.2, OUTRO = 15.0;
+  for (let b = 0; b * BEAT < OUTRO; b++) {
+    const t = b * BEAT, bar = Math.floor(b / 4), beat = b % 4, ch = CHORDS[bar % 4];
+    // Intro: just hats + plucks; full groove from the first wipe
+    if (t >= DROP) {
+      kick(t);
+      if (beat === 1 || beat === 3) clap(t);
+      bass(t + BEAT / 2, BASS[bar % 4] + (beat === 3 ? 12 : 0), BEAT * 0.45);
+    }
+    hat(t + BEAT / 2, t >= DROP ? 0.14 : 0.08);
+    if (t >= PEAK0 && t < PEAK1) { hat(t + BEAT / 4, 0.07); hat(t + (3 * BEAT) / 4, 0.07); } // more drive on MOVE
+    pluck(t + BEAT / 2, ch[beat % 3], t >= DROP ? 0.07 : 0.05);
+    if (beat === 0) pad(t, ch, BAR, t >= DROP ? 0.035 : 0.05);
+  }
+  // Outro: big chord on the logo, then a held pad to the end card
+  pad(OUTRO, [60, 64, 67, 72], DUR - OUTRO, 0.07);
+  [60, 64, 67, 72, 76].forEach((n, i) => tone(15.15 + i * 0.05, midi(n + 12), { type: "triangle", peak: 0.09, d: 1.6, bus: music }));
+  kick(15.15, 1);
+
+  // ---------- sound effects, synced to the picture ----------
+  const whoosh = (t, big = false) => hiss(t, big ? 0.5 : 0.32, { f0: 300, f1: big ? 4500 : 3200, q: 1.1, peak: big ? 0.38 : 0.26, a: big ? 0.16 : 0.08 });
+  const boom = (t) => tone(t, 90, { peak: 0.5, d: 0.35, to: 40 });
+  const pop = (t, f = 420, peak = 0.22) => tone(t, f, { peak, d: 0.1, to: f * 2.6 });
+  const tick = (t, f = 2400, peak = 0.06) => tone(t, f, { type: "square", peak, d: 0.018 });
+  const chime = (t, notes, peak = 0.12, d = 0.35) => notes.forEach((n, i) => tone(t + i * 0.07, midi(n), { type: "triangle", peak, d }));
+
+  // 1 · foods bubble in, underline swish
+  foodEls.forEach((_, i) => pop(0.12 + i * 0.05, 520 + i * 60, 0.1));
+  pop(0.2, 380, 0.16); pop(0.32, 460, 0.18);
+  hiss(0.5, 0.35, { f0: 1500, f1: 5000, q: 2, peak: 0.12 });
+  // 2 · wipe to green, text pops, icon card slides out
+  whoosh(1.28, true); boom(1.32);
+  pop(1.45); pop(1.58, 500);
+  hiss(1.95, 0.25, { f0: 900, f1: 2600, q: 1.5, peak: 0.12 }); pop(2.25, 600, 0.16);
+  // 3 · whip pan, scanner beep
+  whoosh(2.58); hiss(2.66, 0.25, { f0: 2500, f1: 600, q: 1.2, peak: 0.2 });
+  tone(2.95, 1320, { type: "square", peak: 0.07, d: 0.07 }); tone(3.05, 1760, { type: "square", peak: 0.07, d: 0.1 });
+  // 4 · wipe to white, pill pops, big pill slams in
+  whoosh(3.28, true);
+  pop(3.5, 360); hiss(3.95, 0.22, { f0: 3000, f1: 700, q: 1.2, peak: 0.2 }); pop(4.2, 300, 0.26); boom(4.22);
+  tone(4.35, 520, { type: "sine", peak: 0.08, d: 0.3, to: 380 }); // wobble
+  // 5 · heavy whip, circle pops, circle floods the screen
+  whoosh(5.18, true); hiss(5.25, 0.5, { f0: 500, f1: 6000, q: 0.8, peak: 0.22 });
+  pop(5.58, 340, 0.26); hiss(6.0, 0.3, { type: "lowpass", f0: 400, f1: 4000, peak: 0.18 });
+  chime(6.2, [76, 79], 0.07, 0.3);
+  // 6 · wipe, typing, press, logged
+  whoosh(6.48, true);
+  pop(6.72, 440, 0.14);
+  TYPE_TIMES.forEach((t, i) => tick(t, 2000 + (i % 3) * 300, 0.07));
+  tone(7.78, 180, { type: "square", peak: 0.12, d: 0.04 }); tick(7.79, 1200, 0.12);
+  chime(7.88, [72, 76, 79], 0.12, 0.4);
+  // 7 · whip, ring spins in, clock ticks
+  whoosh(8.48);
+  pop(8.64, 300, 0.2); hiss(8.62, 0.4, { f0: 600, f1: 2400, q: 3, peak: 0.08 });
+  for (let t = 9.2; t < 10.15; t += 0.125) tick(t, 3200, 0.05);
+  // 8 · runner: footsteps, shove impact, wind from the speed lines
+  for (let t = 10.22; t < 12.0; t += 0.155) tone(t, 140, { peak: 0.22, d: 0.08, to: 55, pan: 0.1 });
+  whoosh(10.36); boom(10.42); tone(10.42, 220, { type: "triangle", peak: 0.12, d: 0.12, to: 110 });
+  hiss(10.3, 1.8, { type: "bandpass", f0: 700, f1: 1100, q: 0.7, peak: 0.08, a: 0.3 });
+  pop(10.82, 460, 0.16);
+  // 9 · shrink zip, wipe, coins, arrival
+  tone(12.0, 1400, { type: "sine", peak: 0.12, d: 0.25, to: 300 });
+  whoosh(12.18, true);
+  pop(12.62, 380, 0.14); pop(12.82, 520, 0.14);
+  COIN_TIMES.forEach((t, i) => chime(t, [83 + i, 88 + i], 0.11, 0.22));
+  chime(14.8, [79, 84], 0.12, 0.4);
+  // Riser into the end card
+  hiss(14.2, 0.8, { type: "bandpass", f0: 300, f1: 6000, q: 2, peak: 0.16, a: 0.7 });
+  // 10 · logo pop, text whoosh, stores pop
+  pop(15.15, 300, 0.3);
+  whoosh(15.98); pop(16.52, 480, 0.16);
+
+  return ctx.startRendering();
+}
+
+/* ---------- live playback, locked to the audio clock ---------- */
+let actx = null, trackBuf = null, trackSrc = null, audioT0 = 0;
+const trackReady = buildSoundtrack().then((b) => { trackBuf = b; return b; });
+
+let mixEl = null, mixPlaying = false;
+if (CONFIG.AUDIO_MIX) {
+  mixEl = new Audio(CONFIG.AUDIO_MIX);
+  mixEl.loop = true;
+  mixEl.preload = "auto";
+  mixEl.addEventListener("error", () => { mixEl = null; mixPlaying = false; });
+}
+
+function startTrack(at) {
+  if (!actx || !trackBuf || !CONFIG.sound) return;
+  stopTrack();
+  if (mixEl) {
+    mixEl.currentTime = at % DUR;
+    mixEl.play().then(() => { mixPlaying = true; }).catch(() => {});
+    return;
+  }
+  trackSrc = actx.createBufferSource();
+  trackSrc.buffer = trackBuf;
+  trackSrc.loop = true;
+  trackSrc.connect(actx.destination);
+  trackSrc.start(0, at % DUR);
+  audioT0 = actx.currentTime - (at % DUR);
+}
+function stopTrack() {
+  if (mixEl) { mixEl.pause(); mixPlaying = false; }
+  if (trackSrc) { try { trackSrc.stop(); } catch (_) {} trackSrc.disconnect(); trackSrc = null; }
+}
+// Browsers only allow sound after a click/keypress: the first one starts the track in sync
+function unlock() {
+  if (EMBED) return;
+  if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (actx.state === "suspended") actx.resume();
+  trackReady.then(() => { if (!paused && !trackSrc && !mixPlaying) startTrack(prevT); });
+}
+addEventListener("pointerdown", unlock);
+addEventListener("keydown", unlock);
+
+// 16-bit WAV of the soundtrack (used by the MP4 exporter)
+function wavBase64(buf) {
+  const ch = buf.numberOfChannels, len = buf.length, bytes = 44 + len * ch * 2;
+  const dv = new DataView(new ArrayBuffer(bytes));
+  const str = (o, s) => [...s].forEach((c, i) => dv.setUint8(o + i, c.charCodeAt(0)));
+  str(0, "RIFF"); dv.setUint32(4, bytes - 8, true); str(8, "WAVEfmt ");
+  dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, ch, true);
+  dv.setUint32(24, buf.sampleRate, true); dv.setUint32(28, buf.sampleRate * ch * 2, true);
+  dv.setUint16(32, ch * 2, true); dv.setUint16(34, 16, true); str(36, "data"); dv.setUint32(40, len * ch * 2, true);
+  const data = [...Array(ch)].map((_, c) => buf.getChannelData(c));
+  for (let i = 0, o = 44; i < len; i++) for (let c = 0; c < ch; c++, o += 2) dv.setInt16(o, Math.max(-1, Math.min(1, data[c][i])) * 0x7fff, true);
+  let bin = "";
+  const u8 = new Uint8Array(dv.buffer);
+  for (let i = 0; i < u8.length; i += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+/* ============================================================
+   Render
+   ============================================================ */
+function render(t) {
+  // ---------- 1 · floating foods ----------
+  const on1 = t < 1.7;
+  show("s1", on1);
+  if (on1) {
+    const zoom = 1 + 0.28 * prog(t, 0, 1.5);
+    foodEls.forEach((el, i) => {
+      const a = (i / foodEls.length) * Math.PI * 2 - Math.PI / 2 + t * 0.35;
+      const pin = ease.back(prog(t, i * 0.05, 0.35 + i * 0.05));
+      const x = CX + Math.cos(a) * 150 * zoom;
+      const y = CY - 10 + Math.sin(a) * 236 * zoom + Math.sin(t * 2 + i) * 6;
+      put(el, x, y, pin * zoom * (0.9 + 0.1 * Math.sin(t * 1.5 + i)), Math.sin(t * 1.2 + i * 2) * 10, Math.min(1, pin * 1.5));
+    });
+    const pt = ease.back(prog(t, 0.08, 0.4)), pb = ease.back(prog(t, 0.2, 0.55));
+    put($("s1Top"), CX, CY - 44, lerp(0.6, 1, pt), 0, prog(t, 0.08, 0.2), (1 - pt) * 8);
+    put($("s1Big"), CX, CY + 18, lerp(0.5, 1, pb), 0, prog(t, 0.2, 0.32), (1 - pb) * 10);
+    put($("swoosh"), CX + 4, CY + 72);
+    $("swoosh").firstElementChild.style.strokeDashoffset = 100 - 100 * ease.out(prog(t, 0.5, 0.95));
+  }
+
+  // ---------- 2 + 3 · open the app → scan any food ----------
+  const on2 = t >= 1.3 && t < 3.7;
+  show("s2", on2);
+  if (on2) {
+    wipe($("s2"), ease.inOut(prog(t, 1.3, 1.62)), CX, CY);
+    put($("rings"), CX, 520, 1, t * 32);
+    $("ringB").style.transform = `rotate(${-t * 80}deg)`;
+    $("ringB").style.transformOrigin = "310px 310px";
+
+    // Everything from scene 2 whips off to the left at 2.6s
+    const whipX = (tt) => -640 * ease.inOut(prog(tt, 2.6, 2.86));
+    const wx = whipX(t), wb = mblur(whipX, t);
+
+    const ph = ease.spring(prog(t, 1.45, 2.15));
+    const phoneX = (tt) => lerp(300, 0, ease.spring(prog(tt, 1.45, 2.15))) + whipX(tt);
+    $("phone").style.transform = `translate(${CX + phoneX(t)}px, 520px) translate(-50%, -50%) perspective(900px) scale(.94) rotateY(${lerp(-75, -20, ph)}deg) rotateX(8deg) rotateZ(${lerp(6, -3, ph)}deg)`;
+    $("phone").style.filter = mblur(phoneX, t) > 0.4 ? `blur(${mblur(phoneX, t).toFixed(1)}px)` : "none";
+    $("phone").style.opacity = prog(t, 1.45, 1.6);
+
+    const ic = ease.back(prog(t, 1.95, 2.35));
+    put($("iconCard"), lerp(CX, CX + 124, ic) + wx, lerp(520, 636, ic), lerp(0.3, 1, ic), lerp(0, 9, ic), prog(t, 1.95, 2.05), wb);
+
+    const pTop = ease.back(prog(t, 1.45, 1.75)), pBig = ease.back(prog(t, 1.58, 1.9));
+    put($("s2Top"), CX + wx, 168, lerp(0.4, 1, pTop), 0, prog(t, 1.45, 1.55), Math.max(wb, (1 - pTop) * 12));
+    put($("s2Big"), CX + wx, 222, lerp(0.4, 1, pBig), 0, prog(t, 1.58, 1.68), Math.max(wb, (1 - pBig) * 14));
+
+    // 3 · "scan any food" slides in from the right
+    const s3x = (tt) => lerp(720, CX, ease.back(prog(tt, 2.66, 3.0)));
+    put($("s3Word"), s3x(t), CY - 30, 1, 0, t >= 2.66 ? 1 : 0, mblur(s3x, t, 0.22));
+    put($("barcode"), CX, CY + 60, ease.back(prog(t, 2.8, 3.05)), 0, t >= 2.8 ? 1 : 0);
+    const draw = 100 - 100 * ease.out(prog(t, 2.82, 3.2));
+    $("barcode").querySelectorAll("path").forEach((p) => { p.style.strokeDashoffset = draw; });
+  }
+
+  // ---------- 4 · pills ----------
+  const on4 = t >= 3.3 && t < 5.65;
+  show("s4", on4);
+  if (on4) {
+    wipe($("s4"), ease.inOut(prog(t, 3.3, 3.62)), CX, CY);
+    const bx = (tt) => lerp(-460, 820, ease.inOut(prog(tt, 3.3, 4.4)));
+    put($("blob"), bx(t), CY, 1, -12, 1, mblur(bx, t, 0.12, 10));
+
+    const ps = ease.back(prog(t, 3.5, 3.82));
+    const push = ease.spring(prog(t, 3.95, 4.5));
+    put($("pillSmall"), CX, lerp(CY, CY + 100, push), lerp(0.3, 1, ps) * lerp(1, 0.82, push), wobble(t, 4.1, -12) * (t < 4.1 ? 1 : 1), prog(t, 3.5, 3.6));
+    const pbx = (tt) => lerp(700, CX, ease.back(prog(tt, 3.95, 4.35)));
+    put($("pillBig"), pbx(t), CY - 44, 1, wobble(t, 4.35, 9, 10, 4.5), t >= 3.95 ? 1 : 0, mblur(pbx, t, 0.2));
+  }
+
+  // ---------- 5 · AI meal plans ----------
+  const on5 = t >= 5.2 && t < 6.85;
+  show("s5", on5);
+  if (on5) {
+    const sx = (tt) => lerp(540, 0, ease.out(prog(tt, 5.2, 5.4)));
+    $("s5").style.transform = `translateX(${sx(t)}px)`;
+    $("s5").style.filter = mblur(sx, t, 0.08, 8) > 0.4 ? `blur(${mblur(sx, t, 0.08, 8).toFixed(1)}px)` : "none";
+
+    const wwx = (tt) => lerp(760, -360, ease.inOut(prog(tt, 5.22, 5.75)));
+    put($("whipWord"), wwx(t), CY, 1, 0, t < 5.78 ? 1 : 0, Math.max(6, mblur(wwx, t, 0.3, 22)));
+    put($("arc"), CX, CY - 40);
+    $("arc").firstElementChild.style.strokeDashoffset = lerp(34, -100, ease.inOut(prog(t, 5.25, 5.75)));
+
+    const pc = ease.back(prog(t, 5.55, 5.9));
+    const fill = ease.inOut(prog(t, 6.02, 6.3));
+    put($("aiCircle"), CX, CY, lerp(0, 1, pc) * lerp(1, 4.2, fill), 0, t >= 5.55 ? 1 : 0);
+    const inner = 1 - prog(t, 6.0, 6.12);
+    put($("aiBig"), CX, CY - 22, ease.back(prog(t, 5.65, 5.95)), 0, inner);
+    put($("aiSmall"), CX, CY + 54, ease.back(prog(t, 5.75, 6.0)), 0, inner);
+    const pe = ease.out(prog(t, 6.18, 6.38));
+    put($("everyWeek"), CX, CY, lerp(0.9, 1, pe), 0, pe);
+  } else {
+    $("s5").style.transform = ""; $("s5").style.filter = "none";
+  }
+
+  // ---------- 6 · log a meal ----------
+  const on6 = t >= 6.5 && t < 8.8;
+  show("s6", on6);
+  if (on6) {
+    wipe($("s6"), ease.inOut(prog(t, 6.5, 6.8)), CX, CY);
+    const outX = (tt) => -560 * ease.inOut(prog(tt, 8.5, 8.74));
+    $("s6").style.transform = `translateX(${outX(t)}px)`;
+    $("s6").style.filter = mblur(outX, t, 0.08, 8) > 0.4 ? `blur(${mblur(outX, t, 0.08, 8).toFixed(1)}px)` : "none";
+
+    bgPills.forEach((el, i) => {
+      const r = Math.floor(i / BG_COLS), c = i % BG_COLS, dir = r % 2 ? 1 : -1;
+      const x = ((c * 190 + dir * t * 50 + r * 70) % 950 + 950) % 950 - 200;
+      el.style.transform = `translate(${x}px, ${110 + r * 120}px)`;
+    });
+
+    put($("logCap"), CX, CY - 96, ease.back(prog(t, 6.75, 7.05)), 0, prog(t, 6.75, 6.85));
+    const pb = ease.back(prog(t, 6.7, 7.05));
+    const press = t > 7.75 ? 1 - 0.1 * Math.sin(Math.PI * prog(t, 7.75, 7.97)) : 1;
+    put($("logBtn"), CX, CY, lerp(0.4, 1, pb) * press, 0, prog(t, 6.7, 6.8));
+
+    const done = t >= 7.86;
+    const btn = $("logBtn");
+    btn.style.background = done ? "transparent" : "var(--white)";
+    btn.style.border = done ? "4px solid var(--white)" : "4px solid transparent";
+    btn.style.color = done ? "var(--white)" : "var(--brand)";
+    if (done) {
+      if ($("logIcon").dataset.state !== "done") {
+        $("logIcon").dataset.state = "done";
+        $("logIcon").style.background = "transparent";
+        $("logIcon").innerHTML = ICONS.check;
+      }
+      setText($("logText"), T.logged);
+    } else {
+      if ($("logIcon").dataset.state !== "plus") {
+        $("logIcon").dataset.state = "plus";
+        $("logIcon").style.background = "var(--brand)";
+        $("logIcon").textContent = "+";
+      }
+      // types "oat", pauses, then finishes the word
+      const full = T.typeFull, k = T.typePause;
+      const n = t < 7.25 ? Math.floor(k * prog(t, 6.95, 7.2)) : k + Math.floor((full.length - k) * prog(t, 7.3, 7.6));
+      setText($("logText"), full.slice(0, Math.min(full.length, n)) + (t < 7.65 && Math.floor(t * 6) % 2 ? "|" : ""));
+    }
+  } else {
+    $("s6").style.transform = ""; $("s6").style.filter = "none";
+  }
+
+  // ---------- 7 + 8 · log it in seconds → MOVE ----------
+  const on7 = t >= 8.5 && t < 12.6;
+  show("s7", on7);
+  if (on7) {
+    const inX = (tt) => lerp(560, 0, ease.inOut(prog(tt, 8.5, 8.74)));
+    $("s7").style.transform = `translateX(${inX(t)}px)`;
+    $("s7").style.filter = mblur(inX, t, 0.08, 8) > 0.4 ? `blur(${mblur(inX, t, 0.08, 8).toFixed(1)}px)` : "none";
+
+    // Seconds ring gets shoved off by the runner at ~10.4s
+    const shove = (tt) => 720 * ease.inOut(prog(tt, 10.38, 10.75));
+    const pr = ease.back(prog(t, 8.62, 9.05));
+    put($("secGroup"), CX + shove(t), CY, lerp(0.2, 1, pr), 0, prog(t, 8.62, 8.72), mblur(shove, t, 0.2));
+    $("secRing").style.transform = `rotate(${t * 260}deg)`;
+    const sTop = ease.back(prog(t, 8.85, 9.1)), sBig = ease.back(prog(t, 8.95, 9.25));
+    $("secTop").style.opacity = sTop; $("secTop").style.transform = `scale(${lerp(0.5, 1, sTop)})`;
+    $("secBig").style.opacity = sBig; $("secBig").style.transform = `scale(${lerp(0.5, 1, sBig)})`;
+    $("clock").style.opacity = prog(t, 9.2, 9.35);
+    $("hand").style.transform = `rotate(${t * 900}deg)`;
+
+    const pm = ease.out(prog(t, 10.3, 10.6));
+    put($("moveWord"), CX, CY - 10, lerp(1.35, 1, pm), 0, pm * (1 - prog(t, 12.15, 12.35)));
+
+    speedEls.forEach((el, i) => {
+      const [y, w] = SPEED[i];
+      const x = 620 - (((t - 10.2) * (1500 + i * 120) + i * 170) % 1100);
+      el.style.transform = `translate(${x}px, ${y}px)`;
+      el.style.opacity = t > 10.25 && t < 12.2 ? 0.75 : 0;
+    });
+
+    // Runner sprints in from the left, then shrinks into the map badge
+    const rx = (tt) => lerp(-320, CX - 14, ease.back(prog(tt, 10.2, 10.62)));
+    const shrink = ease.inOut(prog(t, 12.0, 12.25));
+    const bounce = -Math.abs(Math.sin(t * 13)) * 12 * (1 - shrink);
+    put($("runner"), lerp(rx(t), CX, shrink), lerp(CY + 20, CY, shrink) + bounce, lerp(1.3, 0.2, shrink), 0, t >= 10.2 ? 1 - prog(t, 12.18, 12.28) : 0, mblur(rx, t, 0.16));
+    const ph = t * 13;
+    const rot = (id, a, cx, cy) => $(id).setAttribute("transform", `rotate(${a.toFixed(1)} ${cx} ${cy})`);
+    rot("legF", 38 * Math.sin(ph), 100, 142); rot("shinF", 10 + 50 * Math.max(0, -Math.cos(ph)), 100, 184);
+    rot("legB", 38 * Math.sin(ph + Math.PI), 100, 142); rot("shinB", 10 + 50 * Math.max(0, Math.cos(ph)), 100, 184);
+    rot("armF", -45 * Math.sin(ph), 100, 98); rot("foreF", -75, 100, 128);
+    rot("armB", -45 * Math.sin(ph + Math.PI), 100, 98); rot("foreB", -75, 100, 128);
+
+    const pp = ease.back(prog(t, 10.8, 11.15));
+    put($("movePill"), CX, 690, lerp(0.3, 1, pp), 0, prog(t, 10.8, 10.9) * (1 - prog(t, 12.0, 12.15)));
+  } else {
+    $("s7").style.transform = ""; $("s7").style.filter = "none";
+  }
+
+  // ---------- 9 · walking route ----------
+  const on9 = t >= 12.2 && t < 15.4;
+  show("s9", on9);
+  if (on9) {
+    wipe($("s9"), ease.inOut(prog(t, 12.2, 12.5)), CX, CY);
+    const d = routeDist(t);
+    const pos = along(d);
+    const zoom = lerp(2.6, 1, ease.inOut(prog(t, 12.3, 12.95))) * lerp(1, 0.82, ease.inOut(prog(t, 14.8, 15.4)));
+    $("map").style.transform = `translate(${CX - pos.x * zoom}px, ${CY - pos.y * zoom}px) scale(${zoom})`;
+    const badge = ease.back(prog(t, 12.22, 12.5));
+    put($("walker"), CX, CY, lerp(1.8, 1, badge) * (t > 14.8 ? 1 + 0.08 * Math.sin((t - 14.8) * 12) * Math.exp(-(t - 14.8) * 4) : 1), (pos.ang * 180) / Math.PI + 90);
+    let got = 0;
+    coinEls.forEach((el, i) => {
+      const taken = d >= COIN_AT[i];
+      if (taken) got++;
+      const k = taken ? clamp(1 - (d - COIN_AT[i]) / 60) : 1;
+      el.style.transform = `scale(${taken ? 1 + (1 - k) * 0.8 : 1})`;
+      el.style.opacity = k;
+    });
+    const pinP = ease.back(prog(t, 12.6, 12.95));
+    const landed = t > 14.8 ? Math.exp(-(t - 14.8) * 5) * Math.sin((t - 14.8) * 18) * 0.12 : 0;
+    $("pin").style.transform = `scale(${pinP * (1 + landed)})`;
+    const pills = ease.back(prog(t, 12.8, 13.15));
+    put($("stepsPill"), CX - 92, 700, lerp(0.4, 1, pills), 0, prog(t, 12.8, 12.9));
+    setText($("coinsPill"), `+${Math.round((T.coins * got) / coinEls.length)} coins`);
+    put($("coinsPill"), CX + 102, 700, lerp(0.4, 1, pills) * (got ? 1 + 0.06 * Math.max(0, Math.sin((d % 220) / 35)) : 1), 0, prog(t, 12.8, 12.9));
+  }
+
+  // ---------- 10 · end card ----------
+  const on10 = t >= 15.0;
+  show("s10", on10);
+  if (on10) {
+    $("s10").style.opacity = ease.out(prog(t, 15.0, 15.3));
+    const slide = ease.spring(prog(t, 15.95, 16.45));
+    const iconX = lerp(CX, 100, slide);
+    const pi = ease.back(prog(t, 15.15, 15.5));
+    put($("endIcon"), iconX, 430, lerp(0.2, 1, pi) * lerp(1, 0.82, slide), 0, prog(t, 15.15, 15.25));
+    [["pulseA", 0], ["pulseB", 0.45]].forEach(([id, off]) => {
+      const ph = ((t - 15.1 - off) % 0.9 + 0.9) % 0.9 / 0.9;
+      put($(id), iconX, 430, lerp(0.85, 1.65, ph) * lerp(1, 0.82, slide), 0, t > 15.1 + off ? (1 - ph) * 0.7 : 0);
+    });
+    const tx = (tt) => lerp(560, 344, ease.back(prog(tt, 16.0, 16.4)));
+    put($("endText"), tx(t), 430, 1, 0, t >= 16.0 ? 1 : 0, mblur(tx, t, 0.2));
+
+    if (typeof CONFIG.rating === "number") {
+      put($("stars"), CX, 560, ease.back(prog(t, 16.5, 16.8)), 0, prog(t, 16.5, 16.6));
+      for (let i = 0; i < 5; i++) {
+        const f = clamp(CONFIG.rating - i) * ease.out(prog(t, 16.7 + i * 0.16, 16.9 + i * 0.16));
+        $("sgs" + i).setAttribute("offset", f);
+        $("sg" + i).firstElementChild.setAttribute("offset", f);
+      }
+    } else {
+      put($("stores"), CX, 560, ease.back(prog(t, 16.5, 16.85)), 0, prog(t, 16.5, 16.6));
+    }
+    put($("endFoot"), CX, 622, 1, 0, ease.out(prog(t, 16.9, 17.2)));
+  }
+}
+
+/* ============================================================
+   Loop + controls
+   ============================================================ */
+let start = performance.now();
+let paused = false, pausedT = 0, prevT = 0;
+const freeze = new URLSearchParams(location.search).get("t");
+if (freeze !== null) { paused = true; pausedT = +freeze; }
+
+function frame(now) {
+  let t;
+  if (paused) t = pausedT;
+  else if (mixPlaying) t = mixEl.currentTime % DUR;               // follow the audio so sound and picture never drift
+  else if (trackSrc) t = (actx.currentTime - audioT0) % DUR;
+  else t = (((now - start) / 1000) * CONFIG.speed) % DUR;
+  prevT = t;
+  render(t);
+  requestAnimationFrame(frame);
+}
+render(paused ? pausedT : 0);
+requestAnimationFrame(frame);
+
+function replay() {
+  start = performance.now(); paused = false; prevT = 0;
+  unlock();
+  if (actx && trackBuf) startTrack(0);
+}
+function togglePause() {
+  if (paused) {
+    start = performance.now() - (pausedT / CONFIG.speed) * 1000; paused = false;
+    if (actx && trackBuf) startTrack(pausedT);
+  } else {
+    pausedT = prevT; paused = true; stopTrack();
+  }
+}
+const replayBtn = $("replay");
+if (EMBED) replayBtn.style.display = "none";
+let hideTimer;
+function showReplay() {
+  replayBtn.classList.remove("off");
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => replayBtn.classList.add("off"), 2000);
+}
+showReplay();
+replayBtn.addEventListener("click", (e) => { e.stopPropagation(); replay(); showReplay(); });
+addEventListener("pointermove", (e) => {
+  const corner = e.clientX > innerWidth - 160 && e.clientY < 80;
+  document.body.style.cursor = corner ? "pointer" : "none";
+  if (corner) showReplay();
+});
+addEventListener("keydown", (e) => {
+  if (e.key === "r" || e.key === "R") replay();
+  else if (e.key === " ") { e.preventDefault(); togglePause(); }
+  else if (e.key === "m" || e.key === "M") { CONFIG.sound = !CONFIG.sound; if (CONFIG.sound && !paused) startTrack(prevT); else stopTrack(); }
+});
+
+window.__reel = {
+  DUR, CONFIG, render,
+  setTime(tt) { paused = true; pausedT = tt; stopTrack(); render(tt); },
+  audioWav: CONFIG.sound ? () => trackReady.then(wavBase64) : undefined,
+};
+</script>
+</body>
+</html>

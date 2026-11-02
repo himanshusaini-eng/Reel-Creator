@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nutrition App Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --primary:#34C759; --primaryDark:#248A3D; --bg:#F4FAF6; --text:#1C1C1E; --text2:#8E8E93; --border:#E5E5EA; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden}
+  body{font-family:Manrope,system-ui,sans-serif;color:var(--text);user-select:none}
+  .abs{position:absolute}.h0{opacity:0}
+  #stage{position:absolute;left:50%;top:50%;width:540px;height:960px;overflow:hidden;transform-origin:50% 50%;
+    background:linear-gradient(180deg,#E8F8EE 0%,var(--bg) 42%,#EEF7F1 100%)}
+  #topStores{left:36px;top:28px;width:468px;display:flex;gap:10px;z-index:30}
+  .topStore{flex:1;height:44px;border-radius:12px;background:#1C1C1E;color:#fff;display:flex;align-items:center;padding:0 12px;gap:8px}
+  .topStore small{display:block;font-size:9px;opacity:.75;font-weight:600}
+  .topStore b{font-size:13px;font-weight:800}
+  .cap{left:30px;top:84px;width:480px;text-align:center}
+  .cap .h{font-size:26px;font-weight:800}.cap .h span{color:var(--primaryDark)}
+  .cap .s{margin-top:4px;font-size:14px;font-weight:600;color:var(--text2)}
+  #phone{width:414px;height:868px;border-radius:64px;transform-origin:0 0;
+    background:linear-gradient(145deg,#3A3D4A,#15161C);box-shadow:0 40px 80px rgba(36,138,61,.2)}
+  #screen{position:absolute;left:12px;top:12px;width:390px;height:844px;border-radius:52px;overflow:hidden;background:var(--bg)}
+  #island{position:absolute;left:146px;top:23px;width:122px;height:36px;border-radius:18px;background:#000;z-index:20}
+  .scr{position:absolute;inset:0;padding:58px 18px 90px}
+  #tabbar{left:14px;top:758px;width:362px;height:68px;border-radius:24px;background:#fff;border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-around;font-size:11px;font-weight:700;color:var(--text2);z-index:10}
+  #tabbar .on{color:var(--primaryDark)}
+  #ring{width:150px;height:150px;margin:12px auto;position:relative}
+  #ring svg{width:150px;height:150px;transform:rotate(-90deg)}
+  #ringCenter{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  #ringVal{font-size:32px;font-weight:800}
+  #ringLbl{font-size:12px;font-weight:700;color:var(--text2)}
+  .stats{display:flex;justify-content:space-between;margin-top:8px;text-align:center}
+  .stats b{display:block;font-size:15px}.stats span{font-size:11px;color:var(--text2);font-weight:600}
+  .card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:14px;margin-top:12px}
+  .ai{background:linear-gradient(125deg,var(--primary),var(--primaryDark));color:#fff;border:none;position:relative}
+  .ai .btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:#fff;color:var(--primaryDark);
+    height:34px;padding:0 12px;border-radius:10px;font-weight:800;font-size:13px;display:flex;align-items:center}
+  .meal{display:flex;gap:12px;align-items:center;padding:12px;background:#fff;border:1px solid var(--border);border-radius:16px;margin-top:10px}
+  .meal .t{width:48px;height:48px;border-radius:12px;background:#E8F8EE;display:flex;align-items:center;justify-content:center;font-size:22px}
+  .log{margin-left:auto;background:var(--primary);color:#fff;border:none;height:30px;padding:0 10px;border-radius:10px;font-weight:800;font-size:12px}
+  #endLogo{left:180px;top:120px;width:180px;height:180px;border-radius:42px;background:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:64px;font-weight:800;color:var(--primary);box-shadow:0 20px 40px rgba(0,0,0,.08)}
+  #endName{left:0;top:330px;width:540px;text-align:center;font-size:34px;font-weight:800}
+  #endTag{left:40px;top:380px;width:460px;text-align:center;font-size:17px;font-weight:700;color:var(--primaryDark)}
+  #stores{left:70px;top:460px;width:400px;display:flex;flex-direction:column;gap:12px}
+  .storeBtn{height:56px;border-radius:14px;background:#1C1C1E;color:#fff;display:flex;align-items:center;padding:0 18px}
+  .storeBtn small{display:block;font-size:11px;opacity:.75}.storeBtn b{font-size:17px}
+  #foot{left:0;top:620px;width:540px;text-align:center;font-size:14px;font-weight:700;color:var(--text2)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="topStores" class="abs h0">
+    <div class="topStore"><div><small>Download on the</small><b>App Store</b></div></div>
+    <div class="topStore"><div><small>Get it on</small><b>Google Play</b></div></div>
+  </div>
+  <div id="caps"></div>
+  <div id="phone" class="abs h0">
+    <div id="screen">
+      <div id="home" class="scr">
+        <div style="font-size:14px;font-weight:600;color:var(--text2)">Good morning</div>
+        <div style="font-size:26px;font-weight:800;margin-bottom:8px" id="hTitle"></div>
+        <div class="card">
+          <div id="ring">
+            <svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#E5E5EA" stroke-width="12"/>
+              <circle id="ringTrack" cx="60" cy="60" r="52" fill="none" stroke="var(--primary)" stroke-width="12" stroke-linecap="round"
+                stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+            <div id="ringCenter"><div id="ringVal">930</div><div id="ringLbl">Remaining</div></div>
+          </div>
+          <div class="stats">
+            <div><b id="statGoal">2100</b><span>Goal</span></div>
+            <div><b id="statFood">1450</b><span>Food</span></div>
+            <div><b id="statBurn">280</b><span>Burned</span></div>
+          </div>
+        </div>
+        <div class="card ai" id="aiCard">
+          <div style="font-size:11px;opacity:.9;font-weight:700">AI-Meal Plan · Lunch</div>
+          <div style="font-size:18px;font-weight:800;margin-top:4px" id="lunch"></div>
+          <div style="font-size:12px;opacity:.9;margin-top:4px;width:200px">Personalized daily & weekly meals</div>
+          <div class="btn">View Plan</div>
+        </div>
+      </div>
+      <div id="plan" class="scr h0">
+        <div style="font-size:14px;font-weight:700;color:var(--primaryDark)">← Home</div>
+        <div style="font-size:24px;font-weight:800;margin:8px 0 14px">Your Weekly Meal Plan</div>
+        <div class="meal"><div class="t">🥣</div><div><b>Breakfast</b><div style="font-size:12px;color:var(--text2)">Idli Sambar · 320 kcal</div></div></div>
+        <div class="meal" id="lunchRow"><div class="t">🍛</div><div><b id="lunch2"></b><div style="font-size:12px;color:var(--text2)">520 kcal · 1 serving</div></div><button class="log">Log this meal</button></div>
+        <div class="meal"><div class="t">🧀</div><div><b>Dinner</b><div style="font-size:12px;color:var(--text2)">Paneer Bhurji · 480 kcal</div></div></div>
+      </div>
+      <div id="tabbar" class="abs"><span class="on" id="tabH">Home</span><span id="tabD">Diary</span><span>Scan</span><span>Stats</span><span>Profile</span></div>
+    </div>
+    <div id="island"></div>
+  </div>
+  <div id="end" class="abs h0" style="inset:0">
+    <div id="endLogo" class="abs">◆</div>
+    <div id="endName" class="abs"></div>
+    <div id="endTag" class="abs"></div>
+    <div id="stores" class="abs h0">
+      <div class="storeBtn"><div><small>Download on the</small><b>App Store</b></div></div>
+      <div class="storeBtn"><div><small>Get it on</small><b>Google Play</b></div></div>
+    </div>
+    <div id="foot" class="abs"></div>
+  </div>
+</div>
+<script>
+const D = Object.assign({
+  appName:"Your App", tagline:"Your one-line tagline here",
+  primary:"#34C759", primaryDark:"#248A3D", goal:2100, food:1450, burned:280,
+  lunchMeal:"Dal Tadka + Rice", showStores:true, footer:"Download free on iOS & Android"
+}, window.__PROJECT__||{});
+const DUR = 18;
+const $ = id => document.getElementById(id);
+const stage = $("stage");
+stage.style.setProperty("--primary", D.primary);
+stage.style.setProperty("--primaryDark", D.primaryDark);
+$("hTitle").textContent = $("endName").textContent = D.appName;
+$("endTag").textContent = D.tagline;
+$("lunch").textContent = $("lunch2").textContent = D.lunchMeal;
+$("statGoal").textContent = D.goal;
+$("statBurn").textContent = D.burned;
+$("foot").textContent = D.footer;
+
+const captions = [
+  {from:1.7,to:5.2,title:'See <span>remaining</span> at a glance',sub:'Goal − Food + Burned'},
+  {from:5.3,to:9.5,title:'AI meal plan you can <span>log</span>',sub:'Swap or log in one tap'},
+  {from:9.6,to:14.5,title:'Stay consistent every <span>day</span>',sub:'Home · Diary · Scan'},
+];
+$("caps").innerHTML = captions.map(c=>`<div class="abs cap h0"><div class="h">${c.title}</div><div class="s">${c.sub}</div></div>`).join("");
+const capEls = [...document.querySelectorAll(".cap")];
+
+function fit(){ const s=Math.min(innerWidth/540,innerHeight/960); stage.style.transform=`translate(-50%,-50%) scale(${s})`; }
+addEventListener("resize", fit); fit();
+
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const ease={out:p=>1-Math.pow(1-p,3),inOut:p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2,spring:p=>p<=0?0:p>=1?1:1-Math.exp(-7*p)*Math.cos(9*p)};
+function set(el,o,tr){if(!el)return;el.style.opacity=o;if(tr!==undefined)el.style.transform=tr;}
+
+const RING=2*Math.PI*52;
+const PHONE_S=0.62, PHONE_TOP=248, PHONE_LEFT=(540-414*PHONE_S)/2;
+
+function render(t){
+  const show=D.showStores!==false;
+  set($("topStores"), show?ease.out(prog(t,0.05,0.3)):0, `translateY(${(1-ease.spring(prog(t,0.05,0.5)))*-16}px)`);
+  captions.forEach((c,i)=>{
+    const a=ease.spring(prog(t,c.from,c.from+.55));
+    const o=ease.out(prog(t,c.from,c.from+.25))*(1-ease.inOut(prog(t,c.to-.2,c.to)));
+    set(capEls[i],o,`translateY(${(1-a)*16}px)`);
+  });
+  const pin=ease.spring(prog(t,1.3,2.15));
+  const pout=ease.inOut(prog(t,14.6,15.1));
+  set($("phone"), ease.out(prog(t,1.3,1.55))*(1-pout),
+    `translate(${PHONE_LEFT}px,${PHONE_TOP+(1-pin)*760+pout*100}px) scale(${PHONE_S*(1-0.05*pout)})`);
+
+  const ringP=ease.out(prog(t,2.0,3.4));
+  const food=Math.round(D.food*ringP);
+  const rem=D.goal-food+D.burned;
+  $("ringTrack").style.strokeDashoffset=RING*(1-food/D.goal);
+  $("ringVal").textContent=String(rem);
+  $("statFood").textContent=String(food);
+
+  const toPlan=ease.inOut(prog(t,5.4,5.85));
+  set($("home"),1-toPlan,`translateX(${-40*toPlan}px)`);
+  const planIn=ease.spring(prog(t,5.4,6.1));
+  set($("plan"), t>=5.4?toPlan:0, `translateX(${390*(1-planIn)}px)`);
+  $("tabH").className=t<5.4?"on":"";
+  $("tabD").className=t>=5.4?"on":"";
+
+  set($("end"), ease.out(prog(t,15.2,15.6)));
+  set($("endLogo"), ease.out(prog(t,15.25,15.5)), `scale(${lerp(.65,1,ease.spring(prog(t,15.25,16)))})`);
+  set($("endName"), ease.out(prog(t,15.45,15.7)));
+  set($("endTag"), ease.out(prog(t,15.55,15.8)));
+  const sIn=ease.spring(prog(t,16.0,16.7));
+  set($("stores"), show?ease.out(prog(t,16.0,16.25)):0, `translateY(${(1-sIn)*24}px)`);
+  set($("foot"), ease.out(prog(t,16.8,17.1)));
+}
+
+let start=performance.now(), paused=false, pausedT=0;
+const freeze=new URLSearchParams(location.search).get("t");
+if(freeze!==null){paused=true;pausedT=+freeze;}
+function frame(now){const t=paused?pausedT:((now-start)/1000)%DUR;render(t);requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+window.__reel={DUR,setTime(t){paused=true;pausedT=t;render(t);},render};
+</script>
+</body>
+</html>

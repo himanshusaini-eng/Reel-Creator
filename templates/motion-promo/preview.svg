@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 480">
+  <rect width="270" height="480" fill="#2FB350"/>
+  <circle cx="135" cy="230" r="120" fill="none" stroke="#C9F5D4" stroke-opacity=".35" stroke-width="22" stroke-dasharray="230 150"/>
+  <rect x="45" y="150" width="180" height="58" rx="29" fill="#fff"/>
+  <text x="135" y="188" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="26" fill="#2FB350">calories</text>
+  <rect x="80" y="226" width="110" height="40" rx="20" fill="none" stroke="#fff" stroke-width="3"/>
+  <text x="135" y="253" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="18" fill="#fff">protein</text>
+  <text x="135" y="350" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="64" fill="none" stroke="#fff" stroke-width="2">MOVE</text>
+</svg>

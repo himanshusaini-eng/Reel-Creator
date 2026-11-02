@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stats Count-up</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body { user-select: none; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 540px; height: 960px; overflow: hidden; transform-origin: 50% 50%;
+    color: var(--fg); font-family: var(--fontBody); background: var(--bg); }
+  .abs { position: absolute; }
+  .head { font-family: var(--fontHead); font-weight: var(--heavy); letter-spacing: -.01em; }
+
+  #eyebrow { left: 0; top: 84px; width: 540px; text-align: center; font-size: 14px; font-weight: 800; letter-spacing: .16em; color: var(--primary); z-index: 3; }
+  #headline { left: 30px; top: 112px; width: 480px; text-align: center; font-size: 38px; line-height: 1.1; z-index: 3; }
+  #headline span { color: var(--primary); }
+
+  #stats { left: 36px; width: 468px; display: flex; flex-direction: column; gap: 16px; z-index: 3; }
+  .stat { display: flex; align-items: center; gap: 20px; padding: 20px 22px; border-radius: 26px; background: var(--card);
+    border: 1px solid var(--cardBorder); box-shadow: var(--shadow); backdrop-filter: blur(14px); }
+  .stat.v-bar, .stat.v-plain { flex-direction: column; align-items: stretch; gap: 0; }
+  .stat > div:last-child { flex: 1; min-width: 0; }
+  .stat.v-ring .num { font-size: 52px; white-space: nowrap; }
+  .ring { position: relative; width: 104px; height: 104px; flex: none; }
+  .ring svg { display: block; transform: rotate(-90deg); }
+  .ring .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; }
+  .num { font-family: var(--fontHead); font-weight: var(--heavy); font-size: 60px; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+  .num .unit { color: var(--primary); }
+  .lbl { margin-top: 6px; font-size: 17px; font-weight: 600; color: var(--muted); line-height: 1.35; }
+  .track { margin-top: 16px; height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--fg) 10%, transparent); overflow: hidden; }
+  .track i { display: block; height: 100%; width: 0; border-radius: 6px; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
+
+  #endLogo { left: 200px; top: 210px; width: 140px; height: 140px; border-radius: 34px; overflow: hidden; box-shadow: var(--shadow); z-index: 5; }
+  #endName { left: 20px; top: 376px; width: 500px; text-align: center; font-size: 40px; z-index: 5; }
+  #endTag { left: 50px; top: 434px; width: 440px; text-align: center; font-size: 18px; font-weight: 600; color: var(--muted); line-height: 1.4; z-index: 5; }
+  #cta { left: 90px; top: 524px; width: 360px; height: 64px; border-radius: 20px; background: var(--primary); color: #fff; z-index: 5;
+    display: flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 45%, transparent); }
+  #stores { left: 60px; top: 618px; width: 420px; display: flex; gap: 12px; z-index: 5; }
+  #foot { left: 0; top: 880px; width: 540px; text-align: center; font-size: 16px; font-weight: 700; color: var(--muted); z-index: 5; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="eyebrow" class="abs"></div>
+  <div id="headline" class="abs head"></div>
+  <div id="stats" class="abs"></div>
+  <div id="endLogo" class="abs"></div>
+  <div id="endName" class="abs head"></div>
+  <div id="endTag" class="abs"></div>
+  <div id="cta" class="abs"></div>
+  <div id="stores" class="abs"></div>
+  <div id="foot" class="abs"></div>
+</div>
+<script src="../_shared/kit.js"></script>
+<script>
+const { $, esc, set, prog, lerp, ease, clamp } = Kit;
+const D = Kit.data({
+  eyebrow: "THE RESULTS", headline: "Your results, in numbers",
+  statCount: "3", statSeconds: 1.3, visual: "ring",
+  value1: "2.4M+", label1: "downloads worldwide", fill1: 82,
+  value2: "3x", label2: "faster than doing it by hand", fill2: 64,
+  value3: "4.9★", label3: "rating on the App Store", fill3: 98,
+  value4: "93%", label4: "of users come back every day", fill4: 93,
+  appName: "Your App", tagline: "Start your streak today", logoUrl: "", ctaText: "Download free",
+  showStores: true, footer: "@yourapp",
+  font: "Sora", theme: "dark", primary: "#34C759", secondary: "#30D5C8", background: "#0B0D12", bgStyle: "grid",
+});
+
+const stage = $("stage");
+Kit.theme(stage, D);
+Kit.fit(stage);
+
+const N = clamp(Number(D.statCount) || 3, 1, 4);
+const SS = Math.max(0.6, Number(D.statSeconds) || 1.3);
+const visual = ["ring", "bar", "plain"].includes(D.visual) ? D.visual : "ring";
+const S0 = 0.8, TEND = S0 + N * SS + 1.3, DUR = +(TEND + 3.4).toFixed(2);
+
+// "2.4M+" → { pre: "", n: 2.4, dec: 1, post: "M+" } so only the number part counts up
+function parseValue(v) {
+  const m = String(v ?? "").match(/^(.*?)(-?\d[\d,]*(?:\.\d+)?)(.*)$/);
+  if (!m) return { pre: String(v ?? ""), n: 0, dec: 0, post: "", comma: false };
+  const raw = m[2];
+  return { pre: m[1], n: parseFloat(raw.replace(/,/g, "")), dec: (raw.split(".")[1] || "").length, post: m[3], comma: raw.includes(",") };
+}
+const fmt = (p, x) => {
+  let s = x.toFixed(p.dec);
+  if (p.comma) s = Number(s).toLocaleString("en-US", { minimumFractionDigits: p.dec, maximumFractionDigits: p.dec });
+  return `${esc(p.pre)}${s}<span class="unit">${esc(p.post)}</span>`;
+};
+
+$("eyebrow").textContent = D.eyebrow;
+$("headline").innerHTML = Kit.accentLast(D.headline);
+const R = 44, C = 2 * Math.PI * R;
+const stats = Array.from({ length: N }, (_, i) => {
+  const k = i + 1;
+  const el = document.createElement("div");
+  el.className = "stat v-" + visual;
+  const fill = clamp((Number(D["fill" + k]) || 0) / 100);
+  const ringHTML = `<div class="ring"><svg width="104" height="104" viewBox="0 0 104 104">
+      <circle cx="52" cy="52" r="${R}" fill="none" stroke="currentColor" stroke-opacity=".12" stroke-width="12"/>
+      <circle class="arc" cx="52" cy="52" r="${R}" fill="none" stroke="url(#g${k})" stroke-width="12" stroke-linecap="round"
+        stroke-dasharray="0 ${C}"/>
+      <defs><linearGradient id="g${k}"><stop offset="0" stop-color="${D.primary}"/><stop offset="1" stop-color="${D.secondary}"/></linearGradient></defs>
+    </svg><div class="pct"></div></div>`;
+  el.innerHTML = (visual === "ring" ? ringHTML : "") +
+    `<div><div class="num"></div><div class="lbl">${esc(D["label" + k] || "")}</div>${visual === "bar" ? `<div class="track"><i></i></div>` : ""}</div>`;
+  $("stats").appendChild(el);
+  return { el, val: parseValue(D["value" + k]), fill, num: el.querySelector(".num"), arc: el.querySelector(".arc"),
+    pct: el.querySelector(".pct"), bar: el.querySelector(".track i") };
+});
+
+$("endLogo").innerHTML = Kit.logoHTML(D);
+$("endName").textContent = D.appName;
+$("endTag").textContent = D.tagline;
+$("cta").textContent = D.ctaText;
+$("stores").innerHTML = Kit.storesHTML();
+$("foot").textContent = D.footer;
+
+function render(t) {
+  Kit.renderBg(t);
+  const out = ease.inOut(prog(t, TEND - 0.3, TEND + 0.2));
+  set($("eyebrow"), ease.out(prog(t, 0.05, 0.3)) * (1 - out));
+  set($("headline"), ease.out(prog(t, 0.15, 0.45)) * (1 - out), `translateY(${18 * (1 - ease.spring(prog(t, 0.15, 0.9)))}px)`);
+  $("stats").style.top = `${Math.max(220, 580 - $("stats").offsetHeight / 2)}px`;
+
+  stats.forEach((s, i) => {
+    const a = S0 + i * SS;
+    const pin = ease.spring(prog(t, a, a + 0.7));
+    set(s.el, ease.out(prog(t, a, a + 0.25)) * (1 - out), `translateY(${(1 - pin) * 60 + out * -20}px) scale(${lerp(0.94, 1, pin)})`);
+    const c = ease.out(prog(t, a + 0.1, a + 0.1 + Math.min(1.4, SS + 0.3)));
+    s.num.innerHTML = fmt(s.val, s.val.n * c);
+    if (s.arc) {
+      s.arc.setAttribute("stroke-dasharray", `${C * s.fill * c} ${C}`);
+      s.pct.textContent = `${Math.round(s.fill * 100 * c)}%`;
+    }
+    if (s.bar) s.bar.style.width = `${s.fill * 100 * c}%`;
+  });
+
+  const e0 = TEND + 0.1;
+  set($("endLogo"), ease.out(prog(t, e0, e0 + 0.25)), `scale(${lerp(0.6, 1, ease.spring(prog(t, e0, e0 + 0.8)))})`);
+  set($("endName"), ease.out(prog(t, e0 + 0.15, e0 + 0.4)), `translateY(${16 * (1 - ease.spring(prog(t, e0 + 0.15, e0 + 0.9)))}px)`);
+  set($("endTag"), ease.out(prog(t, e0 + 0.28, e0 + 0.5)));
+  const ctaIn = ease.spring(prog(t, e0 + 0.5, e0 + 1.2));
+  const pulse = t > e0 + 1.3 ? 1 + 0.03 * Math.max(0, Math.sin((t - e0 - 1.3) * 5)) : 1;
+  set($("cta"), ease.out(prog(t, e0 + 0.5, e0 + 0.7)), `translateY(${(1 - ctaIn) * 24}px) scale(${pulse})`);
+  set($("stores"), D.showStores !== false ? ease.out(prog(t, e0 + 0.75, e0 + 1)) : 0,
+    `translateY(${(1 - ease.spring(prog(t, e0 + 0.75, e0 + 1.4))) * 22}px)`);
+  set($("foot"), ease.out(prog(t, e0 + 0.9, e0 + 1.2)));
+}
+
+Kit.start(DUR, render);
+</script>
+</body>
+</html>

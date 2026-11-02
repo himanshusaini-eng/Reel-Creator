@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screenshot Tour</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body { user-select: none; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 540px; height: 960px; overflow: hidden; transform-origin: 50% 50%;
+    color: var(--fg); font-family: var(--fontBody); background: var(--bg); }
+  .abs { position: absolute; }
+  h1, h2, .head { font-family: var(--fontHead); font-weight: var(--heavy); letter-spacing: -.01em; }
+
+  #logo { left: 195px; top: 270px; width: 150px; height: 150px; border-radius: 36px; overflow: hidden; box-shadow: var(--shadow); z-index: 2; }
+  #name { left: 20px; top: 446px; width: 500px; text-align: center; font-size: 42px; z-index: 2; }
+  #tag { left: 50px; top: 506px; width: 440px; text-align: center; font-size: 18px; font-weight: 600; color: var(--muted); line-height: 1.4; z-index: 2; }
+
+  .cap { left: 30px; top: 70px; width: 480px; text-align: center; z-index: 3; }
+  .cap .step { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .12em; color: var(--primary);
+    padding: 6px 12px; border-radius: 99px; background: color-mix(in srgb, var(--primary) 14%, transparent); margin-bottom: 12px; }
+  .cap h2 { font-size: 34px; line-height: 1.12; }
+  .cap h2 span { color: var(--primary); }
+
+  #phone { left: 0; top: 0; width: 414px; height: 868px; border-radius: 64px; transform-origin: 0 0; z-index: 2;
+    background: linear-gradient(145deg, #3A3D4A, #111217); box-shadow: 0 40px 80px rgba(0,0,0,.35); }
+  #phone.light { background: linear-gradient(145deg, #F2F3F6, #C4C7CF); box-shadow: 0 40px 80px rgba(20,24,40,.25); }
+  #phone.flat { background: transparent; box-shadow: none; }
+  #screen { position: absolute; left: 12px; top: 12px; width: 390px; height: 844px; border-radius: 52px; overflow: hidden; background: #000; }
+  #phone.flat #screen { left: 0; top: 0; width: 414px; height: 868px; border-radius: 44px; box-shadow: var(--shadow), 0 0 0 1px var(--cardBorder); }
+  #screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  #island { position: absolute; left: 146px; top: 23px; width: 122px; height: 36px; border-radius: 18px; background: #000; z-index: 5; }
+  #phone.flat #island { display: none; }
+
+  #dots { left: 0; top: 900px; width: 540px; display: flex; justify-content: center; gap: 8px; z-index: 3; }
+  #dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--muted); opacity: .35; }
+
+  #endLogo { left: 200px; top: 200px; width: 140px; height: 140px; border-radius: 34px; overflow: hidden; box-shadow: var(--shadow); z-index: 4; }
+  #endName { left: 20px; top: 366px; width: 500px; text-align: center; font-size: 40px; z-index: 4; }
+  #endTag { left: 50px; top: 424px; width: 440px; text-align: center; font-size: 18px; font-weight: 600; color: var(--muted); line-height: 1.4; z-index: 4; }
+  #cta { left: 90px; top: 520px; width: 360px; height: 64px; border-radius: 20px; background: var(--primary); color: #fff; z-index: 4;
+    display: flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800; font-family: var(--fontBody);
+    box-shadow: 0 16px 36px color-mix(in srgb, var(--primary) 45%, transparent); }
+  #stores { left: 60px; top: 616px; width: 420px; display: flex; gap: 12px; z-index: 4; }
+  #foot { left: 0; top: 880px; width: 540px; text-align: center; font-size: 16px; font-weight: 700; color: var(--muted); z-index: 4; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="logo" class="abs"></div>
+  <h1 id="name" class="abs"></h1>
+  <div id="tag" class="abs"></div>
+  <div id="caps"></div>
+  <div id="phone" class="abs"><div id="screen"></div><div id="island"></div></div>
+  <div id="dots" class="abs"></div>
+  <div id="endLogo" class="abs"></div>
+  <h1 id="endName" class="abs"></h1>
+  <div id="endTag" class="abs"></div>
+  <div id="cta" class="abs"></div>
+  <div id="stores" class="abs"></div>
+  <div id="foot" class="abs"></div>
+</div>
+<script src="../_shared/kit.js"></script>
+<script>
+const { $, esc, set, prog, lerp, ease } = Kit;
+const D = Kit.data({
+  appName: "Your App", tagline: "Say what your app does in one line", logoUrl: "",
+  screenCount: "4", secondsPerScreen: 2.4, transition: "slide", device: "dark", showStepLabels: true,
+  caption1: "Your main screen", image1: "", caption2: "Your best feature", image2: "",
+  caption3: "Another great feature", image3: "", caption4: "See your progress", image4: "",
+  ctaText: "Download free", showStores: true, footer: "@yourapp",
+  font: "Manrope", theme: "light", primary: "#34C759", secondary: "#0A84FF", background: "#F4FAF6", bgStyle: "gradient",
+});
+
+const stage = $("stage");
+Kit.theme(stage, D);
+Kit.fit(stage);
+
+const N = Math.max(1, Math.min(4, Number(D.screenCount) || 4));
+const S = Math.max(1, Number(D.secondsPerScreen) || 2.4);
+const INTRO = 1.8, TEND = INTRO + N * S, DUR = +(TEND + 3.4).toFixed(2);
+
+$("logo").innerHTML = $("endLogo").innerHTML = Kit.logoHTML(D);
+$("name").textContent = $("endName").textContent = D.appName;
+$("tag").textContent = $("endTag").textContent = D.tagline;
+$("cta").textContent = D.ctaText;
+$("stores").innerHTML = Kit.storesHTML();
+$("foot").textContent = D.footer;
+$("phone").className = "abs " + ({ light: "light", flat: "flat" }[D.device] || "");
+
+const shots = [], caps = [];
+for (let i = 0; i < N; i++) {
+  const img = document.createElement("img");
+  img.src = D["image" + (i + 1)] || Kit.placeholderScreen(i, D.primary, D.theme === "dark");
+  $("screen").appendChild(img);
+  shots.push(img);
+  const cap = document.createElement("div");
+  cap.className = "cap abs";
+  cap.innerHTML = (D.showStepLabels !== false ? `<div class="step">${String(i + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}</div>` : "") +
+    `<h2>${Kit.accentLast(D["caption" + (i + 1)] || "")}</h2>`;
+  $("caps").appendChild(cap);
+  caps.push(cap);
+}
+$("dots").innerHTML = shots.map(() => "<i></i>").join("");
+const dots = [...$("dots").children];
+
+const PS = 0.72, PW = 414 * PS, PX = (540 - PW) / 2, PY = 246;
+const TR = 0.25; // half-length of a screen change
+
+function render(t) {
+  Kit.renderBg(t);
+  const introOut = ease.inOut(prog(t, 1.3, 1.7));
+  const lp = ease.spring(prog(t, 0.1, 0.9));
+  set($("logo"), ease.out(prog(t, 0.1, 0.35)) * (1 - introOut), `scale(${lerp(0.6, 1, lp) * (1 - 0.15 * introOut)})`);
+  set($("name"), ease.out(prog(t, 0.3, 0.55)) * (1 - introOut), `translateY(${18 * (1 - ease.spring(prog(t, 0.3, 1)))}px)`);
+  set($("tag"), ease.out(prog(t, 0.42, 0.65)) * (1 - introOut), `translateY(${14 * (1 - ease.spring(prog(t, 0.42, 1.1)))}px)`);
+
+  const pin = ease.spring(prog(t, 1.35, 2.25));
+  const pout = ease.inOut(prog(t, TEND - 0.1, TEND + 0.45));
+  const float = Math.sin(t * 1.6) * 5;
+  set($("phone"), ease.out(prog(t, 1.35, 1.6)) * (1 - pout),
+    `translate(${PX}px, ${PY + (1 - pin) * 760 + pout * 120 + float}px) scale(${PS * (1 - 0.08 * pout)})`);
+  set($("dots"), ease.out(prog(t, 1.9, 2.2)) * (1 - pout));
+
+  shots.forEach((img, i) => {
+    const Ti = INTRO + i * S;
+    const pi = i === 0 ? 1 : ease.inOut(prog(t, Ti - TR, Ti + TR));
+    const po = i === N - 1 ? 0 : ease.inOut(prog(t, Ti + S - TR, Ti + S + TR));
+    let o = 1, tr = "none";
+    if (D.transition === "zoom") { o = pi * (1 - po); tr = `scale(${lerp(1.18, 1, pi) * lerp(1, 0.88, po)})`; }
+    else if (D.transition === "fade") o = pi * (1 - po);
+    else tr = `translateX(${((1 - pi) - po) * 390}px)`;
+    set(img, o, tr);
+    img.style.zIndex = i;
+
+    const cin = ease.out(prog(t, Math.max(1.75, Ti - TR + 0.1), Math.max(2.05, Ti + TR + 0.1)));
+    const cout = i === N - 1 ? ease.inOut(prog(t, TEND - 0.2, TEND + 0.15)) : ease.inOut(prog(t, Ti + S - TR, Ti + S));
+    set(caps[i], cin * (1 - cout), `translateY(${(1 - cin) * 18 - cout * 12}px)`);
+
+    const act = Math.min(prog(t, Ti - TR, Ti + TR), 1 - prog(t, Ti + S - TR, Ti + S + TR));
+    const a = i === 0 ? 1 - prog(t, Ti + S - TR, Ti + S + TR) : i === N - 1 ? prog(t, Ti - TR, Ti + TR) : act;
+    dots[i].style.width = `${8 + 18 * a}px`;
+    dots[i].style.opacity = 0.35 + 0.65 * a;
+    dots[i].style.background = a > 0.5 ? "var(--primary)" : "var(--muted)";
+  });
+
+  const e0 = TEND + 0.3;
+  set($("endLogo"), ease.out(prog(t, e0, e0 + 0.25)), `scale(${lerp(0.6, 1, ease.spring(prog(t, e0, e0 + 0.8)))})`);
+  set($("endName"), ease.out(prog(t, e0 + 0.15, e0 + 0.4)), `translateY(${16 * (1 - ease.spring(prog(t, e0 + 0.15, e0 + 0.9)))}px)`);
+  set($("endTag"), ease.out(prog(t, e0 + 0.28, e0 + 0.5)));
+  const ctaIn = ease.spring(prog(t, e0 + 0.45, e0 + 1.2));
+  const pulse = 1 + 0.03 * Math.max(0, Math.sin((t - e0 - 1.3) * 5)) * (t > e0 + 1.3 ? 1 : 0);
+  set($("cta"), ease.out(prog(t, e0 + 0.45, e0 + 0.65)), `translateY(${(1 - ctaIn) * 24}px) scale(${pulse})`);
+  set($("stores"), D.showStores !== false ? ease.out(prog(t, e0 + 0.7, e0 + 0.95)) : 0,
+    `translateY(${(1 - ease.spring(prog(t, e0 + 0.7, e0 + 1.4))) * 22}px)`);
+  set($("foot"), ease.out(prog(t, e0 + 0.9, e0 + 1.2)));
+}
+
+Kit.start(DUR, render);
+</script>
+</body>
+</html>

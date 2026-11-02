@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kinetic Type</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body { user-select: none; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 540px; height: 960px; overflow: hidden; transform-origin: 50% 50%;
+    font-family: var(--fontBody); background: #000; }
+  .abs { position: absolute; }
+  .panel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0 40px; }
+  .line { width: 460px; text-align: center; font-family: var(--fontHead); font-weight: var(--heavy); line-height: 1.02; letter-spacing: -.01em; }
+  .line.left { text-align: left; }
+  .w { display: inline-block; position: relative; margin: 0 .12em; white-space: pre; }
+  .w .in { display: inline-block; position: relative; z-index: 1; }
+  .w.mask { overflow: hidden; vertical-align: bottom; padding-bottom: .04em; }
+  .hl { position: absolute; z-index: 0; transform-origin: 0 50%; }
+  .hl.box { left: -.1em; right: -.1em; top: .04em; bottom: -.02em; border-radius: .08em; }
+  .hl.underline { left: 0; right: 0; bottom: -.04em; height: .12em; border-radius: .06em; }
+  .cursor { display: inline-block; width: .08em; height: .9em; margin-left: .04em; vertical-align: -.08em; }
+  #brand { left: 0; top: 54px; width: 540px; text-align: center; font-size: 16px; font-weight: 700; letter-spacing: .14em; z-index: 50; }
+  #bar { left: 40px; top: 908px; width: 460px; height: 4px; border-radius: 2px; z-index: 50; }
+  #bar::before { content: ""; position: absolute; inset: 0; border-radius: 2px; background: var(--track); }
+  #bar i { position: relative; display: block; height: 100%; width: 0; border-radius: 2px; background: currentColor; }
+
+  #end { z-index: 40; flex-direction: column; text-align: center; padding: 0 50px; }
+  #endLogo { width: 140px; height: 140px; border-radius: 34px; overflow: hidden; box-shadow: 0 20px 44px rgba(0,0,0,.25); }
+  #endTitle { margin-top: 28px; font-family: var(--fontHead); font-weight: var(--heavy); font-size: 52px; line-height: 1.05; }
+  #endSub { margin-top: 12px; font-size: 19px; font-weight: 600; opacity: .72; line-height: 1.4; }
+  #cta { margin-top: 34px; height: 66px; padding: 0 40px; border-radius: 22px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800; }
+  #stores { margin-top: 18px; width: 420px; display: flex; gap: 12px; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="panels"></div>
+  <div id="end" class="panel">
+    <div id="endLogo"></div>
+    <div id="endTitle"></div>
+    <div id="endSub"></div>
+    <div id="cta"></div>
+    <div id="stores"></div>
+  </div>
+  <div id="brand" class="abs"></div>
+  <div id="bar" class="abs"><i></i></div>
+</div>
+<script src="../_shared/kit.js"></script>
+<script>
+const { $, esc, set, prog, lerp, ease, clamp } = Kit;
+const D = Kit.data({
+  lines: "Your hook\ngoes here.\nOne idea\nper line.\nKeep it short.",
+  secondsPerLine: 1.3, animation: "pop", wipe: "up", align: "center", uppercase: true, textScale: 1, emphasis: "box",
+  color1: "#111216", color2: "#34C759", color3: "#F4F1E8", primary: "#FFD60A",
+  showBrandTag: true, showProgress: true,
+  appName: "Your App", logoUrl: "", endTitle: "Your App", endSubtitle: "Your one-line tagline here",
+  ctaText: "Download free", showStores: true, endBackground: "#111216", font: "Anton",
+});
+
+const stage = $("stage");
+Kit.theme(stage, { ...D, theme: "dark", bgStyle: "solid", secondary: D.color2 });
+Kit.fit(stage);
+
+const textOn = (bg) => (Kit.isDark(bg) ? "#FFFFFF" : "#111216");
+const palette = [D.color1, D.color2, D.color3].filter(Boolean);
+const lines = Kit.lines(D.lines).map((l) => (D.uppercase ? l.toUpperCase() : l));
+if (!lines.length) lines.push(D.appName || "Your text");
+const L = Math.max(0.5, Number(D.secondsPerLine) || 1.3);
+const TEND = lines.length * L, DUR = +(TEND + 3.4).toFixed(2);
+const WIPE = Math.min(0.38, L * 0.4);
+const font = Kit.FONTS[D.font] ? D.font : "Manrope";
+const heavy = (Kit.FONTS[font] || {}).heavy || 800;
+
+const measure = document.createElement("canvas").getContext("2d");
+// Largest size where the longest word fits the 460px column and the wrapped line stays under ~600px tall
+function fitSize(text) {
+  measure.font = `${heavy} 100px "${font}"`;
+  const words = text.split(/\s+/);
+  const longest = Math.max(...words.map((w) => measure.measureText(w).width), 1);
+  const total = measure.measureText(text).width + words.length * 24;
+  let size = Math.min(190 * (Number(D.textScale) || 1), (100 * 452) / longest);
+  while (size > 30 && Math.ceil((total * size) / 100 / 460) * size * 1.06 > 600) size -= 4;
+  return size;
+}
+
+const panels = lines.map((text, i) => {
+  const bg = palette[i % palette.length];
+  const el = document.createElement("div");
+  el.className = "panel";
+  el.style.background = bg;
+  el.style.zIndex = i + 1;
+  el.style.color = textOn(bg);
+  const words = text.split(/\s+/);
+  const mask = D.animation === "slide";
+  const emph = D.emphasis !== "none" && i === lines.length - 1 ? words.length - 1 : -1;
+  el.innerHTML = `<div class="line ${D.align === "left" ? "left" : ""}">${words
+    .map((w, k) => `<span class="w ${mask ? "mask" : ""}">${k === emph ? `<i class="hl ${D.emphasis}" style="background:${D.primary}"></i>` : ""}<span class="in"${
+      k === emph && D.emphasis === "box" ? ` style="color:${textOn(D.primary)}"` : ""}>${esc(w)}</span></span>`)
+    .join("")}${D.animation === "type" ? `<span class="cursor" style="background:currentColor"></span>` : ""}</div>`;
+  $("panels").appendChild(el);
+  const line = el.querySelector(".line");
+  return { el, line, text, words, wEls: [...el.querySelectorAll(".w")], ins: [...el.querySelectorAll(".w .in")],
+    hl: el.querySelector(".hl"), cursor: el.querySelector(".cursor") };
+});
+
+$("brand").textContent = (D.appName || "").toUpperCase();
+$("end").style.background = D.endBackground;
+$("end").style.color = textOn(D.endBackground);
+$("endLogo").innerHTML = Kit.logoHTML(D);
+$("endTitle").textContent = D.endTitle;
+$("endSub").textContent = D.endSubtitle;
+$("cta").textContent = D.ctaText;
+$("cta").style.background = D.primary;
+$("cta").style.color = textOn(D.primary);
+$("stores").innerHTML = Kit.storesHTML();
+
+function clip(p) {
+  if (p >= 1) return "none";
+  if (D.wipe === "left") return `inset(0 0 0 ${(1 - p) * 100}%)`;
+  if (D.wipe === "circle") return `circle(${p * 75}% at 50% 50%)`;
+  if (D.wipe === "cut") return p > 0 ? "none" : "inset(0 0 100% 0)";
+  return `inset(${(1 - p) * 100}% 0 0 0)`;
+}
+
+function render(t) {
+  panels.forEach((P, i) => {
+    // Measured every frame (cheap) so a late-loading web font never leaves a fallback size behind
+    P.line.style.fontSize = fitSize(P.text) + "px";
+    const T0 = i * L;
+    const pw = i === 0 ? 1 : ease.inOut(prog(t, T0, T0 + WIPE));
+    P.el.style.clipPath = clip(pw);
+    P.el.style.visibility = t >= T0 || i === 0 ? "visible" : "hidden";
+    const tw = T0 + (i === 0 ? 0.1 : WIPE * 0.6);
+    const span = Math.max(0.25, L * 0.55);
+    const step = Math.min(0.14, span / Math.max(1, P.words.length));
+    if (D.animation === "type") {
+      const chars = P.text.length;
+      let shown = Math.floor(prog(t, tw, tw + span) * chars + 0.0001);
+      P.ins.forEach((el, k) => {
+        const w = P.words[k];
+        el.textContent = w.slice(0, Math.max(0, shown));
+        shown -= w.length + 1;
+        P.wEls[k].style.display = el.textContent ? "inline-block" : "none";
+      });
+      if (P.cursor) P.cursor.style.opacity = Math.floor(t * 3) % 2 || t < tw + span ? 1 : 0;
+    } else {
+      P.ins.forEach((el, k) => {
+        const a = tw + k * step;
+        if (D.animation === "slide") {
+          const p = ease.out(prog(t, a, a + 0.32));
+          set(el, 1, `translateY(${(1 - p) * 110}%)`);
+        } else if (D.animation === "fade") {
+          const p = ease.out(prog(t, a, a + 0.3));
+          set(el, p, `translateY(${(1 - p) * 14}px)`);
+        } else {
+          const p = prog(t, a, a + 0.3);
+          set(el, ease.out(Math.min(1, p * 2)), `scale(${lerp(0.35, 1, ease.back(p))})`);
+        }
+      });
+    }
+    if (P.hl) P.hl.style.transform = `scaleX(${ease.inOut(prog(t, tw + span * 0.9, tw + span * 0.9 + 0.3))})`;
+  });
+
+  const pe = ease.inOut(prog(t, TEND, TEND + WIPE + 0.1));
+  $("end").style.clipPath = clip(pe);
+  $("end").style.visibility = t >= TEND ? "visible" : "hidden";
+  const e0 = TEND + 0.25;
+  set($("endLogo"), ease.out(prog(t, e0, e0 + 0.25)), `scale(${lerp(0.5, 1, ease.spring(prog(t, e0, e0 + 0.8)))})`);
+  set($("endTitle"), ease.out(prog(t, e0 + 0.15, e0 + 0.4)), `translateY(${20 * (1 - ease.spring(prog(t, e0 + 0.15, e0 + 0.9)))}px)`);
+  set($("endSub"), ease.out(prog(t, e0 + 0.3, e0 + 0.55)));
+  const ctaP = ease.spring(prog(t, e0 + 0.5, e0 + 1.2));
+  const pulse = t > e0 + 1.3 ? 1 + 0.035 * Math.max(0, Math.sin((t - e0 - 1.3) * 5)) : 1;
+  set($("cta"), ease.out(prog(t, e0 + 0.5, e0 + 0.7)), `translateY(${(1 - ctaP) * 24}px) scale(${pulse})`);
+  set($("stores"), D.showStores !== false ? ease.out(prog(t, e0 + 0.75, e0 + 1)) : 0,
+    `translateY(${(1 - ease.spring(prog(t, e0 + 0.75, e0 + 1.4))) * 20}px)`);
+  if (D.showStores === false) $("stores").style.display = "none";
+
+  // Overlay text follows whichever panel is on screen
+  const cur = palette[Math.min(lines.length - 1, Math.floor(Math.max(0, t - WIPE * 0.5) / L)) % palette.length];
+  $("brand").style.color = $("bar").style.color = textOn(cur);
+  $("bar").style.setProperty("--track", Kit.isDark(cur) ? "rgba(255,255,255,.22)" : "rgba(0,0,0,.14)");
+  set($("brand"), D.showBrandTag !== false ? ease.out(prog(t, 0.1, 0.4)) * (1 - prog(t, TEND, TEND + 0.3)) : 0);
+  set($("bar"), D.showProgress !== false ? 1 - prog(t, TEND, TEND + 0.3) : 0);
+  $("bar").firstElementChild.style.width = `${clamp(t / TEND) * 100}%`;
+}
+
+Kit.start(DUR, render);
+</script>
+</body>
+</html>

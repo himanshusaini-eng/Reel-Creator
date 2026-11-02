@@ -1,0 +1,30 @@
+{
+  "name": "Nutrition App Demo",
+  "description": "Home ring → AI meal plan → diary → scan → store CTAs (full demo flow)",
+  "duration": 18,
+  "thumbnail": "preview.svg",
+  "fields": [
+    { "key": "appName", "label": "App name", "type": "text" },
+    { "key": "tagline", "label": "Tagline", "type": "text" },
+    { "key": "primary", "label": "Primary", "type": "color" },
+    { "key": "primaryDark", "label": "Primary dark", "type": "color" },
+    { "key": "goal", "label": "Calorie goal", "type": "number" },
+    { "key": "food", "label": "Food kcal", "type": "number" },
+    { "key": "burned", "label": "Burned kcal", "type": "number" },
+    { "key": "lunchMeal", "label": "Lunch meal name", "type": "text" },
+    { "key": "showStores", "label": "Show store badges", "type": "boolean" },
+    { "key": "footer", "label": "Footer", "type": "text" }
+  ],
+  "defaults": {
+    "appName": "Your App",
+    "tagline": "Your one-line tagline here",
+    "primary": "#34C759",
+    "primaryDark": "#248A3D",
+    "goal": 2100,
+    "food": 1450,
+    "burned": 280,
+    "lunchMeal": "Dal Tadka + Rice",
+    "showStores": true,
+    "footer": "Download free on iOS & Android"
+  }
+}

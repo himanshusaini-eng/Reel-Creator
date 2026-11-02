@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reel Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Figma-style top bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <a class="icon-btn" href="/app" title="All projects" aria-label="All projects">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M3 9h12M3 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </a>
+        <div class="file-pill">
+          <span class="file-mark">RC</span>
+          <input type="text" id="projectName" class="file-name" value="Untitled reel" spellcheck="false">
+          <span class="file-draft" id="saveState">Saved</span>
+        </div>
+      </div>
+      <div class="topbar-center">
+        <div class="view-switch" role="tablist">
+          <button class="view-tab on" id="viewDesign" type="button">Design</button>
+          <button class="view-tab" id="viewCode" type="button">Code</button>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="status top-status" id="topStatus" aria-live="polite"></span>
+        <button class="btn ghost" id="btnNew" type="button">New</button>
+        <button class="btn" id="btnSave" type="button">Save</button>
+        <button class="btn" id="btnApplyCode" type="button" hidden>Apply code</button>
+        <button class="btn share" id="btnRender" type="button">Export MP4</button>
+      </div>
+    </header>
+
+    <!-- Left panel -->
+    <aside class="left-panel">
+      <div class="panel-tabs" role="tablist">
+        <button class="panel-tab on" data-left="elements" type="button">Elements</button>
+        <button class="panel-tab" data-left="exports" type="button">Exports</button>
+        <button class="panel-tab" data-left="projects" type="button">Projects</button>
+      </div>
+
+      <div class="panel-body" id="leftElements">
+        <div class="section">
+          <div class="section-head"><span>Add elements</span></div>
+          <p class="hint tight">Drag onto the video, or click to add at the center. You can also drop an image file on the video.</p>
+          <div class="el-grid" id="elementTiles"></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><span>Layers</span><span class="section-meta">top first</span></div>
+          <div id="layers"></div>
+        </div>
+      </div>
+
+      <div class="panel-body hidden" id="leftExports">
+        <div class="section">
+          <div class="section-head"><span>Export history</span></div>
+          <div class="outputs" id="outputs"></div>
+        </div>
+      </div>
+
+      <div class="panel-body hidden" id="leftProjects">
+        <div class="section">
+          <div class="section-head"><span>Your projects</span></div>
+          <div id="projects"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Canvas / Code -->
+    <main class="canvas-wrap">
+      <div class="canvas" id="canvas">
+        <div class="artboard" id="artboard">
+          <div class="artboard-label">
+            <span class="artboard-dot"></span>
+            <span id="frameLabel">Reel — 1080 × 1920</span>
+          </div>
+          <div class="phone-frame" id="phoneFrame">
+            <iframe id="preview" title="Preview"></iframe>
+            <div class="fade-overlay" id="fadeOverlay"></div>
+            <div class="ov-editor" id="ovEditor" aria-label="Elements on the video"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-view hidden" id="codeView">
+        <div class="code-toolbar">
+          <div class="code-path" id="codePath">index.html</div>
+          <div class="code-actions">
+            <span class="code-dirty hidden" id="codeDirty">Unsaved</span>
+            <button class="btn sm" id="btnReloadCode" type="button">Reload</button>
+            <button class="btn sm share" id="btnSaveCode" type="button">Save &amp; preview</button>
+          </div>
+        </div>
+        <textarea id="codeEditor" class="code-editor" spellcheck="false" wrap="off" placeholder="HTML source will appear here…"></textarea>
+      </div>
+
+      <div class="canvas-footer">
+        <div class="timeline">
+          <button class="icon-btn" id="btnPlay" type="button" title="Play">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 2.2v9.6L12 7 3 2.2z"/></svg>
+          </button>
+          <input type="range" id="scrub" min="0" max="180" value="0" step="1">
+          <span id="timeLabel" class="time">0.0s</span>
+        </div>
+        <div class="zoom">
+          <button class="icon-btn sm" id="zoomOut" type="button">−</button>
+          <span id="zoomLabel">100%</span>
+          <button class="icon-btn sm" id="zoomIn" type="button">+</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right inspector -->
+    <aside class="right-panel">
+      <div class="panel-tabs" role="tablist">
+        <button class="panel-tab on" data-right="design" type="button">Design</button>
+        <button class="panel-tab" data-right="code" type="button">Code</button>
+        <button class="panel-tab" data-right="export" type="button">Export</button>
+      </div>
+
+      <div class="panel-body" id="rightDesign">
+        <div class="section hidden" id="elementSection">
+          <div class="section-head">
+            <span id="elementTitle">Element</span>
+            <span class="el-actions">
+              <button class="icon-btn sm" id="elForward" type="button" title="Bring forward">↑</button>
+              <button class="icon-btn sm" id="elBack" type="button" title="Send backward">↓</button>
+              <button class="icon-btn sm" id="elDuplicate" type="button" title="Duplicate (⌘D)">⧉</button>
+              <button class="icon-btn sm danger" id="elDelete" type="button" title="Delete (Del)">🗑</button>
+            </span>
+          </div>
+          <div id="elementFields"></div>
+          <div class="el-time-btns">
+            <button class="btn sm" id="elStartHere" type="button">Start at playhead</button>
+            <button class="btn sm" id="elEndHere" type="button">End at playhead</button>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-head"><span>Frame</span></div>
+          <div class="prop-row">
+            <label>W</label><input class="mini" id="frameW" value="1080" readonly>
+            <label>H</label><input class="mini" id="frameH" value="1920" readonly>
+          </div>
+          <div class="prop-row">
+            <label>Ratio</label><input class="mini wide" id="frameRatio" value="9:16" readonly title="Change it in Video → Format">
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-head"><span>Properties</span></div>
+          <div id="fields"></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><span>Video</span><span class="section-meta" id="videoSummary"></span></div>
+          <div id="videoFields"></div>
+        </div>
+      </div>
+
+      <div class="panel-body hidden" id="rightCode">
+        <div class="section">
+          <div class="section-head"><span>HTML source</span></div>
+          <p class="hint tight">Edit the reel HTML in the center <b>Code</b> view. Saving forks templates into an editable copy.</p>
+          <button class="btn block" id="btnOpenCode" type="button">Open code editor</button>
+          <button class="btn block" id="btnApplyCodeSide" type="button" style="margin-top:8px">Save &amp; preview</button>
+        </div>
+      </div>
+
+      <div class="panel-body hidden" id="rightExport">
+        <div class="section">
+          <div class="section-head"><span>Render</span></div>
+          <p class="hint tight" id="exportSpec">Exports a vertical MP4 at 1080×1920, 30fps.</p>
+          <div class="progress"><i id="bar"></i></div>
+          <div class="status" id="status">Ready</div>
+          <div id="download"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+  <script src="/app.js" type="module"></script>
+  <script>
+    document.querySelectorAll(".panel-tab[data-left]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".panel-tab[data-left]").forEach((b) => b.classList.remove("on"));
+        btn.classList.add("on");
+        document.getElementById("leftElements").classList.toggle("hidden", btn.dataset.left !== "elements");
+        document.getElementById("leftExports").classList.toggle("hidden", btn.dataset.left !== "exports");
+        document.getElementById("leftProjects").classList.toggle("hidden", btn.dataset.left !== "projects");
+      });
+    });
+    document.querySelectorAll(".panel-tab[data-right]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".panel-tab[data-right]").forEach((b) => b.classList.remove("on"));
+        btn.classList.add("on");
+        const mode = btn.dataset.right;
+        document.getElementById("rightDesign").classList.toggle("hidden", mode !== "design");
+        document.getElementById("rightCode").classList.toggle("hidden", mode !== "code");
+        document.getElementById("rightExport").classList.toggle("hidden", mode !== "export");
+        if (mode === "code") window.__openCodeView?.();
+      });
+    });
+  </script>
+</body>
+</html>

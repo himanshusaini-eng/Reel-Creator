@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reel Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body class="landing">
+  <header class="site-head">
+    <a class="brand" href="/"><span class="brand-mark">RC</span>Reel Creator</a>
+    <nav class="head-nav">
+      <a href="#how">How it works</a>
+      <a href="#uses">Use cases</a>
+      <a href="#templates">Templates</a>
+    </nav>
+    <div class="head-actions">
+      <a class="btn ghost" href="/signin">Sign in</a>
+      <a class="btn primary" href="/signup">Get started</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="kicker">Device video mockups · 9:16 reels</span>
+      <h1>Put your app's screen recording in a real device</h1>
+      <p>Upload a screen recording or screenshot, drop it into an iPhone, Android, iPad or MacBook frame, add a headline and motion, and export a 1080×1920 MP4 ready for Reels, TikTok, Shorts and App Store previews.</p>
+      <div class="hero-ctas">
+        <a class="btn primary lg" href="/app/new?template=device-mockup">Get started — it's free</a>
+        <a class="btn lg" href="#how">See how it works</a>
+      </div>
+    </div>
+
+    <a class="dropzone" href="/app/new?template=device-mockup" aria-label="Start a device mockup">
+      <div class="dz-phone" aria-hidden="true">
+        <div class="dz-screen">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M5 20h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <b>Upload your video</b>
+          <span>MP4 · WebM · MOV · PNG · JPG</span>
+        </div>
+      </div>
+      <span class="dz-note">Click to start a mockup</span>
+    </a>
+  </section>
+
+  <section class="devices" aria-label="Supported devices">
+    <span>iPhone</span><span>Android phone</span><span>iPad</span><span>MacBook</span><span>Frameless</span>
+  </section>
+
+  <section class="band" id="how">
+    <div class="band-head">
+      <h2>How it works</h2>
+      <p>From screen recording to finished reel in three steps.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><i>1</i><b>Choose a device</b><span>Pick an iPhone, Android, iPad or MacBook frame in graphite, silver or your brand color. Or start from one of the animated templates.</span></div>
+      <div class="step"><i>2</i><b>Upload your video</b><span>Add a screen recording or screenshot. Trim where it starts, set the reel length, choose a motion like float, 3D tilt or orbit, and write a headline.</span></div>
+      <div class="step"><i>3</i><b>Export</b><span>Render a 1080×1920 MP4 at 24, 30 or 60 fps, with optional music and fades. Every export stays in the project's history.</span></div>
+    </div>
+  </section>
+
+  <section class="band" id="uses">
+    <div class="band-head">
+      <h2>Use cases</h2>
+      <p>One recording, many places to show it.</p>
+    </div>
+    <div class="uses">
+      <div class="use"><b>App Store &amp; Google Play</b><span>Preview videos that show the real app in a real device.</span></div>
+      <div class="use"><b>Social reels</b><span>Vertical clips for Instagram Reels, TikTok and YouTube Shorts.</span></div>
+      <div class="use"><b>Launches &amp; portfolios</b><span>Product Hunt galleries, Dribbble and Behance shots, changelog posts.</span></div>
+      <div class="use"><b>Pitches &amp; presentations</b><span>Drop a polished demo clip into a deck instead of a raw recording.</span></div>
+    </div>
+  </section>
+
+  <section class="band" id="templates">
+    <div class="band-head">
+      <h2>Templates</h2>
+      <p>Start from a device mockup or one of the animated reel templates.</p>
+    </div>
+    <div class="tpl-grid landing-tpls" id="tpls"></div>
+  </section>
+
+  <section class="cta-band">
+    <h2>Make your first reel in a few minutes</h2>
+    <a class="btn primary lg" href="/app/new?template=device-mockup">Get started</a>
+  </section>
+
+  <footer class="site-foot">
+    <span>Reel Creator</span>
+    <span class="muted">Device mockups and app promo reels, rendered to MP4.</span>
+  </footer>
+
+  <script type="module">
+    import { escapeHtml } from "/site.js";
+    fetch("/api/templates")
+      .then((r) => r.json())
+      .then((list) => {
+        document.getElementById("tpls").innerHTML = list
+          .map((t) => `
+            <a class="tpl-card" href="/app/new?template=${encodeURIComponent(t.id)}">
+              <img src="/templates/${encodeURIComponent(t.id)}/${escapeHtml(t.thumbnail || "preview.svg")}" alt="">
+              <div><b>${escapeHtml(t.name)}</b><span>${escapeHtml(t.description || "")}</span></div>
+            </a>`)
+          .join("");
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

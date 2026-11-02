@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New project · Reel Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <header class="site-head">
+    <a class="brand" href="/app"><span class="brand-mark">RC</span>Reel Creator</a>
+    <div class="head-actions">
+      <span class="who" id="who"></span>
+      <button class="btn ghost" id="btnSignOut" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="page wizard">
+    <div class="page-head">
+      <h1>New project</h1>
+      <a class="btn ghost" href="/app">Cancel</a>
+    </div>
+
+    <section class="wstep">
+      <h2><i>1</i>Name</h2>
+      <input class="input" id="name" placeholder="e.g. Your App – launch reel" autocomplete="off">
+    </section>
+
+    <section class="wstep">
+      <h2><i>2</i>Starting point</h2>
+      <div class="source-tabs" role="tablist">
+        <button class="source-tab on" data-source="template" type="button">Template</button>
+        <button class="source-tab" data-source="upload" type="button">Upload HTML reel</button>
+        <button class="source-tab" data-source="duplicate" type="button">Duplicate a project</button>
+      </div>
+
+      <div id="srcTemplate"><div class="tpl-grid" id="templates"></div></div>
+
+      <div id="srcUpload" class="hidden">
+        <div class="drop" id="drop">
+          <input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden>
+          <input type="file" id="assetFiles" accept="image/*,.json,.svg,.png,.jpg,.jpeg,.webp" multiple hidden>
+          <div class="drop-actions">
+            <button class="btn" id="btnPickHtml" type="button">Choose index.html</button>
+            <button class="btn ghost" id="btnPickAssets" type="button">Add assets</button>
+          </div>
+          <p>Or drop the <code>.html</code> file and its <code>assets/</code> images here.<br>
+            The reel should expose <code>window.__reel = { DUR, setTime(t) }</code>. If it doesn't, a basic one is added.</p>
+          <div class="file-list" id="fileList"></div>
+        </div>
+      </div>
+
+      <div id="srcDuplicate" class="hidden"><div class="dup-list" id="dupList"></div></div>
+    </section>
+
+    <div class="error" id="error" role="alert"></div>
+    <div class="wizard-foot">
+      <button class="btn primary lg" id="btnCreate" type="button" disabled>Create project</button>
+    </div>
+  </main>
+
+  <script type="module">
+    import { $, api, escapeHtml, timeAgo, mountAccount } from "/site.js";
+
+    const s = { source: "template", templateId: null, dupId: null, html: null, assets: [], templates: [], projects: [] };
+
+    function canCreate() {
+      if (s.source === "template") return !!s.templateId;
+      if (s.source === "upload") return !!s.html;
+      return !!s.dupId;
+    }
+    const refresh = () => ($("btnCreate").disabled = !canCreate());
+
+    function renderTemplates() {
+      $("templates").innerHTML = s.templates
+        .map((t) => `
+          <button class="tpl-card${t.id === s.templateId ? " on" : ""}" data-id="${escapeHtml(t.id)}" type="button">
+            <img src="/templates/${encodeURIComponent(t.id)}/${escapeHtml(t.thumbnail || "preview.svg")}" alt="">
+            <div><b>${escapeHtml(t.name)}</b><span>${escapeHtml(t.description || "")}</span></div>
+          </button>`)
+        .join("");
+    }
+
+    function renderDuplicates() {
+      $("dupList").innerHTML = s.projects.length
+        ? s.projects
+            .map((p) => `
+              <button class="dup-item${p.id === s.dupId ? " on" : ""}" data-id="${p.id}" type="button">
+                <b>${escapeHtml(p.name)}</b><span>edited ${timeAgo(p.updatedAt)}</span>
+              </button>`)
+            .join("")
+        : `<p class="muted">You don't have any projects to copy yet.</p>`;
+    }
+
+    function renderFiles() {
+      const rows = [];
+      if (s.html) rows.push(`HTML: ${escapeHtml(s.html.name)}`);
+      if (s.assets.length) rows.push(`${s.assets.length} asset${s.assets.length === 1 ? "" : "s"}: ${s.assets.map((f) => escapeHtml(f.name)).join(", ")}`);
+      $("fileList").innerHTML = rows.map((r) => `<div>${r}</div>`).join("");
+      refresh();
+    }
+
+    document.querySelectorAll(".source-tab").forEach((tab) =>
+      tab.addEventListener("click", () => {
+        s.source = tab.dataset.source;
+        document.querySelectorAll(".source-tab").forEach((t) => t.classList.toggle("on", t === tab));
+        $("srcTemplate").classList.toggle("hidden", s.source !== "template");
+        $("srcUpload").classList.toggle("hidden", s.source !== "upload");
+        $("srcDuplicate").classList.toggle("hidden", s.source !== "duplicate");
+        refresh();
+      })
+    );
+
+    $("templates").addEventListener("click", (e) => {
+      const card = e.target.closest(".tpl-card");
+      if (!card) return;
+      s.templateId = card.dataset.id;
+      renderTemplates();
+      refresh();
+    });
+    $("dupList").addEventListener("click", (e) => {
+      const item = e.target.closest(".dup-item");
+      if (!item) return;
+      s.dupId = item.dataset.id;
+      renderDuplicates();
+      refresh();
+    });
+
+    $("btnPickHtml").addEventListener("click", () => $("htmlFile").click());
+    $("btnPickAssets").addEventListener("click", () => $("assetFiles").click());
+    $("htmlFile").addEventListener("change", () => {
+      s.html = $("htmlFile").files?.[0] || s.html;
+      renderFiles();
+    });
+    $("assetFiles").addEventListener("change", () => {
+      s.assets = [...($("assetFiles").files || [])];
+      renderFiles();
+    });
+    const drop = $("drop");
+    drop.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      drop.classList.add("drag");
+    });
+    drop.addEventListener("dragleave", () => drop.classList.remove("drag"));
+    drop.addEventListener("drop", (e) => {
+      e.preventDefault();
+      drop.classList.remove("drag");
+      const files = [...(e.dataTransfer?.files || [])];
+      const html = files.find((f) => /\.html?$/i.test(f.name) || f.type === "text/html");
+      const assets = files.filter((f) => f !== html);
+      if (html) s.html = html;
+      if (assets.length) s.assets = assets;
+      renderFiles();
+    });
+
+    $("btnCreate").addEventListener("click", async () => {
+      const name = $("name").value.trim();
+      $("error").textContent = "";
+      $("btnCreate").disabled = true;
+      $("btnCreate").textContent = "Creating…";
+      try {
+        let project;
+        if (s.source === "template") {
+          project = await api("/api/projects", { method: "POST", body: JSON.stringify({ templateId: s.templateId, name }) });
+        } else if (s.source === "upload") {
+          const fd = new FormData();
+          fd.append("name", name);
+          fd.append("html", s.html);
+          for (const f of s.assets) fd.append("assets", f);
+          project = await api("/api/upload-html", { method: "POST", body: fd });
+        } else {
+          project = await api(`/api/projects/${s.dupId}/duplicate`, { method: "POST", body: JSON.stringify({ name }) });
+        }
+        location.href = `/app/projects/${project.id}`;
+      } catch (err) {
+        $("error").textContent = err.message;
+        $("btnCreate").textContent = "Create project";
+        refresh();
+      }
+    });
+
+    async function boot() {
+      await mountAccount();
+      [s.templates, s.projects] = await Promise.all([api("/api/templates"), api("/api/projects")]);
+      const wanted = new URLSearchParams(location.search).get("template");
+      s.templateId = s.templates.some((t) => t.id === wanted) ? wanted : s.templates[0]?.id || null;
+      renderTemplates();
+      renderDuplicates();
+      refresh();
+    }
+    boot().catch((e) => ($("error").textContent = e.message));
+  </script>
+</body>
+</html>

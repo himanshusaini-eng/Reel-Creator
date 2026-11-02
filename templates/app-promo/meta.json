@@ -1,0 +1,36 @@
+{
+  "name": "App Promo",
+  "description": "Intro → phone feature cards → App Store / Play download end card",
+  "duration": 12,
+  "thumbnail": "preview.svg",
+  "fields": [
+    { "key": "appName", "label": "App name", "type": "text" },
+    { "key": "tagline", "label": "Tagline", "type": "text" },
+    { "key": "primary", "label": "Primary color", "type": "color" },
+    { "key": "primaryDark", "label": "Primary dark", "type": "color" },
+    { "key": "background", "label": "Background", "type": "color" },
+    { "key": "logoUrl", "label": "Logo", "type": "image" },
+    { "key": "feature1", "label": "Feature 1", "type": "text" },
+    { "key": "feature2", "label": "Feature 2", "type": "text" },
+    { "key": "feature3", "label": "Feature 3", "type": "text" },
+    { "key": "caption1", "label": "Caption 1", "type": "text" },
+    { "key": "caption2", "label": "Caption 2", "type": "text" },
+    { "key": "showStores", "label": "Show store badges", "type": "boolean" },
+    { "key": "footer", "label": "Footer", "type": "text" }
+  ],
+  "defaults": {
+    "appName": "Your App",
+    "tagline": "Say what your app does in one line",
+    "primary": "#34C759",
+    "primaryDark": "#248A3D",
+    "background": "#F4FAF6",
+    "logoUrl": "",
+    "feature1": "Your top feature",
+    "feature2": "Second key feature",
+    "feature3": "Third key feature",
+    "caption1": "Caption: the main benefit",
+    "caption2": "Caption: why users love it",
+    "showStores": true,
+    "footer": "Download free on iOS & Android"
+  }
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App Promo Reel</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body { font-family: Manrope, system-ui, sans-serif; color: #1C1C1E; user-select: none; }
+  .abs { position: absolute; }
+  .h0 { opacity: 0; }
+  #stage { position: absolute; left: 50%; top: 50%; width: 540px; height: 960px; overflow: hidden; transform-origin: 50% 50%;
+    background: linear-gradient(180deg, #E8F8EE 0%, var(--bg, #F4FAF6) 45%, #EEF7F1 100%); }
+  #topStores { left: 36px; top: 28px; width: 468px; display: flex; gap: 10px; z-index: 20; }
+  .topStore { flex: 1; height: 44px; border-radius: 12px; background: #1C1C1E; color: #fff; display: flex; align-items: center; gap: 10px; padding: 0 12px; }
+  .topStore small { display: block; font-size: 9px; opacity: .75; font-weight: 600; }
+  .topStore b { font-size: 13px; font-weight: 800; }
+  #logo { left: 150px; top: 220px; width: 240px; height: 240px; border-radius: 54px; background: #fff; overflow: hidden;
+    box-shadow: 0 24px 50px rgba(0,0,0,.12); display: flex; align-items: center; justify-content: center; }
+  #logo img { width: 100%; height: 100%; object-fit: contain; }
+  #logoFallback { font-size: 64px; font-weight: 800; color: var(--primary, #34C759); }
+  #name { left: 0; top: 490px; width: 540px; text-align: center; font-size: 36px; font-weight: 800; }
+  #tag { left: 40px; top: 540px; width: 460px; text-align: center; font-size: 17px; font-weight: 600; color: #8E8E93; line-height: 1.35; }
+  #cap { left: 30px; top: 88px; width: 480px; text-align: center; }
+  #cap .h { font-size: 28px; font-weight: 800; }
+  #cap .h span { color: var(--primaryDark, #248A3D); }
+  #phone { left: 0; top: 0; width: 414px; height: 820px; border-radius: 56px; transform-origin: 0 0;
+    background: linear-gradient(145deg, #3A3D4A, #15161C); box-shadow: 0 30px 60px rgba(0,0,0,.25); }
+  #screen { position: absolute; left: 12px; top: 12px; width: 390px; height: 796px; border-radius: 46px; overflow: hidden; background: var(--bg, #F4FAF6); padding: 64px 18px 24px; }
+  #island { position: absolute; left: 134px; top: 22px; width: 122px; height: 34px; border-radius: 17px; background: #000; z-index: 5; }
+  .card { background: #fff; border: 1px solid #E5E5EA; border-radius: 18px; padding: 16px; margin-bottom: 12px; }
+  .card b { display: block; font-size: 17px; font-weight: 800; }
+  .card span { display: block; margin-top: 4px; font-size: 13px; color: #8E8E93; font-weight: 600; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary, #34C759); display: inline-block; margin-right: 8px; }
+  #end { position: absolute; inset: 0; }
+  #endLogo { left: 180px; top: 140px; width: 180px; height: 180px; border-radius: 42px; background: #fff; overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,.1); display: flex; align-items: center; justify-content: center; }
+  #endLogo img { width: 100%; height: 100%; object-fit: contain; }
+  #endName { left: 0; top: 350px; width: 540px; text-align: center; font-size: 34px; font-weight: 800; }
+  #endTag { left: 40px; top: 400px; width: 460px; text-align: center; font-size: 17px; font-weight: 700; color: var(--primaryDark, #248A3D); }
+  #feats { left: 70px; top: 460px; width: 400px; }
+  .feat { height: 48px; border-radius: 14px; background: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; padding: 0 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.06); font-weight: 700; font-size: 15px; }
+  .feat i { width: 28px; height: 28px; border-radius: 10px; background: var(--primary, #34C759); color: #fff; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 14px; }
+  #stores { left: 70px; top: 640px; width: 400px; display: flex; flex-direction: column; gap: 10px; }
+  .storeBtn { height: 54px; border-radius: 14px; background: #1C1C1E; color: #fff; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
+  .storeBtn small { display: block; font-size: 11px; opacity: .75; }
+  .storeBtn b { font-size: 17px; }
+  #foot { left: 0; top: 780px; width: 540px; text-align: center; font-size: 14px; font-weight: 700; color: #8E8E93; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="topStores" class="abs h0">
+    <div class="topStore"><div><small>Download on the</small><b>App Store</b></div></div>
+    <div class="topStore"><div><small>Get it on</small><b>Google Play</b></div></div>
+  </div>
+  <div id="intro">
+    <div id="logo" class="abs h0"><span id="logoFallback">◆</span><img id="logoImg" alt="" style="display:none"></div>
+    <div id="name" class="abs h0"></div>
+    <div id="tag" class="abs h0"></div>
+  </div>
+  <div id="cap" class="abs h0"><div class="h" id="capH"></div></div>
+  <div id="phone" class="abs h0">
+    <div id="screen">
+      <div style="font-size:15px;font-weight:600;color:#8E8E93" id="greet">Good morning</div>
+      <div style="font-size:28px;font-weight:800;margin:4px 0 18px" id="phoneTitle"></div>
+      <div class="card" id="c1"><b><span class="dot"></span><span id="f1t"></span></b><span>One short line about it</span></div>
+      <div class="card" id="c2"><b><span class="dot"></span><span id="f2t"></span></b><span>Why users love it</span></div>
+      <div class="card" id="c3"><b><span class="dot"></span><span id="f3t"></span></b><span>What makes it different</span></div>
+    </div>
+    <div id="island"></div>
+  </div>
+  <div id="end" class="h0">
+    <div id="endLogo" class="abs"><span id="endLogoFallback" style="font-size:48px;font-weight:800;color:var(--primary)">◆</span><img id="endLogoImg" alt="" style="display:none"></div>
+    <div id="endName" class="abs"></div>
+    <div id="endTag" class="abs"></div>
+    <div id="feats" class="abs"></div>
+    <div id="stores" class="abs h0">
+      <div class="storeBtn"><div><small>Download on the</small><b>App Store</b></div></div>
+      <div class="storeBtn"><div><small>Get it on</small><b>Google Play</b></div></div>
+    </div>
+    <div id="foot" class="abs"></div>
+  </div>
+</div>
+<script>
+const D = Object.assign({
+  appName: "Your App", tagline: "Say what your app does in one line", primary: "#34C759", primaryDark: "#248A3D",
+  background: "#F4FAF6", logoUrl: "", feature1: "Your top feature", feature2: "Second key feature", feature3: "Third key feature",
+  caption1: "Caption: the main benefit", caption2: "Caption: why users love it", showStores: true, footer: "Download free on iOS & Android"
+}, window.__PROJECT__ || {});
+
+const DUR = 12;
+const $ = (id) => document.getElementById(id);
+const stage = $("stage");
+stage.style.setProperty("--primary", D.primary);
+stage.style.setProperty("--primaryDark", D.primaryDark);
+stage.style.setProperty("--bg", D.background);
+
+$("name").textContent = $("endName").textContent = $("phoneTitle").textContent = D.appName;
+$("tag").textContent = $("endTag").textContent = D.tagline;
+$("foot").textContent = D.footer;
+$("f1t").textContent = D.feature1;
+$("f2t").textContent = D.feature2;
+$("f3t").textContent = D.feature3;
+$("feats").innerHTML = [D.feature1, D.feature2, D.feature3].map(t =>
+  `<div class="feat h0"><i>✓</i>${t}</div>`).join("");
+const featEls = [...document.querySelectorAll(".feat")];
+
+function setLogo(url) {
+  ["logoImg", "endLogoImg"].forEach((id, i) => {
+    const img = $(id);
+    const fb = $(i === 0 ? "logoFallback" : "endLogoFallback");
+    if (url) { img.src = url; img.style.display = "block"; fb.style.display = "none"; }
+  });
+}
+if (D.logoUrl) setLogo(D.logoUrl);
+
+function fit() {
+  const s = Math.min(innerWidth / 540, innerHeight / 960);
+  stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+}
+addEventListener("resize", fit); fit();
+
+const clamp = (x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp = (a,b,p)=>a+(b-a)*p;
+const prog = (t,a,b)=>clamp((t-a)/(b-a));
+const ease = {
+  out: p => 1 - Math.pow(1-p,3),
+  inOut: p => p<.5 ? 4*p*p*p : 1 - Math.pow(-2*p+2,3)/2,
+  spring: p => p<=0?0:p>=1?1:1-Math.exp(-7*p)*Math.cos(9*p),
+};
+function set(el, o, tr) { if (!el) return; el.style.opacity = o; if (tr!==undefined) el.style.transform = tr; }
+
+const PHONE_S = 0.62, PHONE_TOP = 248, PHONE_LEFT = (540 - 414 * PHONE_S) / 2;
+
+function render(t) {
+  const showStores = D.showStores !== false;
+  set($("topStores"), showStores ? ease.out(prog(t, 0.05, 0.3)) : 0, `translateY(${(1-ease.spring(prog(t,0.05,0.5)))*-16}px)`);
+
+  const io = ease.inOut(prog(t, 1.2, 1.55));
+  const ip = ease.spring(prog(t, 0.1, 0.9));
+  set($("logo"), ease.out(prog(t,0.1,0.35))*(1-io), `scale(${lerp(0.7,1,ip)*(1-0.1*io)})`);
+  set($("name"), ease.out(prog(t,0.25,0.5))*(1-io), `translateY(${20*(1-ease.spring(prog(t,0.25,0.9)))}px)`);
+  set($("tag"), ease.out(prog(t,0.35,0.55))*(1-io), `translateY(${16*(1-ease.spring(prog(t,0.35,1)))}px)`);
+
+  const cap1 = ease.out(prog(t,1.6,1.9))*(1-ease.inOut(prog(t,4.2,4.5)));
+  const cap2 = ease.out(prog(t,4.6,4.9))*(1-ease.inOut(prog(t,7.8,8.1)));
+  $("capH").innerHTML = t < 4.4
+    ? D.caption1.replace(/(\w+)$/, '<span>$1</span>')
+    : D.caption2.replace(/(\w+)$/, '<span>$1</span>');
+  set($("cap"), Math.max(cap1, cap2), `translateY(${12*(1-Math.max(cap1,cap2))}px)`);
+
+  const pin = ease.spring(prog(t, 1.35, 2.2));
+  const pout = ease.inOut(prog(t, 8.0, 8.5));
+  set($("phone"), ease.out(prog(t,1.35,1.6))*(1-pout),
+    `translate(${PHONE_LEFT}px, ${PHONE_TOP+(1-pin)*700+pout*80}px) scale(${PHONE_S*(1-0.05*pout)})`);
+  ["c1","c2","c3"].forEach((id,i)=>{
+    const p = ease.spring(prog(t, 2.0+i*0.15, 2.6+i*0.15));
+    set($(id), ease.out(prog(t,2.0+i*0.15,2.3+i*0.15)), `translateY(${(1-p)*24}px)`);
+  });
+
+  const endOn = ease.out(prog(t, 8.3, 8.7));
+  set($("end"), endOn);
+  set($("endLogo"), endOn, `scale(${lerp(0.7,1,ease.spring(prog(t,8.4,9.2)))})`);
+  set($("endName"), ease.out(prog(t,8.6,8.9)), `translateY(${16*(1-ease.spring(prog(t,8.6,9.3)))}px)`);
+  set($("endTag"), ease.out(prog(t,8.75,9.0)));
+  featEls.forEach((el,i)=>{
+    const p = ease.spring(prog(t, 9.0+i*0.12, 9.6+i*0.12));
+    set(el, ease.out(prog(t,9.0+i*0.12,9.25+i*0.12)), `translateY(${(1-p)*18}px)`);
+  });
+  const storesIn = ease.spring(prog(t, 9.6, 10.3));
+  set($("stores"), showStores ? ease.out(prog(t,9.6,9.85)) : 0, `translateY(${(1-storesIn)*24}px)`);
+  set($("foot"), ease.out(prog(t, 10.4, 10.7)));
+}
+
+let start = performance.now(), paused = false, pausedT = 0;
+const freeze = new URLSearchParams(location.search).get("t");
+if (freeze !== null) { paused = true; pausedT = +freeze; }
+function frame(now) {
+  const t = paused ? pausedT : ((now - start) / 1000) % DUR;
+  render(t);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.__reel = {
+  DUR,
+  setTime(t) { paused = true; pausedT = t; render(t); },
+  render,
+};
+</script>
+</body>
+</html>

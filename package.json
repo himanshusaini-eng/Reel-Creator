@@ -1,0 +1,32 @@
+{
+  "name": "reel-creator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "App demo reel studio — edit templates, preview, export 9:16 MP4",
+  "scripts": {
+    "dev": "nest start --watch",
+    "start": "NODE_ENV=production node dist/main.js",
+    "build": "nest build",
+    "render": "node worker/render.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.12",
+    "@nestjs/core": "^11.0.12",
+    "@nestjs/platform-express": "^11.0.12",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.2",
+    "puppeteer-core": "^23.11.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.5",
+    "@types/express": "^5.0.1",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}

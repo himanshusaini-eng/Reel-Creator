@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Reel Creator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <header class="site-head">
+    <a class="brand" href="/"><span class="brand-mark">RC</span>Reel Creator</a>
+  </header>
+
+  <main class="auth-wrap">
+    <form class="card" id="form" novalidate>
+      <h1 id="title">Sign in</h1>
+      <p class="sub" id="sub">Welcome back. Pick up where you left off.</p>
+      <label class="field hidden" id="nameField"><span>Name</span>
+        <input class="input" id="name" name="name" autocomplete="name">
+      </label>
+      <label class="field"><span>Email</span>
+        <input class="input" id="email" name="email" type="email" autocomplete="email" required>
+      </label>
+      <label class="field"><span>Password</span>
+        <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+      </label>
+      <div class="error" id="error" role="alert"></div>
+      <button class="btn primary" id="submit" type="submit">Sign in</button>
+      <div class="switch" id="switch"></div>
+    </form>
+  </main>
+
+  <script type="module">
+    import { $, api } from "/site.js";
+
+    const signup = location.pathname === "/signup";
+    const params = new URLSearchParams(location.search);
+    const raw = params.get("next") || "";
+    // Only follow same-site paths back after sign-in
+    const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/app";
+    const carry = raw ? `?next=${encodeURIComponent(raw)}` : "";
+
+    if (signup) {
+      document.title = "Create account · Reel Creator";
+      $("title").textContent = "Create your account";
+      $("sub").textContent = "Free. Your projects and exports stay private to you.";
+      $("nameField").classList.remove("hidden");
+      $("password").autocomplete = "new-password";
+      $("password").placeholder = "At least 8 characters";
+      $("submit").textContent = "Create account";
+      $("switch").innerHTML = `Already have an account? <a href="/signin${carry}">Sign in</a>`;
+    } else {
+      $("switch").innerHTML = `New here? <a href="/signup${carry}">Create a free account</a>`;
+    }
+
+    $("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      $("error").textContent = "";
+      $("submit").disabled = true;
+      try {
+        const body = { email: $("email").value, password: $("password").value };
+        if (signup) body.name = $("name").value;
+        await api(signup ? "/api/auth/signup" : "/api/auth/signin", { method: "POST", body: JSON.stringify(body) });
+        location.href = next;
+      } catch (err) {
+        $("error").textContent = err.message;
+        $("submit").disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
