@@ -5,6 +5,8 @@ import { PUBLIC } from "../paths";
 import { ProjectsService } from "../projects/projects.service";
 import type { AuthedRequest } from "../auth/user.decorator";
 
+
+
 @Controller()
 export class PagesController {
   constructor(private readonly projects: ProjectsService) {}
