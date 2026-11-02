@@ -1,0 +1,11 @@
+node_modules/
+dist/
+output/*
+!output/.gitkeep
+projects/*
+!projects/.gitkeep
+uploads/*
+!uploads/.gitkeep
+.reel-frames/
+.DS_Store
+*.log
