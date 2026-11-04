@@ -3,108 +3,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reel Creator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Turn app screens into polished promo reels. Compose, customize, and export your next launch video in one creative studio.">
+  <title>Reel Creator — App promo, reimagined</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/landing.css">
 </head>
-<body class="landing">
+<body class="landing" id="top">
+  <div class="page-glow page-glow-top" aria-hidden="true"></div>
   <header class="site-head">
-    <a class="brand" href="/"><span class="brand-mark">RC</span>Reel Creator</a>
-    <nav class="head-nav">
-      <a href="#how">How it works</a>
+    <a class="brand" href="/" aria-label="Reel Creator home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg></span>
+      <span class="brand-text">reelcreator</span>
+    </a>
+    <nav class="head-nav" id="siteNav" aria-label="Main navigation">
+      <a href="#features">Features</a>
       <a href="#uses">Use cases</a>
       <a href="#templates">Templates</a>
+      <a href="/signin" class="nav-login">Log-in</a>
+      <a class="btn primary nav-menu-cta" href="/signup">Try now <span aria-hidden="true">→</span></a>
     </nav>
     <div class="head-actions">
-      <a class="btn ghost" href="/signin">Sign in</a>
-      <a class="btn primary" href="/signup">Get started</a>
+      <a class="btn primary nav-cta" href="/signup">Try now <span aria-hidden="true">→</span></a>
     </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="siteNav">
+      <span></span><span></span><span></span>
+    </button>
   </header>
+  <div class="site-head-spacer" aria-hidden="true"></div>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
 
-  <section class="hero">
-    <div>
-      <span class="kicker">Device video mockups · 9:16 reels</span>
-      <h1>Put your app's screen recording in a real device</h1>
-      <p>Upload a screen recording or screenshot, drop it into an iPhone, Android, iPad or MacBook frame, add a headline and motion, and export a 1080×1920 MP4 ready for Reels, TikTok, Shorts and App Store previews.</p>
-      <div class="hero-ctas">
-        <a class="btn primary lg" href="/app/new?template=device-mockup">Get started — it's free</a>
-        <a class="btn lg" href="#how">See how it works</a>
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy reveal">
+        <p class="hero-eyebrow">App promo studio</p>
+        <h1 id="heroTitle">Your app.<br>In its<br>best light.</h1>
+        <p class="hero-sub">Drop in a screen recording. Shape the story. Export a reel you’d actually post.</p>
+        <div class="hero-ctas">
+          <a class="btn primary lg" href="/signup">Start a reel</a>
+          <a class="btn demo-link lg" href="#workspace">See the studio</a>
+        </div>
+        <p class="hero-note">Built for founders shipping on Instagram, TikTok, and the stores.</p>
       </div>
-    </div>
 
-    <a class="dropzone" href="/app/new?template=device-mockup" aria-label="Start a device mockup">
-      <div class="dz-phone" aria-hidden="true">
-        <div class="dz-screen">
-          <svg width="44" height="44" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0-4.5 4.5M12 4l4.5 4.5M5 20h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <b>Upload your video</b>
-          <span>MP4 · WebM · MOV · PNG · JPG</span>
+      <div class="hero-art reveal reveal-delay" aria-label="A preview of the Reel Creator studio">
+        <div class="studio-window">
+          <div class="studio-top">
+            <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            <span class="studio-file">summer-launch / v03</span>
+            <span class="render-pill">Preview</span>
+          </div>
+          <div class="studio-canvas">
+            <div class="canvas-side-note">Scene 02 · 00:04.8</div>
+            <div class="preview-card">
+              <div class="preview-copy"><span>YOUR DAY, IN FLOW</span><strong>Make space<br>for your best.</strong><i>Small steps. Big momentum.</i></div>
+              <div class="preview-phone">
+                <div class="phone-island"></div>
+                <div class="phone-ui">
+                  <div class="phone-greet">Good morning</div>
+                  <div class="phone-date">Monday, June 12</div>
+                  <div class="phone-score"><span>YOUR FOCUS</span><strong>84<span>%</span></strong><div><i></i></div></div>
+                  <div class="phone-task"><i>✓</i><span>Morning routine<small>Done · 8:42 AM</small></span></div>
+                  <div class="phone-task"><i class="task-ring"></i><span>Deep work<small>Next · 45 min</small></span></div>
+                </div>
+              </div>
+              <div class="preview-caption">app preview · 00:04</div>
+            </div>
+          </div>
+          <div class="studio-timeline">
+            <div class="timeline-head"><span>Timeline</span><span>00:04.8 / 00:18.0</span></div>
+            <div class="timeline-track"><span class="track-label">Video</span><div class="track-video"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+            <div class="timeline-track"><span class="track-label">Motion</span><div class="track-motion"><span>Headline</span><span>Device</span></div></div>
+            <div class="timeline-playhead"><i></i></div>
+          </div>
         </div>
       </div>
-      <span class="dz-note">Click to start a mockup</span>
-    </a>
-  </section>
+    </section>
 
-  <section class="devices" aria-label="Supported devices">
-    <span>iPhone</span><span>Android phone</span><span>iPad</span><span>MacBook</span><span>Frameless</span>
-  </section>
+    <section class="trusted strip" aria-label="Export destinations">
+      <p class="trusted-label">Export ready for</p>
+      <ul class="platform-list">
+        <li>Instagram</li>
+        <li>TikTok</li>
+        <li>YouTube</li>
+        <li>App Store</li>
+        <li>Google Play</li>
+      </ul>
+    </section>
 
-  <section class="band" id="how">
-    <div class="band-head">
-      <h2>How it works</h2>
-      <p>From screen recording to finished reel in three steps.</p>
-    </div>
-    <div class="steps">
-      <div class="step"><i>1</i><b>Choose a device</b><span>Pick an iPhone, Android, iPad or MacBook frame in graphite, silver or your brand color. Or start from one of the animated templates.</span></div>
-      <div class="step"><i>2</i><b>Upload your video</b><span>Add a screen recording or screenshot. Trim where it starts, set the reel length, choose a motion like float, 3D tilt or orbit, and write a headline.</span></div>
-      <div class="step"><i>3</i><b>Export</b><span>Render a 1080×1920 MP4 at 24, 30 or 60 fps, with optional music and fades. Every export stays in the project's history.</span></div>
-    </div>
-  </section>
+    <section class="section features-section" id="features" aria-labelledby="featuresTitle">
+      <div class="section-heading reveal">
+        <h2 id="featuresTitle">What you get</h2>
+        <p>The pieces of a launch reel, in one place—without the agency wait.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card feature-wide reveal">
+          <div class="feature-info"><span class="feature-index">01</span><h3>Start from your app</h3><p>Bring a recording or screenshots. Get a first cut you can actually edit—not a blank timeline.</p><a href="/app/new" class="feature-link">Open the studio <span>→</span></a></div>
+          <div class="feature-visual generator-visual" aria-hidden="true">
+            <div class="gen-window"><span class="gen-line"></span><b>From idea<br>to in motion.</b><small>Building first cut…</small><div class="gen-progress"><i></i></div></div>
+          </div>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-visual templates-visual" aria-hidden="true">
+            <div class="template-mini mini-lilac"><span>01</span><b>Make<br>your mark.</b></div>
+            <div class="template-mini mini-peach"><span>02</span><b>A little<br>more you.</b></div>
+            <div class="template-mini mini-green"><span>03</span><b>Ready to<br>be seen.</b></div>
+          </div>
+          <div class="feature-info"><span class="feature-index">02</span><h3>Templates that don’t feel templated</h3><p>Pick a structure, then rewrite the beats until it sounds like your product.</p><a href="#templates" class="feature-link">Browse templates <span>→</span></a></div>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-visual layers-visual" aria-hidden="true">
+            <div class="layer-row layer-back"><i>◌</i><span>Atmosphere</span><b>◉</b></div>
+            <div class="layer-row layer-mid"><i>▤</i><span>Feature callout</span><b>◉</b></div>
+            <div class="layer-row layer-front"><i>▣</i><span>App screen</span><b>◉</b></div>
+            <div class="layer-playhead"><i></i></div><div class="layer-time">00:06.2</div>
+          </div>
+          <div class="feature-info"><span class="feature-index">03</span><h3>A real timeline</h3><p>Nudge timing, rewrite captions, swap music. Watch the cut update as you go.</p><a href="#workspace" class="feature-link">Peek at the editor <span>→</span></a></div>
+        </article>
+        <article class="feature-card feature-wide feature-export reveal">
+          <div class="feature-info"><span class="feature-index">04</span><h3>Export and post</h3><p>Pick the frame, hit export, get an MP4. No render farm. No mystery settings.</p><a href="#formats" class="feature-link">Export options <span>→</span></a></div>
+          <div class="feature-visual export-visual" aria-hidden="true">
+            <div class="export-file"><span class="file-play">▶</span><b>summer-launch.mp4</b><small>1080 × 1920 · 00:18</small><div class="file-progress"><i></i></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
 
-  <section class="band" id="uses">
-    <div class="band-head">
-      <h2>Use cases</h2>
-      <p>One recording, many places to show it.</p>
-    </div>
-    <div class="uses">
-      <div class="use"><b>App Store &amp; Google Play</b><span>Preview videos that show the real app in a real device.</span></div>
-      <div class="use"><b>Social reels</b><span>Vertical clips for Instagram Reels, TikTok and YouTube Shorts.</span></div>
-      <div class="use"><b>Launches &amp; portfolios</b><span>Product Hunt galleries, Dribbble and Behance shots, changelog posts.</span></div>
-      <div class="use"><b>Pitches &amp; presentations</b><span>Drop a polished demo clip into a deck instead of a raw recording.</span></div>
-    </div>
-  </section>
+    <section class="workflow-section" id="workflow" aria-labelledby="workflowTitle">
+      <div class="workflow-inner">
+        <div class="section-heading reveal">
+          <h2 id="workflowTitle">How it works</h2>
+          <p>Three steps. No onboarding maze.</p>
+        </div>
+        <div class="workflow-steps">
+          <article class="workflow-step reveal"><div class="step-top"><span>01</span></div><div class="step-illustration upload-illustration"><div class="upload-cloud">↑</div><span>Drop screens here</span></div><h3>Bring your app</h3><p>Upload a recording, screenshots, or start from a template.</p></article>
+          <div class="step-connector" aria-hidden="true"></div>
+          <article class="workflow-step reveal reveal-delay"><div class="step-top"><span>02</span></div><div class="step-illustration customize-illustration"><div class="customize-phone"><i></i><b>Good things<br>are in motion.</b></div><div class="customize-swatches"><b></b><b></b><b></b><b></b></div></div><h3>Shape the cut</h3><p>Rewrite lines, tighten pacing, pick music that fits.</p></article>
+          <div class="step-connector" aria-hidden="true"></div>
+          <article class="workflow-step reveal reveal-delay-more"><div class="step-top"><span>03</span></div><div class="step-illustration finish-illustration"><div class="finish-disc"><span>▶</span></div><div class="finish-check">✓</div><div class="finish-label">Ready</div></div><h3>Export</h3><p>Download an MP4 and post it where your users are.</p></article>
+        </div>
+      </div>
+    </section>
 
-  <section class="band" id="templates">
-    <div class="band-head">
-      <h2>Templates</h2>
-      <p>Start from a device mockup or one of the animated reel templates.</p>
-    </div>
-    <div class="tpl-grid landing-tpls" id="tpls"></div>
-  </section>
+    <section class="editor-section section" id="workspace" aria-labelledby="studioTitle">
+      <div class="section-heading reveal">
+        <h2 id="studioTitle">The workspace</h2>
+        <p>Timeline, canvas, and export in one calm screen.</p>
+      </div>
+      <div class="editor-window reveal">
+        <div class="editor-topbar"><div class="editor-brand"><span class="brand-mark mini-mark">R</span><span>reelcreator</span><i>/</i><b>Spring campaign</b><span class="saved-state"><i></i> All changes saved</span></div><div class="editor-top-actions"><span>↶</span><span>↷</span><button>Preview</button><button class="editor-export">Export <i>↗</i></button></div></div>
+        <div class="editor-body">
+          <aside class="editor-tools"><span class="tool-active">◫</span><span>▤</span><span>✳</span><span>♫</span><span>⚙</span><span class="tool-bottom">?</span></aside>
+          <aside class="editor-layers"><div class="editor-pane-head">YOUR SCENES <span>＋</span></div><div class="scene-thumb scene-active"><span>01</span><b>Opening</b><small>00:00 — 00:04</small></div><div class="scene-thumb"><span>02</span><b>Feature story</b><small>00:04 — 00:11</small></div><div class="scene-thumb"><span>03</span><b>End card</b><small>00:11 — 00:18</small></div><div class="layer-divider"></div><div class="editor-pane-head">LAYERS <span>•••</span></div><div class="editor-layer-row"><i>◌</i><span>Soft glow</span><b>◉</b></div><div class="editor-layer-row"><i>▤</i><span>Headline</span><b>◉</b></div><div class="editor-layer-row"><i>▣</i><span>App screen</span><b>◉</b></div><div class="editor-layer-row"><i>◈</i><span>Background</span><b>◉</b></div></aside>
+          <div class="editor-stage"><div class="stage-label"><span>SCENE 01</span><span>FIT TO SCREEN⌄</span></div><div class="stage-art"><div class="stage-orb"></div><div class="stage-title"><span>MADE FOR YOUR MOMENT</span><b>Make room<br>for <i>more.</i></b><small>A calmer way to get things done.</small><button>Get started <i>↗</i></button></div><div class="stage-device"><div class="stage-device-island"></div><div class="stage-device-ui"><div>9:41 <span>●●●</span></div><p>Today, but<br><b>better.</b></p><i></i><i></i><i></i><small>Your week is looking good ✦</small></div></div></div><div class="editor-controls"><span>▶</span><div class="control-track"><i></i></div><span>00:02.4 <small>/ 00:18.0</small></span><span>◫</span></div><div class="editor-timeline"><div class="editor-time-ticks"><span>00:00</span><span>00:04</span><span>00:08</span><span>00:12</span><span>00:16</span></div><div class="editor-track-row"><span>Video</span><div class="clip clip-video"></div></div><div class="editor-track-row"><span>Text</span><div class="clip clip-text">Headline <i>✦</i></div></div><div class="editor-track-row"><span>Audio</span><div class="clip clip-audio">♫ &nbsp; Light in the morning</div></div><div class="editor-cursor"></div></div></div>
+          <aside class="editor-inspector"><div class="inspector-head">Properties <span>•••</span></div><span class="inspector-label">TEXT LAYER</span><div class="inspector-field">Make room for more.</div><div class="inspector-label">TYPEFACE</div><div class="inspector-field">Satoshi <span>⌄</span></div><div class="inspector-row"><div><span class="inspector-label">SIZE</span><div class="inspector-field">48 px</div></div><div><span class="inspector-label">WEIGHT</span><div class="inspector-field">Bold ⌄</div></div></div><div class="inspector-label">COLOR</div><div class="color-pick"><i></i><span>#FFFFFF</span><b>⌄</b></div><div class="inspector-label">ENTRANCE</div><div class="inspector-field">Soft rise <span>⌄</span></div><div class="inspector-label">TIMING</div><div class="timing-field"><span>Start</span><b>00:00.4</b></div><div class="timing-field"><span>Duration</span><b>00:03.0</b></div></aside>
+        </div>
+      </div>
+      <div class="editor-caption"><span class="caption-spark">✳</span> Built for your flow. Not to get in the way.</div>
+    </section>
 
-  <section class="cta-band">
-    <h2>Make your first reel in a few minutes</h2>
-    <a class="btn primary lg" href="/app/new?template=device-mockup">Get started</a>
-  </section>
+    <section class="formats-section section" id="formats" aria-labelledby="formatsTitle">
+      <div class="formats-copy reveal"><span class="section-kicker">Your work, ready for the world</span><h2 id="formatsTitle">A crisp finish.<br><span class="subdued-heading">Every single time.</span></h2><p>Choose your canvas, fine-tune your frame rate, and let your final cut do the talking.</p><a class="text-link" href="/app/new">Create your first export <span>↗</span></a></div>
+      <div class="formats-art reveal reveal-delay" aria-hidden="true">
+        <div class="format-glow"></div><div class="format-card format-main"><div class="format-file-icon">▶</div><span>FINAL CUT</span><b>Good things<br>are in motion.</b><div class="format-meta"><span>MP4</span><span>1080p</span><span>30 FPS</span></div><div class="render-line"><i></i></div><small>Rendered just now <b>✓</b></small></div>
+        <div class="format-chip fc-one"><i>▣</i> 9:16 vertical</div><div class="format-chip fc-two"><i>◌</i> H.264 · MP4</div><div class="format-chip fc-three"><i>✦</i> Ready to share</div><div class="format-cross">✳</div>
+      </div>
+    </section>
+
+    <section class="template-section section" id="templates" aria-labelledby="templatesTitle">
+      <div class="template-heading reveal"><div><span class="section-kicker">A head start, in every style</span><h2 id="templatesTitle">Find your first frame.</h2><p>Meet the templates that make getting started feel like getting somewhere.</p></div><a class="text-link" href="/app/new">See all templates <span>↗</span></a></div>
+      <div class="tpl-grid landing-tpls" id="tpls"><div class="template-loading">A few good ideas are on their way <span>✳</span></div></div>
+    </section>
+
+    <section class="testimonial-section section" aria-labelledby="testimonialTitle">
+      <div class="testimonial-heading reveal"><span class="section-kicker">For the people who make things</span><h2 id="testimonialTitle">Less production.<br><span class="subdued-heading">More momentum.</span></h2><p class="testimonial-note">Illustrative creator stories—not verified customer reviews.</p></div>
+      <div class="testimonial-grid">
+        <article class="quote-card quote-feature reveal"><div class="quote-stars">★★★★★ <span>EXAMPLE STORY</span></div><blockquote>“The best tools don’t make the work for you. They make it easier to make something you’re proud of.”</blockquote><div class="quote-person"><span class="person-avatar avatar-one">J</span><span><b>For the independent builder</b><small>A little more time for the product.</small></span><i>↗</i></div><div class="quote-mark">“</div></article>
+        <article class="quote-card reveal reveal-delay"><div class="quote-stars">★★★★★ <span>EXAMPLE STORY</span></div><blockquote>“A great launch deserves more than a screen recording. Give your product the entrance it deserves.”</blockquote><div class="quote-person"><span class="person-avatar avatar-two">M</span><span><b>For the small-but-mighty team</b><small>A polished launch, without the production crew.</small></span><i>↗</i></div><div class="quote-mark">“</div></article>
+        <article class="quote-card reveal reveal-delay-more"><div class="quote-stars">★★★★★ <span>EXAMPLE STORY</span></div><blockquote>“One app, a dozen places to show it off. Make a reel that feels right everywhere.”</blockquote><div class="quote-person"><span class="person-avatar avatar-three">A</span><span><b>For the creative who ships</b><small>From the App Store to the scroll.</small></span><i>↗</i></div><div class="quote-mark">“</div></article>
+      </div>
+    </section>
+
+    <section class="pricing-section section" id="pricing" aria-labelledby="pricingTitle">
+      <div class="section-heading reveal"><span class="section-kicker">Room to grow, built right in</span><h2 id="pricingTitle">A good fit for<br><span class="subdued-heading">your next big thing.</span></h2><p>Start creating, find your rhythm, and choose what fits when you’re ready.</p></div>
+      <div class="pricing-grid">
+        <article class="price-card reveal"><span class="plan-name">STARTER</span><h3>Find your flow.</h3><p class="plan-desc">Everything you need to bring your first idea to life.</p><div class="plan-price">Start for free</div><a class="btn price-btn" href="/signup">Get started <span>↗</span></a><div class="plan-divider"></div><span class="plan-includes">A lovely place to begin</span><ul><li>Explore the reel templates</li><li>Customize your app story</li><li>Design with the visual editor</li><li>Export a shareable MP4</li></ul></article>
+        <article class="price-card price-pro reveal reveal-delay"><div class="popular-badge"><span>✦</span> THE CREATOR FAVORITE</div><span class="plan-name">PRO</span><h3>Make more of it.</h3><p class="plan-desc">For the ideas that keep coming—and the launches that can’t wait.</p><div class="plan-price">More room to create</div><a class="btn primary price-btn" href="/signup">Make something great <span>↗</span></a><div class="plan-divider"></div><span class="plan-includes">Everything in your studio</span><ul><li>Every available template</li><li>Fine-tune timing and motion</li><li>More formats and frame rates</li><li>Keep every export close</li></ul></article>
+        <article class="price-card reveal reveal-delay-more"><span class="plan-name">ENTERPRISE</span><h3>Make it a moment.</h3><p class="plan-desc">For the bigger launches and the people behind them.</p><div class="plan-price">Let’s make a plan</div><a class="btn price-btn" href="/signup">Talk to us <span>↗</span></a><div class="plan-divider"></div><span class="plan-includes">A little more personal</span><ul><li>A workflow shaped around you</li><li>Room for bigger ideas</li><li>A human on your side</li><li>Built for your next chapter</li></ul></article>
+      </div>
+      <p class="pricing-note">No credit card needed to start. Plan details are a preview; billing isn’t connected yet.</p>
+    </section>
+
+    <section class="final-cta">
+      <div class="cta-stars" aria-hidden="true"><i>✦</i><i>·</i><i>✧</i><i>·</i><i>✦</i></div>
+      <div class="cta-glow"></div>
+      <div class="final-cta-content reveal"><span class="section-kicker">Your app’s next close-up is waiting</span><h2>Ready to make<br><span class="gradient-text">a little noise?</span></h2><p>Your next great app promo starts with a first frame.</p><a href="/signup" class="btn primary lg magnetic">Start creating for free <span>↗</span></a><small>Make something wonderful. Keep it yours.</small></div>
+      <div class="cta-orbit" aria-hidden="true"><span></span><span></span><span></span><i>✳</i></div>
+    </section>
+  </main>
 
   <footer class="site-foot">
-    <span>Reel Creator</span>
-    <span class="muted">Device mockups and app promo reels, rendered to MP4.</span>
+    <a class="brand footer-brand" href="/"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg></span><span>reel<span class="brand-light">creator</span></span></a>
+    <span class="footer-note">Make your app the one they remember.</span>
+    <nav class="footer-links" aria-label="Footer navigation"><a href="#features">Features</a><a href="#templates">Templates</a><a href="#pricing">Pricing</a><a href="/signin">Sign in</a></nav>
+    <div class="footer-bottom"><span>© <span id="year"></span> Reel Creator. Made for what’s next.</span><div><a href="https://instagram.com" aria-label="Instagram">◎</a><a href="https://youtube.com" aria-label="YouTube">▶</a><a href="https://tiktok.com" aria-label="TikTok">♪</a></div><a href="#top" class="back-top">Back to top ↑</a></div>
   </footer>
-
-  <script type="module">
-    import { escapeHtml } from "/site.js";
-    fetch("/api/templates")
-      .then((r) => r.json())
-      .then((list) => {
-        document.getElementById("tpls").innerHTML = list
-          .map((t) => `
-            <a class="tpl-card" href="/app/new?template=${encodeURIComponent(t.id)}">
-              <img src="/templates/${encodeURIComponent(t.id)}/${escapeHtml(t.thumbnail || "preview.svg")}" alt="">
-              <div><b>${escapeHtml(t.name)}</b><span>${escapeHtml(t.description || "")}</span></div>
-            </a>`)
-          .join("");
-      })
-      .catch(() => {});
-  </script>
+  <script type="module" src="/landing.js"></script>
 </body>
 </html>
