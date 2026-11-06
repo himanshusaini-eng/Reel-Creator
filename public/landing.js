@@ -96,6 +96,25 @@ document.addEventListener("keydown", (event) => {
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+const billingOptions = document.querySelectorAll("[data-billing]");
+const prices = document.querySelectorAll(".plan-price[data-monthly][data-yearly]");
+billingOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    const yearly = option.dataset.billing === "yearly";
+    billingOptions.forEach((button) => {
+      const active = button === option;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    prices.forEach((price) => {
+      const amount = price.dataset[yearly ? "yearly" : "monthly"];
+      if (amount === undefined) return;
+      price.innerHTML = `$${amount}<small>/month</small>`;
+      price.setAttribute("aria-label", `$${amount} per month`);
+    });
+  });
+});
+
 const revealItems = document.querySelectorAll(".reveal");
 if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -139,4 +158,53 @@ try {
   }).join("");
 } catch (error) {
   templatesContainer.innerHTML = `<p class="template-loading" role="status">${escapeHtml(error.message)}. You can still <a href="/app/new">browse templates in the studio ↗</a>.</p>`;
+}
+
+const testimonialTrack = document.getElementById("testimonialTrack");
+const testimonialCards = [...(testimonialTrack?.querySelectorAll(".testimonial-card") || [])];
+const testimonialPrev = document.getElementById("testimonialPrev");
+const testimonialNext = document.getElementById("testimonialNext");
+if (testimonialTrack && testimonialCards.length) {
+  let testimonialIndex = 0;
+  let shiftTimeout;
+  const isMobileTestimonials = () => window.matchMedia("(max-width: 700px)").matches;
+  const showTestimonial = (nextIndex) => {
+    testimonialIndex = (nextIndex + testimonialCards.length) % testimonialCards.length;
+    if (!isMobileTestimonials()) return;
+    const card = testimonialCards[testimonialIndex];
+    testimonialTrack.scrollTo({ left: card.offsetLeft - testimonialTrack.offsetLeft, behavior: "smooth" });
+  };
+  const rotateTestimonials = (direction) => {
+    if (isMobileTestimonials()) {
+      showTestimonial(testimonialIndex + direction);
+      return;
+    }
+
+    testimonialTrack.classList.remove("is-shifting");
+    if (direction > 0) testimonialTrack.append(testimonialCards.shift());
+    else testimonialTrack.prepend(testimonialCards.pop());
+    testimonialTrack.classList.add("is-shifting");
+    window.clearTimeout(shiftTimeout);
+    shiftTimeout = window.setTimeout(() => testimonialTrack.classList.remove("is-shifting"), 400);
+  };
+  testimonialPrev?.addEventListener("click", () => rotateTestimonials(-1));
+  testimonialNext?.addEventListener("click", () => rotateTestimonials(1));
+
+  let carouselTimer;
+  const pauseCarousel = () => window.clearInterval(carouselTimer);
+  const resumeCarousel = () => {
+    pauseCarousel();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    carouselTimer = window.setInterval(() => rotateTestimonials(1), 5000);
+  };
+  testimonialTrack.addEventListener("pointerenter", pauseCarousel);
+  testimonialTrack.addEventListener("pointerleave", resumeCarousel);
+  testimonialTrack.addEventListener("focusin", pauseCarousel);
+  testimonialTrack.addEventListener("focusout", resumeCarousel);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) pauseCarousel();
+    else resumeCarousel();
+  });
+  window.addEventListener("resize", resumeCarousel, { passive: true });
+  resumeCarousel();
 }

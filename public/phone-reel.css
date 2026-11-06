@@ -1,0 +1,1227 @@
+/* Live promo preview inside hero phone — GPU transforms only */
+
+.phone-reel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #050508;
+  color: #fff;
+  font-family: inherit;
+  contain: layout paint style;
+  isolation: isolate;
+}
+
+/* ---------- Intro ---------- */
+.pr-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: #000;
+  opacity: 1;
+  pointer-events: none;
+  will-change: opacity;
+  transition: opacity 0.55s ease;
+}
+
+.pr-intro.is-done {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pr-intro-glow {
+  position: absolute;
+  width: 140%;
+  height: 60%;
+  left: 50%;
+  top: 45%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.55) 0%, rgba(255, 122, 0, 0.18) 38%, transparent 68%);
+  transform: translate3d(-50%, -50%, 0) scale(0.4);
+  opacity: 0;
+  filter: blur(18px);
+  will-change: transform, opacity;
+}
+
+.phone-reel.is-intro .pr-intro-glow {
+  animation: prIntroGlow 1s ease-out forwards;
+}
+
+.pr-logo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translate3d(0, 8px, 0) scale(0.88);
+  will-change: transform, opacity;
+}
+
+.phone-reel.is-intro .pr-logo {
+  animation: prLogoIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+}
+
+.pr-logo-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff7a00, #a855f7);
+  border-radius: 11px;
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.55);
+}
+
+.pr-logo-mark svg {
+  width: 20px;
+  height: 20px;
+}
+
+.pr-logo-text {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: rgba(255, 248, 242, 0.92);
+}
+
+@keyframes prIntroGlow {
+  0% { opacity: 0; transform: translate3d(-50%, -50%, 0) scale(0.35); }
+  55% { opacity: 1; transform: translate3d(-50%, -50%, 0) scale(1); }
+  100% { opacity: 0.55; transform: translate3d(-50%, -50%, 0) scale(1.15); }
+}
+
+@keyframes prLogoIn {
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* ---------- Camera / stage ---------- */
+.pr-camera {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  will-change: transform;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: 50% 38%;
+}
+
+.pr-stage {
+  position: absolute;
+  inset: -4%;
+  will-change: transform;
+}
+
+.pr-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #0a0612;
+}
+
+.pr-grad {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(28px);
+  will-change: transform, opacity;
+}
+
+.pr-grad-a {
+  width: 120%;
+  height: 70%;
+  left: -20%;
+  top: -10%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.55) 0%, transparent 70%);
+  animation: prDriftA 14s ease-in-out infinite;
+}
+
+.pr-grad-b {
+  width: 100%;
+  height: 60%;
+  right: -30%;
+  bottom: 5%;
+  background: radial-gradient(circle, rgba(255, 122, 0, 0.32) 0%, transparent 68%);
+  animation: prDriftB 16s ease-in-out infinite;
+}
+
+.pr-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(22px);
+  opacity: 0.55;
+  will-change: transform;
+}
+
+.pr-blob-a {
+  width: 55%;
+  height: 35%;
+  left: 10%;
+  top: 28%;
+  background: rgba(168, 85, 247, 0.45);
+  animation: prBlobA 11s ease-in-out infinite;
+}
+
+.pr-blob-b {
+  width: 48%;
+  height: 30%;
+  right: 0;
+  top: 48%;
+  background: rgba(255, 90, 40, 0.28);
+  animation: prBlobB 13s ease-in-out infinite;
+}
+
+.pr-blob-c {
+  width: 40%;
+  height: 28%;
+  left: 30%;
+  bottom: 18%;
+  background: rgba(99, 102, 241, 0.35);
+  animation: prBlobC 15s ease-in-out infinite;
+}
+
+.pr-rays {
+  position: absolute;
+  inset: -20%;
+  background:
+    conic-gradient(from 200deg at 50% 40%,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.04) 18deg,
+      transparent 36deg,
+      rgba(168, 85, 247, 0.07) 70deg,
+      transparent 95deg,
+      rgba(255, 122, 0, 0.05) 140deg,
+      transparent 170deg);
+  opacity: 0.7;
+  mix-blend-mode: screen;
+  animation: prRays 22s linear infinite;
+  will-change: transform;
+}
+
+.pr-orb {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.22), rgba(168, 85, 247, 0.08) 45%, transparent 70%);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.2);
+  will-change: transform, opacity;
+}
+
+.pr-orb-1 { width: 42px; height: 42px; left: 12%; top: 22%; animation: prOrbFloat 9s ease-in-out infinite; }
+.pr-orb-2 { width: 28px; height: 28px; right: 14%; top: 34%; animation: prOrbFloat 11s ease-in-out infinite 1.2s; opacity: 0.7; }
+.pr-orb-3 { width: 18px; height: 18px; left: 22%; bottom: 32%; animation: prOrbFloat 8s ease-in-out infinite 0.6s; }
+.pr-orb-4 { width: 34px; height: 34px; right: 20%; bottom: 28%; animation: prOrbFloat 12s ease-in-out infinite 2s; opacity: 0.65; }
+
+.pr-sparkles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pr-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px currentColor;
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.pr-spark.purple { color: #c084fc; background: #e9d5ff; }
+.pr-spark.orange { color: #fb923c; background: #ffedd5; }
+.pr-spark.star {
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+
+/* ---------- World / floor ---------- */
+.pr-scape {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pr-hills {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: 26%;
+  height: 34%;
+  background:
+    radial-gradient(ellipse 55% 80% at 18% 100%, rgba(88, 40, 160, 0.55), transparent 70%),
+    radial-gradient(ellipse 50% 70% at 72% 100%, rgba(124, 58, 237, 0.4), transparent 72%),
+    radial-gradient(ellipse 40% 60% at 48% 110%, rgba(255, 122, 0, 0.18), transparent 70%);
+  filter: blur(2px);
+  animation: prHillsDrift 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.pr-floor {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  bottom: 0;
+  height: 34%;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(12, 8, 22, 0.25) 18%, rgba(8, 6, 16, 0.92) 100%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0 1px,
+      transparent 1px 28px
+    );
+  transform: perspective(420px) rotateX(58deg);
+  transform-origin: 50% 100%;
+  opacity: 0.9;
+}
+
+.pr-floor-glow {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 16%;
+  height: 18%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.35), rgba(255, 122, 0, 0.12) 42%, transparent 70%);
+  filter: blur(10px);
+  animation: prFloorGlow 4.8s ease-in-out infinite;
+}
+
+.pr-studio-wall {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 18%;
+  height: 28%;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 40%),
+    rgba(16, 12, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.25);
+}
+
+.pr-studio-wall::before {
+  content: "REEL STUDIO";
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  color: rgba(255, 248, 242, 0.35);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.pr-desk {
+  position: absolute;
+  bottom: 22%;
+  height: 10px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(60, 48, 80, 0.9), rgba(20, 14, 32, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+}
+
+.pr-desk-a { left: 8%; width: 26%; transform: perspective(200px) rotateX(50deg); }
+.pr-desk-b { left: 37%; width: 28%; transform: perspective(200px) rotateX(50deg); }
+.pr-desk-c { right: 8%; width: 26%; transform: perspective(200px) rotateX(50deg); }
+
+@keyframes prHillsDrift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-3%, 1.5%, 0); }
+}
+
+@keyframes prFloorGlow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.06); }
+}
+
+/* ---------- Work tools / bubbles / links ---------- */
+.pr-tool {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.pr-tool-timeline {
+  left: 58%;
+  top: 18%;
+  width: 54px;
+  height: 28px;
+  padding: 5px 5px 4px;
+  border-radius: 7px;
+  background: rgba(12, 10, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.pr-tool-timeline i {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #a855f7, #7c3aed);
+  width: 70%;
+}
+
+.pr-tool-timeline i:nth-child(2) {
+  width: 88%;
+  background: linear-gradient(90deg, #fb923c, #ea580c);
+}
+
+.pr-tool-timeline i:nth-child(3) {
+  width: 55%;
+  background: linear-gradient(90deg, #60a5fa, #6366f1);
+}
+
+.pr-tool-playhead {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 20%;
+  width: 1.5px;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(251, 146, 60, 0.8);
+  animation: prScrub 2.4s ease-in-out infinite;
+}
+
+.pr-tool-palette {
+  right: -8%;
+  top: 8%;
+  display: flex;
+  gap: 3px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(12, 10, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pr-tool-palette span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: prSwatch 2.8s ease-in-out infinite;
+}
+
+.pr-tool-palette span:nth-child(1) { background: #a855f7; }
+.pr-tool-palette span:nth-child(2) { background: #fb923c; animation-delay: 0.3s; }
+.pr-tool-palette span:nth-child(3) { background: #60a5fa; animation-delay: 0.6s; }
+
+.pr-tool-board {
+  left: 55%;
+  top: 6%;
+  width: 48px;
+  padding: 5px 6px 6px;
+  border-radius: 8px;
+  background: rgba(12, 10, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.pr-tool-board > span {
+  display: block;
+  margin-bottom: 4px;
+  color: rgba(255, 248, 242, 0.7);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.pr-tool-board em {
+  display: block;
+  height: 4px;
+  margin-top: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pr-tool-board em:nth-child(2) { width: 90%; background: rgba(168, 85, 247, 0.55); }
+.pr-tool-board em:nth-child(3) { width: 70%; background: rgba(251, 146, 60, 0.45); }
+.pr-tool-board em:nth-child(4) { width: 80%; background: rgba(96, 165, 250, 0.4); }
+
+.pr-tool-export {
+  left: -8%;
+  top: 12%;
+  width: 46px;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(12, 10, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  text-align: center;
+}
+
+.pr-tool-bar {
+  display: block;
+  height: 5px;
+  margin-bottom: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.pr-tool-bar i {
+  display: block;
+  height: 100%;
+  width: 15%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #a855f7, #fb923c);
+  will-change: width;
+}
+
+.pr-tool-export small {
+  color: rgba(255, 248, 242, 0.75);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.pr-bubble {
+  position: absolute;
+  left: 50%;
+  top: -18%;
+  z-index: 6;
+  min-width: 70px;
+  padding: 5px 8px;
+  border-radius: 10px 10px 10px 4px;
+  background: rgba(255, 248, 242, 0.95);
+  color: #1a1420;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translate3d(-50%, 8px, 0) scale(0.86);
+  transition: opacity 0.28s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.pr-bubble::after {
+  content: attr(data-say);
+}
+
+.pr-bubble.is-on {
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0) scale(1);
+}
+
+/* Keep speech readable when the figure faces left */
+.pr-buddy.role-right .pr-bubble {
+  transform: translate3d(-50%, 8px, 0) scale(-0.86, 0.86);
+}
+.pr-buddy.role-right .pr-bubble.is-on,
+.pr-buddy.role-right.is-talk .pr-bubble {
+  transform: translate3d(-50%, 0, 0) scale(-1, 1);
+}
+.pr-buddy.role-right .pr-job-tag {
+  transform: translate3d(-50%, 0, 0) scaleX(-1);
+}
+.pr-buddy.role-right .pr-tool-export {
+  transform: scaleX(-1);
+}
+
+.pr-job-tag {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  z-index: 5;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(10, 8, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 248, 242, 0.78);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: translate3d(-50%, 0, 0);
+  backdrop-filter: blur(6px);
+}
+
+.pr-links {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.pr-link {
+  fill: none;
+  stroke: rgba(168, 85, 247, 0.35);
+  stroke-width: 0.6;
+  stroke-dasharray: 3 3;
+  stroke-linecap: round;
+  opacity: 0.25;
+  transition: opacity 0.35s ease, stroke 0.35s ease;
+}
+
+.pr-link.is-hot {
+  opacity: 1;
+  stroke: rgba(251, 146, 60, 0.75);
+  stroke-dasharray: 2 2;
+  animation: prLinkPulse 1.1s linear infinite;
+}
+
+.pr-handoff {
+  position: absolute;
+  z-index: 7;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.pr-handoff-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #7c3aed, #fb923c);
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translate3d(30%, 45%, 0) scale(0.8);
+  will-change: transform, opacity;
+}
+
+.pr-handoff.is-on .pr-handoff-card {
+  opacity: 1;
+}
+
+@keyframes prScrub {
+  0%, 100% { left: 12%; }
+  50% { left: 78%; }
+}
+
+@keyframes prSwatch {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+@keyframes prLinkPulse {
+  to { stroke-dashoffset: -10; }
+}
+
+/* ---------- Cast / studio crew ---------- */
+.pr-cast {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.phone-reel.is-live .pr-cast {
+  opacity: 1;
+}
+
+/* Full-stage layer so translate % is relative to the phone screen */
+.pr-buddy {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: translate3d(50%, 70%, 0) scale(0.2);
+  transform-origin: 0 0;
+  will-change: transform;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.phone-reel.is-live .pr-buddy {
+  opacity: 1;
+}
+
+.pr-buddy-fig {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 34%;
+  aspect-ratio: 1;
+  transform: translate3d(-50%, -88%, 0);
+  transform-origin: 50% 85%;
+  will-change: transform;
+}
+
+.pr-buddy.role-lead {
+  z-index: 4;
+}
+
+.pr-buddy.role-lead .pr-buddy-fig {
+  width: 32%;
+  filter: drop-shadow(0 16px 24px rgba(88, 28, 135, 0.42));
+}
+
+.pr-buddy.role-left {
+  z-index: 3;
+}
+
+.pr-buddy.role-left .pr-buddy-fig {
+  width: 29%;
+  filter:
+    hue-rotate(-18deg) saturate(1.05)
+    drop-shadow(0 12px 18px rgba(88, 28, 135, 0.3));
+}
+
+.pr-buddy.role-right {
+  z-index: 3;
+}
+
+.pr-buddy.role-right .pr-buddy-fig {
+  width: 29%;
+  filter:
+    hue-rotate(22deg) saturate(1.08)
+    drop-shadow(0 12px 18px rgba(88, 28, 135, 0.3));
+}
+
+.pr-buddy.role-back {
+  z-index: 2;
+  opacity: 0.92;
+}
+
+.pr-buddy.role-back .pr-buddy-fig {
+  width: 23%;
+  filter:
+    hue-rotate(48deg) saturate(0.95) brightness(0.96)
+    drop-shadow(0 10px 14px rgba(88, 28, 135, 0.28));
+}
+
+.pr-buddy.is-work .pr-char-face {
+  animation: prWorkBob 1.1s ease-in-out infinite;
+}
+
+.pr-buddy.role-left.is-work .pr-char-face {
+  animation: prWorkEdit 0.9s ease-in-out infinite;
+}
+
+.pr-buddy.role-right.is-work .pr-char-face {
+  animation: prWorkExport 1.2s ease-in-out infinite;
+}
+
+.pr-buddy.role-back.is-work .pr-char-face {
+  animation: prWorkDesign 1.4s ease-in-out infinite;
+}
+
+.pr-buddy.is-wave .pr-char-face {
+  animation: prCharWave 0.7s ease-in-out;
+}
+
+.pr-buddy.is-bounce .pr-char-face {
+  animation: prCharBounce 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.pr-buddy.is-nod .pr-char-face {
+  animation: prNod 0.55s ease-in-out;
+}
+
+.pr-buddy.is-look-left .pr-char-face {
+  transform: translate3d(-5%, 0, 0) rotate(-5deg);
+}
+
+.pr-buddy.is-look-right .pr-char-face {
+  transform: translate3d(5%, 0, 0) rotate(5deg);
+}
+
+.pr-buddy.is-talk .pr-bubble {
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0) scale(1);
+}
+
+.pr-char-face {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 80%;
+  will-change: transform;
+}
+
+.pr-char-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Soft lids over the PNG eyes — sky-blue to match the face */
+.pr-lids {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pr-lid {
+  position: absolute;
+  top: 17.8%;
+  width: 16%;
+  height: 15%;
+  border-radius: 50%;
+  background:
+    radial-gradient(120% 90% at 50% 12%, rgba(255, 255, 255, 0.28), transparent 52%),
+    linear-gradient(180deg, #7ad0ff 0%, #55b8f6 48%, #3fa6ea 100%);
+  box-shadow:
+    inset 0 -2px 3px rgba(40, 110, 170, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.25);
+  transform: scaleY(0);
+  transform-origin: 50% 8%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.pr-lid-l { left: 30.4%; }
+.pr-lid-r { left: 54%; }
+
+.pr-buddy.is-blink .pr-lid {
+  animation: prBlink 0.16s ease-in-out;
+}
+
+.pr-buddy.is-blink-double .pr-lid {
+  animation: prBlinkDouble 0.42s ease-in-out;
+}
+
+@keyframes prBlink {
+  0% { transform: scaleY(0); opacity: 0; }
+  35% { transform: scaleY(1); opacity: 1; }
+  65% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(0); opacity: 0; }
+}
+
+@keyframes prBlinkDouble {
+  0% { transform: scaleY(0); opacity: 0; }
+  18% { transform: scaleY(1); opacity: 1; }
+  32% { transform: scaleY(0); opacity: 0; }
+  48% { transform: scaleY(0); opacity: 0; }
+  62% { transform: scaleY(1); opacity: 1; }
+  78% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(0); opacity: 0; }
+}
+
+.pr-char-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  z-index: 1;
+  width: 54%;
+  height: 10%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(124, 58, 237, 0.5), transparent 70%);
+  transform: translate3d(-50%, 0, 0);
+  filter: blur(5px);
+  will-change: transform, opacity;
+}
+
+.pr-buddy.is-work .pr-char-shadow {
+  animation: prWorkShadow 1.1s ease-in-out infinite;
+}
+
+.pr-char-rim {
+  position: absolute;
+  inset: 8% 6% 12%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 70% 40%, rgba(255, 122, 0, 0.35), transparent 55%);
+  filter: blur(14px);
+  opacity: 0.7;
+  animation: prRim 4.5s ease-in-out infinite;
+}
+
+@keyframes prWorkBob {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -3%, 0) rotate(1.5deg); }
+}
+
+@keyframes prWorkEdit {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-2deg); }
+  30% { transform: translate3d(2%, -2%, 0) rotate(3deg); }
+  60% { transform: translate3d(-1%, 1%, 0) rotate(-1deg); }
+}
+
+@keyframes prWorkExport {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -4%, 0) scale(1.03); }
+}
+
+@keyframes prWorkDesign {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  40% { transform: translate3d(-2%, -3%, 0) rotate(-4deg); }
+  70% { transform: translate3d(2%, -1%, 0) rotate(3deg); }
+}
+
+@keyframes prWorkShadow {
+  0%, 100% { opacity: 0.5; transform: translate3d(-50%, 0, 0) scale(1); }
+  50% { opacity: 0.8; transform: translate3d(-50%, 0, 0) scale(0.9); }
+}
+
+@keyframes prNod {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  40% { transform: translate3d(0, 4%, 0) rotate(2deg); }
+  70% { transform: translate3d(0, -1%, 0) rotate(-1deg); }
+}
+
+@keyframes prCharWave {
+  0%, 100% { transform: rotate(0deg) translate3d(0, 0, 0); }
+  25% { transform: rotate(7deg) translate3d(2%, -3%, 0); }
+  50% { transform: rotate(-4deg) translate3d(-1%, 1%, 0); }
+  75% { transform: rotate(5deg) translate3d(1%, -2%, 0); }
+}
+
+@keyframes prCharBounce {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  40% { transform: translate3d(0, -12%, 0) scale(1.05); }
+  70% { transform: translate3d(0, 2%, 0) scale(0.98); }
+}
+
+@keyframes prRim {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}
+
+/* ---------- FX ---------- */
+.pr-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pr-leak {
+  position: absolute;
+  width: 80%;
+  height: 40%;
+  border-radius: 50%;
+  filter: blur(30px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.pr-leak-a {
+  top: -5%;
+  left: -20%;
+  background: rgba(255, 140, 60, 0.35);
+  animation: prLeak 9s ease-in-out infinite;
+}
+
+.pr-leak-b {
+  bottom: 10%;
+  right: -25%;
+  background: rgba(168, 85, 247, 0.3);
+  animation: prLeak 11s ease-in-out infinite 4s;
+}
+
+.pr-flare {
+  position: absolute;
+  top: 18%;
+  right: 12%;
+  width: 70px;
+  height: 70px;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(255, 180, 100, 0.25) 28%, transparent 60%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  animation: prFlare 8s ease-in-out infinite 1.5s;
+  will-change: opacity, transform;
+}
+
+.pr-bloom {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.08), transparent 55%);
+  mix-blend-mode: soft-light;
+  opacity: 0.6;
+  animation: prBloom 6s ease-in-out infinite;
+}
+
+.pr-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+}
+
+/* ---------- Badges ---------- */
+.pr-badges {
+  position: absolute;
+  top: 52px;
+  left: 14px;
+  right: 14px;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.pr-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: rgba(255, 248, 242, 0.95);
+  background: rgba(20, 12, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translate3d(0, -8px, 0) scale(0.92);
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.pr-badge.is-active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.pr-badge.is-exit {
+  opacity: 0;
+  transform: translate3d(0, 6px, 0) scale(0.94);
+}
+
+/* ---------- Caption ---------- */
+.pr-caption {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 86px;
+  z-index: 18;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.phone-reel.is-live .pr-caption {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.pr-caption-kicker {
+  display: block;
+  margin-bottom: 4px;
+  color: #fb923c;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.pr-caption-title {
+  display: block;
+  color: #fff8f2;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- Timeline ---------- */
+.pr-timeline {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 12px;
+  z-index: 22;
+  padding: 8px 8px 6px;
+  border-radius: 12px;
+  background: rgba(8, 6, 14, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translate3d(0, 8px, 0);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}
+
+.phone-reel.is-live .pr-timeline {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.pr-thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.pr-thumb {
+  display: block;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0.55;
+  transform: scale(1);
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  will-change: transform, opacity;
+}
+
+.pr-thumb.is-hot {
+  opacity: 1;
+  transform: scale(1.04);
+  box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.55);
+}
+
+.pr-thumb.t1 { background: linear-gradient(135deg, #1e1033, #7c3aed); }
+.pr-thumb.t2 { background: linear-gradient(135deg, #2a1208, #ea580c); }
+.pr-thumb.t3 { background: linear-gradient(135deg, #0f172a, #6366f1); }
+.pr-thumb.t4 { background: linear-gradient(135deg, #1a0a24, #c026d3); }
+.pr-thumb.t5 { background: linear-gradient(135deg, #111827, #f97316); }
+
+.pr-track {
+  position: relative;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: visible;
+}
+
+.pr-track-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #a855f7, #fb923c);
+  will-change: width;
+}
+
+.pr-playhead {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(251, 146, 60, 0.8);
+  transform: translate3d(0, -50%, 0);
+  will-change: left;
+}
+
+.pr-time {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  color: rgba(255, 248, 242, 0.55);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+/* ---------- Motion keys ---------- */
+@keyframes prDriftA {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(8%, 6%, 0) scale(1.08); }
+}
+
+@keyframes prDriftB {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-10%, -5%, 0) scale(1.1); }
+}
+
+@keyframes prBlobA {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(12%, -8%, 0); }
+}
+
+@keyframes prBlobB {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-10%, 10%, 0); }
+}
+
+@keyframes prBlobC {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, -12%, 0) scale(1.15); }
+}
+
+@keyframes prRays {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes prOrbFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.55; }
+  50% { transform: translate3d(0, -14px, 0); opacity: 0.95; }
+}
+
+@keyframes prLeak {
+  0%, 100% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.9); }
+  40% { opacity: 0.45; transform: translate3d(6%, 4%, 0) scale(1.1); }
+  70% { opacity: 0.15; }
+}
+
+@keyframes prFlare {
+  0%, 100% { opacity: 0; transform: scale(0.7); }
+  45% { opacity: 0.75; transform: scale(1.15); }
+  70% { opacity: 0.2; transform: scale(1); }
+}
+
+@keyframes prBloom {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .pr-intro { display: none; }
+  .phone-reel .pr-cast { opacity: 1; }
+  .phone-reel .pr-buddy {
+    opacity: 1;
+    animation: none;
+  }
+  .phone-reel .pr-buddy.role-lead { transform: translate3d(50%, 62%, 0) scale(1); }
+  .phone-reel .pr-buddy.role-left { transform: translate3d(32%, 64%, 0) scale(0.76); }
+  .phone-reel .pr-buddy.role-right { transform: translate3d(68%, 64%, 0) scale(0.76); }
+  .phone-reel .pr-buddy.role-back { transform: translate3d(48%, 54%, 0) scale(0.56); }
+  .phone-reel .pr-char-face,
+  .phone-reel .pr-char-img {
+    transform: none;
+    animation: none;
+  }
+  .pr-lid { display: none; }
+  .phone-reel .pr-caption,
+  .phone-reel .pr-timeline {
+    opacity: 1;
+    transform: none;
+  }
+  .pr-grad,
+  .pr-blob,
+  .pr-rays,
+  .pr-orb,
+  .pr-leak,
+  .pr-flare,
+  .pr-bloom,
+  .pr-hills,
+  .pr-floor-glow,
+  .pr-char-rim {
+    animation: none !important;
+  }
+  .pr-badge.is-active { opacity: 1; transform: none; }
+}
