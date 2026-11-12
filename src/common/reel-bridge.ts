@@ -22,13 +22,13 @@ export function ensureReelBridge(html: string) {
   try {
     if (window.CONFIG && CONFIG.duration) DUR = CONFIG.duration;
     else if (typeof window.DUR === "number") DUR = window.DUR;
-  } catch (e) {}
+  }  catch (e) {}
   var external = false;
   var controlT = 0;
   var _raf = window.requestAnimationFrame.bind(window);
   window.requestAnimationFrame = function (cb) {
     return _raf(function (now) {
-      if (external) return;
+      if (external) return;                                                                                              
       cb(now);
     });
   };

@@ -35,7 +35,7 @@ async function bootstrap() {
 
   const auth = app.get(AuthService);
   const projects = app.get(ProjectsService);
-  const http = app.getHttpAdapter().getInstance();
+  const http = app.getHttpAdapter().getInstance();  
 
   http.use(["/uploads", "/output"], (req: AuthedRequest, res: any, next: any) => {
     const user = auth.resolveUser(req) || req.user;
@@ -57,10 +57,10 @@ async function bootstrap() {
     } else if (scope === "html") {
       if (!projects.listProjects(uid).some((p) => p.htmlUploadId === owner)) {
         return res.status(404).send("Not found");
-      }
+      }   
     } else if (scope === "users") {
       if (owner !== uid) return res.status(404).send("Not found");
-    }
+    } 
     next();
   });
 

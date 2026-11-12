@@ -10,8 +10,7 @@
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
   <link rel="stylesheet" href="/landing.css">
-  <link rel="stylesheet" href="/phone-reel.css">
-  <link rel="stylesheet" href="/mascot.css">
+  <link rel="stylesheet" href="/hero-reel.css">
 </head>
 <body class="landing" id="top">
   <header class="site-head">
@@ -23,9 +22,9 @@
     </a>
     <nav class="head-nav" id="siteNav" aria-label="Main navigation">
       <a href="#features">Features</a>
+      <a href="#about">About</a>
       <a href="#templates">Templates</a>
       <a href="#pricing">Pricing</a>
-      <a href="#workflow">Resources</a>
       <a href="/signin" class="nav-login">Log in</a>
       <a class="btn primary nav-menu-cta" href="/signup">Start free <span aria-hidden="true">→</span></a>
     </nav>
@@ -43,18 +42,213 @@
     <section class="hero" aria-labelledby="heroTitle">
       <div class="hero-copy reveal">
         <p class="hero-eyebrow"><span aria-hidden="true">✦</span> AI App Promo Studio</p>
-        <h1 id="heroTitle">Create App Promo<br>Videos That<br>Actually Convert.</h1>
+        <h1 id="heroTitle">Create App Promo Videos That Actually Convert.</h1>
         <p class="hero-sub">Turn your app into a scroll-stopping promo video in minutes. Record, edit, enhance with AI, and export professional reels — all in one place.</p>
         <div class="hero-ctas">
           <a class="btn primary lg" href="/signup">Start Free <span aria-hidden="true">→</span></a>
-          <a class="btn ghost lg" href="#workspace"><span class="play-icon" aria-hidden="true">▶</span> Watch Demo</a>
+          <button class="btn ghost lg" id="heroWatchDemo" type="button"><span class="play-icon" aria-hidden="true">▶</span> Watch Demo</button>
         </div>
         <div class="hero-note" aria-label="Available on Apple App Store, Google Play, Product Hunt, and TikTok">
           <span>Available on</span><b><span aria-hidden="true">●</span> App Store</b><b><span aria-hidden="true">▶</span> Google Play</b><b><span aria-hidden="true">◉</span> Product Hunt</b><b><span aria-hidden="true">♪</span> TikTok</b>
         </div>
       </div>
 
-      <div class="hero-art reveal reveal-delay" aria-hidden="true">
+      <div class="hero-art" id="heroMedia">
+        <div class="hero-showcase" id="heroShowcase" data-state="poster">
+          <div class="hero-player-screen">
+            <div class="hero-reel" id="heroReel" role="img" aria-label="Reel Creator product story preview">
+              <div class="hr-bg" aria-hidden="true">
+                <span class="hr-glow hr-glow-a"></span>
+                <span class="hr-glow hr-glow-b"></span>
+                <span class="hr-glow hr-glow-c"></span>
+                <span class="hr-grain"></span>
+              </div>
+
+              <!-- 01 Open: what this product is -->
+              <div class="hr-scene is-active" data-scene="open">
+                <div class="hr-open">
+                  <div class="hr-brand">
+                    <span class="hr-brand-mark" aria-hidden="true">
+                      <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+                    </span>
+                    <span class="hr-brand-text">reelcreator</span>
+                  </div>
+                  <p class="hr-kicker">Product story · 16s</p>
+                  <h2 class="hr-title">Your app.<br>A promo that converts.</h2>
+                  <p class="hr-sub">Watch how founders go from screens to a launch-ready reel — in one studio.</p>
+                  <div class="hr-open-row" aria-hidden="true">
+                    <span class="hr-pill">Record</span>
+                    <span class="hr-arrow"></span>
+                    <span class="hr-pill">AI polish</span>
+                    <span class="hr-arrow"></span>
+                    <span class="hr-pill hr-pill-action">Export</span>
+                  </div>
+                </div>
+                <div class="hr-open-phone" aria-hidden="true">
+                  <div class="hr-phone">
+                    <div class="hr-phone-screen">
+                      <img src="/assets/screen.png" alt="" width="540" height="960" decoding="async">
+                      <div class="hr-phone-overlay">
+                        <span>App Store Promo</span>
+                        <strong>Launch in 18s</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 02 Studio: the real workspace -->
+              <div class="hr-scene" data-scene="studio">
+                <div class="hr-studio">
+                  <div class="hr-studio-bar">
+                    <span class="hr-studio-dots"><i></i><i></i><i></i></span>
+                    <span class="hr-studio-title">summer-launch · Design</span>
+                    <span class="hr-studio-live"><i></i> Editing</span>
+                  </div>
+                  <div class="hr-studio-body">
+                    <aside class="hr-studio-side">
+                      <b>Scenes</b>
+                      <span class="is-on">01 Hook</span>
+                      <span>02 Feature</span>
+                      <span>03 CTA</span>
+                    </aside>
+                    <div class="hr-studio-canvas">
+                      <div class="hr-studio-artboard">
+                        <img src="/assets/screen.png" alt="" width="960" height="640" decoding="async">
+                        <div class="hr-studio-cursor" aria-hidden="true"></div>
+                      </div>
+                    </div>
+                    <aside class="hr-studio-props">
+                      <b>Properties</b>
+                      <label>Caption <em>On</em></label>
+                      <label>Motion <em>Soft rise</em></label>
+                      <label>Duration <em>18s</em></label>
+                    </aside>
+                  </div>
+                  <div class="hr-studio-timeline">
+                    <span class="hr-tl-label">Timeline</span>
+                    <div class="hr-tl-track">
+                      <i class="hr-tl-clip c1"></i>
+                      <i class="hr-tl-clip c2"></i>
+                      <i class="hr-tl-clip c3"></i>
+                      <b class="hr-tl-head"></b>
+                    </div>
+                  </div>
+                </div>
+                <div class="hr-lower-third">
+                  <span>02 · Studio</span>
+                  <strong>Compose the cut in one calm workspace</strong>
+                </div>
+              </div>
+
+              <!-- 03 Polish: AI makes it feel finished -->
+              <div class="hr-scene" data-scene="polish">
+                <div class="hr-polish">
+                  <div class="hr-polish-preview">
+                    <div class="hr-phone hr-phone-lg">
+                      <div class="hr-phone-screen">
+                        <img src="/assets/screen.png" alt="" width="540" height="960" decoding="async">
+                        <div class="hr-caption-stack" aria-hidden="true">
+                          <span class="hr-cap is-1">Capture your flow</span>
+                          <span class="hr-cap is-2">AI trims the noise</span>
+                          <span class="hr-cap is-3">Ship a polished reel</span>
+                        </div>
+                        <div class="hr-ai-badge"><i></i> AI polish</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hr-polish-copy">
+                    <p class="hr-kicker">03 · AI polish</p>
+                    <h2 class="hr-title">Edits that feel<br>finished — fast.</h2>
+                    <p class="hr-sub">Captions, pacing, and soft motion land automatically. You stay in control.</p>
+                    <ul class="hr-chips">
+                      <li>Auto captions</li>
+                      <li>Beat-aware cuts</li>
+                      <li>1080P ready</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 04 Ship: export & outcome -->
+              <div class="hr-scene" data-scene="ship">
+                <div class="hr-ship">
+                  <div class="hr-ship-card">
+                    <div class="hr-ship-top">
+                      <span class="hr-export-dot"></span>
+                      <span>summer-launch.mp4</span>
+                      <b>Ready</b>
+                    </div>
+                    <div class="hr-ship-preview">
+                      <img src="/assets/screen.png" alt="" width="640" height="360" decoding="async">
+                      <span class="hr-ship-play" aria-hidden="true"></span>
+                    </div>
+                    <div class="hr-export-bar"><i></i></div>
+                    <div class="hr-ship-meta">
+                      <span>MP4</span>
+                      <span>1080P</span>
+                      <span>9:16</span>
+                      <span>18s</span>
+                    </div>
+                    <div class="hr-ship-dest" aria-hidden="true">
+                      <span>App Store</span>
+                      <span>Play</span>
+                      <span>TikTok</span>
+                      <span>Ads</span>
+                    </div>
+                  </div>
+                  <div class="hr-ship-copy">
+                    <p class="hr-kicker">04 · Export</p>
+                    <h2 class="hr-title">One studio.<br>Launch-ready reels.</h2>
+                    <p class="hr-sub">That’s Reel Creator — from first screen to shareable promo.</p>
+                  </div>
+                </div>
+                <div class="hr-talent hr-talent-end" aria-hidden="true">
+                  <img src="/assets/characterlap.png" alt="" width="280" height="280" decoding="async">
+                </div>
+              </div>
+
+              <div class="hr-caption" id="heroReelCaption" aria-hidden="true">
+                <span>Scene 01</span>
+                <strong>Open</strong>
+              </div>
+            </div>
+            <div class="hero-showcase-wash" aria-hidden="true"></div>
+            <div class="hero-player-top" aria-hidden="true">
+              <span class="hero-studio-mark"><span></span> Product story</span>
+              <span class="hero-video-status" id="heroLiveStatus"><i></i> Ready</span>
+            </div>
+            <button class="hero-video-toggle" id="heroVideoToggle" type="button" aria-label="Play promo preview" aria-controls="heroReel">
+              <svg class="hero-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 10 6-10 6V6Z"/></svg>
+              <svg class="hero-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h3v12H8zM15 6h3v12h-3z"/></svg>
+            </button>
+          </div>
+          <div class="hero-player-chrome">
+            <div class="hero-player-controls">
+              <button class="hero-ctrl" id="heroCtrlPlay" type="button" aria-label="Play">
+                <svg class="hero-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 12 7-12 7V5Z"/></svg>
+                <svg class="hero-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zm7 0h3v14h-3z"/></svg>
+              </button>
+              <div class="hero-scrub" id="heroScrub" role="slider" tabindex="0" aria-label="Seek preview" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0">
+                <div class="hero-scrub-track">
+                  <span class="hero-scrub-buffer" id="heroVideoBuffer"></span>
+                  <span class="hero-scrub-fill" id="heroVideoProgress"></span>
+                  <span class="hero-scrub-thumb" id="heroScrubThumb"></span>
+                </div>
+              </div>
+              <span class="hero-player-time" id="heroVideoTime">0:00 / 0:16</span>
+            </div>
+          </div>
+          <span class="hero-sr-only" id="heroVideoStatus" role="status" aria-live="polite">Preview ready</span>
+        </div>
+        <div class="hero-mascot" id="heroMascot" aria-hidden="true">
+          <span class="hero-mascot-aura"></span>
+          <img src="/assets/hero-mascot.webp" alt="" width="360" height="360" fetchpriority="high">
+          <span class="hero-mascot-lid hero-mascot-lid-left"></span>
+          <span class="hero-mascot-lid hero-mascot-lid-right"></span>
+        </div>
+
+        <template>
         <div class="hero-phone">
           <div class="hero-phone-shadow" aria-hidden="true"></div>
           <div class="hero-phone-bezel">
@@ -222,26 +416,60 @@
             </div>
           </div>
         </div>
-        <div class="hero-meta">
-          <span>1080 × 1920</span>
-          <span>00:18</span>
-          <span>MP4</span>
-        </div>
-        <div class="hero-float hero-float-ai"><span aria-hidden="true">✦</span> AI Render</div>
-        <div class="hero-float hero-float-export"><b>HD</b> 1080P Export</div>
-        <div class="hero-float hero-float-timeline"><span aria-hidden="true">▤</span> Timeline</div>
-        <div class="hero-float hero-float-ready"><span aria-hidden="true">✓</span> MP4 Ready</div>
+        </template>
       </div>
     </section>
 
     <section class="trusted" aria-label="Trusted by leading creators">
       <p class="trusted-label">Trusted by<br>leading creators.</p>
-      <ul class="platform-list" aria-label="Creator teams">
-        <li><span aria-hidden="true">▣</span> Notion</li>
-        <li><span aria-hidden="true">⠿</span> Figma</li>
-        <li><span aria-hidden="true">◉</span> Spotify</li>
-        <li><span aria-hidden="true">◩</span> Adobe</li>
-        <li><span aria-hidden="true">❖</span> Dropbox</li>
+      <div class="trusted-marquee" id="trustedMarquee" aria-hidden="true">
+        <div class="trusted-track" id="trustedTrack">
+          <ul class="platform-list" id="trustedLogos">
+            <li>
+              <svg class="brand-icon notion-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 3.5h15.5v17H4z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+                <path d="M8 17V7l8 10V7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" stroke-linejoin="round"/>
+              </svg>
+              Notion
+            </li>
+            <li>
+              <svg class="brand-icon figma-icon" viewBox="0 0 200 300" aria-hidden="true">
+                <path d="M50 300c27.6 0 50-22.4 50-50v-50H50c-27.6 0-50 22.4-50 50s22.4 50 50 50z" fill="#0ACF83"/>
+                <path d="M0 150c0-27.6 22.4-50 50-50h50v100H50c-27.6 0-50-22.4-50-50z" fill="#A259FF"/>
+                <path d="M0 50C0 22.4 22.4 0 50 0h50v100H50C22.4 100 0 77.6 0 50z" fill="#F24E1E"/>
+                <path d="M100 0h50c27.6 0 50 22.4 50 50s-22.4 50-50 50h-50V0z" fill="#FF7262"/>
+                <path d="M200 150c0 27.6-22.4 50-50 50s-50-22.4-50-50 22.4-50 50-50 50 22.4 50 50z" fill="#1ABCFE"/>
+              </svg>
+              Figma
+            </li>
+            <li>
+              <svg class="brand-icon spotify-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="11" fill="#1ED760"/>
+                <path d="M6.5 9.2c3.9-1.1 8.3-.7 11.6 1.3M7.4 12.2c3.1-.8 6.7-.5 9.4 1.1m-8.5 1.8c2.4-.6 5-.3 7 1" fill="none" stroke="#101010" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+              Spotify
+            </li>
+            <li>
+              <svg class="brand-icon adobe-icon" viewBox="0 0 270.8 239.3" aria-hidden="true">
+                <path d="M170.5 0 270.8 239.3V0H170.5ZM0 0v239.3L100.3 0H0Zm91.7 190.5h45.8l20.1 48.8h41.5L134.7 87.4l-43 103.1Z" fill="#ED2224"/>
+              </svg>
+              Adobe
+            </li>
+            <li>
+              <svg class="brand-icon dropbox-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m7.2 3 4.8 3.2L7.2 9.4 2.4 6.2 7.2 3Zm9.6 0 4.8 3.2-4.8 3.2L12 6.2 16.8 3ZM7.2 9.8 12 13l-4.8 3.2L2.4 13l4.8-3.2Zm9.6 0 4.8 3.2-4.8 3.2L12 13l4.8-3.2ZM12 14.1l4.8 3.2-4.8 3.2-4.8-3.2 4.8-3.2Z" fill="currentColor"/>
+              </svg>
+              Dropbox
+            </li>
+          </ul>
+        </div>
+      </div>
+      <ul class="platform-list trusted-sr-list" aria-label="Creator teams">
+        <li>Notion</li>
+        <li>Figma</li>
+        <li>Spotify</li>
+        <li>Adobe</li>
+        <li>Dropbox</li>
       </ul>
     </section>
 
@@ -252,34 +480,103 @@
         <p>A simple, powerful, and AI-driven studio to turn your app into a stunning promo video.</p>
       </div>
       <div class="feature-list">
-        <article class="feature-row reveal">
-          <span class="feature-index" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="6" width="17" height="12" rx="2.5"/><path d="m10 10 5 2-5 2v-4Z"/></svg></span>
+        <article class="feature-row reveal" data-feature="record">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradRecord" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#ff8a5c"/><stop offset="1" stop-color="#ff5a1f"/>
+                </linearGradient>
+              </defs>
+              <rect class="fi-frame" x="3.5" y="6" width="17" height="12" rx="2.5" stroke="url(#fiGradRecord)"/>
+              <path class="fi-play" d="m10 10 5 2-5 2v-4Z" fill="url(#fiGradRecord)" stroke="none"/>
+            </svg>
+          </span>
           <div>
             <h3>Screen Recording</h3>
-            <p>Capture your app flow in high quality.</p>
+            <p>Capture crisp app flows ready for the timeline.</p>
           </div>
         </article>
-        <article class="feature-row reveal reveal-delay">
-          <span class="feature-index" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z"/><path d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z"/></svg></span>
+        <article class="feature-row reveal reveal-delay" data-feature="ai">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradAi" x1="5" y1="3" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#d4b7ff"/><stop offset=".55" stop-color="#a78bfa"/><stop offset="1" stop-color="#7c5cff"/>
+                </linearGradient>
+              </defs>
+              <path class="fi-spark-a" d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" fill="url(#fiGradAi)" stroke="none"/>
+              <path class="fi-spark-b" d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z" fill="#f0abfc" stroke="none"/>
+            </svg>
+          </span>
           <div>
             <h3>AI Editing</h3>
-            <p>Auto-enhance, trim, and add smooth transitions.</p>
+            <p>Trim, enhance, and land soft transitions automatically.</p>
           </div>
         </article>
-        <article class="feature-row reveal">
-          <span class="feature-index" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 8 4-8 4-8-4 8-4Z"/><path d="m4 11 8 4 8-4"/><path d="m4 15 8 4 8-4"/></svg></span>
+        <article class="feature-row reveal" data-feature="templates">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradTpl" x1="4" y1="3" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#7dd3fc"/><stop offset="1" stop-color="#3b82f6"/>
+                </linearGradient>
+              </defs>
+              <path class="fi-layer-a" d="m12 3 8 4-8 4-8-4 8-4Z" fill="url(#fiGradTpl)" stroke="none" opacity=".95"/>
+              <path class="fi-layer-b" d="m4 11 8 4 8-4" stroke="#60a5fa" stroke-width="1.8"/>
+              <path class="fi-layer-c" d="m4 15 8 4 8-4" stroke="#93c5fd" stroke-width="1.8"/>
+            </svg>
+          </span>
           <div>
             <h3>Promo Templates</h3>
-            <p>Use ready-to-edit, premium app templates.</p>
+            <p>Start from polished layouts built for app launches.</p>
           </div>
         </article>
-        <article class="feature-row reveal reveal-delay">
-          <span class="feature-index" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15V3m0 0L8 7m4-4 4 4M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg></span>
+        <article class="feature-row reveal reveal-delay" data-feature="export">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradExport" x1="6" y1="3" x2="18" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#6ee7b7"/><stop offset="1" stop-color="#10b981"/>
+                </linearGradient>
+              </defs>
+              <path class="fi-arrow" d="M12 15V3m0 0L8 7m4-4 4 4" stroke="url(#fiGradExport)" stroke-width="1.9"/>
+              <path class="fi-tray" d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" stroke="#34d399" stroke-width="1.8"/>
+            </svg>
+          </span>
           <div>
             <h3>Export &amp; Share</h3>
-            <p>Render in HD and share across all platforms.</p>
+            <p>Render in HD and ship to every platform fast.</p>
           </div>
         </article>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about" aria-labelledby="aboutTitle">
+      <div class="about-shell reveal">
+        <div class="about-copy">
+          <p class="section-kicker">About Reel Creator</p>
+          <h2 id="aboutTitle">The studio for app stories that need to convert.</h2>
+          <p class="about-lead">Reel Creator helps founders, marketers, and growth teams turn product screens into polished promo reels — without bouncing between editors, templates, and export tools.</p>
+          <p class="about-note">Compose scenes, refine with AI, and export launch-ready video from one calm workspace.</p>
+        </div>
+        <div class="about-points">
+          <article class="about-point">
+            <span class="about-point-tag">For founders</span>
+            <h3>Ship launch videos faster</h3>
+            <p>Go from screen recording to App Store–ready reel without a full production pass.</p>
+          </article>
+          <article class="about-point">
+            <span class="about-point-tag">For marketers</span>
+            <h3>Keep every cut on-brand</h3>
+            <p>Start from proven promo structures, then tune captions, pacing, and look in minutes.</p>
+          </article>
+          <article class="about-point">
+            <span class="about-point-tag">For teams</span>
+            <h3>One flow from idea to export</h3>
+            <p>Timeline, canvas, and output settings stay together so reviews stay simple.</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -388,6 +685,52 @@
       </div>
     </section>
 
+    <section class="section outcomes-section" id="outcomes" aria-labelledby="outcomesTitle">
+      <div class="outcomes-head reveal">
+        <p class="section-kicker">What you can create</p>
+        <h2 id="outcomesTitle">Built for every moment before launch day.</h2>
+        <p>From first teaser to store listing, Reel Creator covers the promo formats teams actually need.</p>
+      </div>
+
+      <div class="outcomes-stats reveal">
+        <div class="outcomes-stat">
+          <strong>18s</strong>
+          <span>Average polished cut</span>
+        </div>
+        <div class="outcomes-stat">
+          <strong>1080P</strong>
+          <span>Export-ready quality</span>
+        </div>
+        <div class="outcomes-stat">
+          <strong>9:16</strong>
+          <span>Social-first framing</span>
+        </div>
+        <div class="outcomes-stat">
+          <strong>1 studio</strong>
+          <span>Record, edit, export</span>
+        </div>
+      </div>
+
+      <div class="outcomes-grid">
+        <article class="outcomes-card reveal">
+          <h3>App Store &amp; Play promos</h3>
+          <p>Show the product flow clearly with clean scenes, captions, and a finish that feels native to store listings.</p>
+        </article>
+        <article class="outcomes-card reveal reveal-delay">
+          <h3>Launch teasers</h3>
+          <p>Build short hype cuts for Product Hunt, X, and LinkedIn without rebuilding the whole edit each time.</p>
+        </article>
+        <article class="outcomes-card reveal">
+          <h3>Feature walkthroughs</h3>
+          <p>Turn key screens into a guided story — highlight value, keep pacing tight, and export when it feels right.</p>
+        </article>
+        <article class="outcomes-card reveal reveal-delay">
+          <h3>Paid social creatives</h3>
+          <p>Ship vertical reels sized for ads and organic posts, with templates that already speak “app promo.”</p>
+        </article>
+      </div>
+    </section>
+
     <section class="section template-section" id="templates" aria-labelledby="templatesTitle">
       <div class="section-heading reveal">
         <p class="section-kicker">Templates</p>
@@ -406,33 +749,42 @@
         <p class="section-kicker">Testimonials</p>
         <h2 id="testimonialsTitle">Loved by creators worldwide.</h2>
       </div>
-      <div class="testimonial-track" id="testimonialTrack" aria-label="Creator testimonials" aria-live="polite">
-        <article class="testimonial-card">
-          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-          <blockquote>“ReelCreator cut our video production time by 70%. Super easy and powerful.”</blockquote>
-          <div class="testimonial-author"><span class="testimonial-avatar avatar-one" aria-hidden="true">PS</span><span><b>Priya Sharma</b><small>Product Designer</small></span></div>
-          <span class="testimonial-company">◉&nbsp; Product Hunt</span>
-        </article>
-        <article class="testimonial-card">
-          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-          <blockquote>“The templates are amazing. We created our app promo in just a few minutes.”</blockquote>
-          <div class="testimonial-author"><span class="testimonial-avatar avatar-two" aria-hidden="true">RM</span><span><b>Rahul Mehta</b><small>Indie Developer</small></span></div>
-          <span class="testimonial-company">✳&nbsp; Figma Community</span>
-        </article>
-        <article class="testimonial-card">
-          <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-          <blockquote>“A complete studio for app promos. Clean, fast, and professional.”</blockquote>
-          <div class="testimonial-author"><span class="testimonial-avatar avatar-three" aria-hidden="true">AV</span><span><b>Ananya Verma</b><small>Marketing Lead</small></span></div>
-          <span class="testimonial-company">◩&nbsp; Adobe Express</span>
-        </article>
+      <div class="testimonial-viewport" id="testimonialViewport">
+        <div class="testimonial-track" id="testimonialTrack" aria-label="Creator testimonials" aria-live="polite">
+          <article class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote>“ReelCreator cut our video production time by 70%. Super easy and powerful.”</blockquote>
+            <div class="testimonial-author"><span class="testimonial-avatar avatar-one" aria-hidden="true">PS</span><span><b>Priya Sharma</b><small>Product Designer</small></span></div>
+            <span class="testimonial-company">◉&nbsp; Product Hunt</span>
+          </article>
+          <article class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote>“The templates are amazing. We created our app promo in just a few minutes.”</blockquote>
+            <div class="testimonial-author"><span class="testimonial-avatar avatar-two" aria-hidden="true">RM</span><span><b>Rahul Mehta</b><small>Indie Developer</small></span></div>
+            <span class="testimonial-company">✳&nbsp; Figma Community</span>
+          </article>
+          <article class="testimonial-card">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <blockquote>“A complete studio for app promos. Clean, fast, and professional.”</blockquote>
+            <div class="testimonial-author"><span class="testimonial-avatar avatar-three" aria-hidden="true">AV</span><span><b>Ananya Verma</b><small>Marketing Lead</small></span></div>
+            <span class="testimonial-company">◩&nbsp; Adobe Express</span>
+          </article>
+        </div>
       </div>
-      <div class="testimonial-controls" role="group" aria-label="Testimonial controls">
-        <button class="testimonial-arrow" id="testimonialPrev" type="button" aria-label="Previous testimonials" aria-controls="testimonialTrack">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 10H4.5m0 0 4.25-4.25M4.5 10l4.25 4.25"/></svg>
-        </button>
-        <button class="testimonial-arrow" id="testimonialNext" type="button" aria-label="Next testimonials" aria-controls="testimonialTrack">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10h11m0 0-4.25-4.25M15.5 10l-4.25 4.25"/></svg>
-        </button>
+      <div class="testimonial-footer">
+        <div class="testimonial-pagination" role="group" aria-label="Choose a testimonial">
+          <button class="testimonial-dot is-active" type="button" aria-label="Show testimonial 1" aria-controls="testimonialTrack" aria-current="true"></button>
+          <button class="testimonial-dot" type="button" aria-label="Show testimonial 2" aria-controls="testimonialTrack"></button>
+          <button class="testimonial-dot" type="button" aria-label="Show testimonial 3" aria-controls="testimonialTrack"></button>
+        </div>
+        <div class="testimonial-controls" role="group" aria-label="Testimonial controls">
+          <button class="testimonial-arrow" id="testimonialPrev" type="button" aria-label="Previous testimonials" aria-controls="testimonialTrack">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 10H4.5m0 0 4.25-4.25M4.5 10l4.25 4.25"/></svg>
+          </button>
+          <button class="testimonial-arrow" id="testimonialNext" type="button" aria-label="Next testimonials" aria-controls="testimonialTrack">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10h11m0 0-4.25-4.25M15.5 10l-4.25 4.25"/></svg>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -472,7 +824,7 @@
           <p class="plan-name">Team</p>
           <p class="plan-desc">For teams and growing businesses.</p>
           <h3 class="plan-price" data-monthly="49" data-yearly="39" aria-label="$49 per month">$49<small>/month</small></h3>
-          <ul>
+          <ul>  
             <li>Everything in Pro</li>
             <li>Team collaboration</li>
             <li>Priority support</li>
@@ -501,10 +853,10 @@
     </a>
     <nav class="footer-links" aria-label="Footer">
       <a href="#features">Features</a>
+      <a href="#about">About</a>
+      <a href="#outcomes">Use cases</a>
       <a href="#templates">Templates</a>
       <a href="#pricing">Pricing</a>
-      <a href="#workflow">Resources</a>
-      <a href="/signin">Company</a>
     </nav>
     <div class="footer-socials" aria-label="Social links"><a href="https://youtube.com" aria-label="YouTube">▶</a><a href="https://x.com" aria-label="X">𝕏</a><a href="https://instagram.com" aria-label="Instagram">◎</a><a href="https://linkedin.com" aria-label="LinkedIn">in</a></div>
     <p class="footer-copy">© <span id="year"></span> Reel Creator</p>
@@ -513,8 +865,7 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
   <script type="module" src="/landing.js"></script>
-  <script type="module" src="/phone-reel.js"></script>
+  <script type="module" src="/hero-motion.js"></script>
   <script type="module" src="/workspace.js"></script>
-  <script type="module" src="/mascot.js"></script>
 </body>
 </html>

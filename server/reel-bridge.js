@@ -16,7 +16,7 @@ export function ensureReelBridge(html) {
   let out = stripStubBridge(html || "");
   if (hasAuthorReelBridge(out)) return out;
   const bridge = `
-<script>
+<script>s
 (function () {
   if (window.__reel && window.__reel.setTime && !window.__reel.__stub) return;
   var DUR = 18;

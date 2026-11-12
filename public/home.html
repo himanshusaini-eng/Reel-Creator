@@ -10,7 +10,12 @@
 </head>
 <body>
   <header class="site-head">
-    <a class="brand" href="/app"><span class="brand-mark">RC</span>reelcreator</a>
+    <a class="brand" href="/app" aria-label="Reel Creator home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+      </span>
+      reelcreator
+    </a>
     <div class="head-actions">
       <span class="who" id="who"></span>
       <button class="btn ghost" id="btnSignOut" type="button">Sign out</button>
@@ -19,9 +24,31 @@
 
   <main class="page">
     <div class="page-head">
-      <h1>My projects</h1>
+      <div class="page-head-copy">
+        <h1>My projects</h1>
+        <p class="page-head-sub">Your app promo studio — compose scenes, refine with AI, and export launch-ready reels.</p>
+      </div>
       <a class="btn primary" href="/app/new">New project</a>
     </div>
+
+    <section class="studio-guide" aria-label="How Reel Creator works">
+      <article class="studio-guide-card">
+        <span class="studio-guide-step">01</span>
+        <h2>Start from a template</h2>
+        <p>Pick a proven promo structure or bring your own HTML reel into the studio.</p>
+      </article>
+      <article class="studio-guide-card">
+        <span class="studio-guide-step">02</span>
+        <h2>Compose &amp; polish</h2>
+        <p>Tune captions, pacing, and scenes in one calm workspace before export.</p>
+      </article>
+      <article class="studio-guide-card">
+        <span class="studio-guide-step">03</span>
+        <h2>Export launch-ready</h2>
+        <p>Ship 9:16 social cuts and store-ready promos without leaving the app.</p>
+      </article>
+    </section>
+
     <div class="error" id="error" role="alert"></div>
     <div id="list"></div>
   </main>
@@ -61,7 +88,7 @@
       $("list").innerHTML = projects.length
         ? `<div class="grid">${projects.map(card).join("")}</div>`
         : `<div class="empty"><h2>Create your first reel</h2>
-             <p>Start from a template or upload an HTML reel you already have.</p>
+             <p>Turn app screens into a polished promo video. Start from a template or upload HTML you already have.</p>
              <a class="btn primary lg" href="/app/new">New project</a></div>`;
     }
 

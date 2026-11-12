@@ -17,7 +17,9 @@
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M3 9h12M3 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </a>
         <div class="file-pill">
-          <span class="file-mark">RC</span>
+          <span class="file-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+          </span>
           <input type="text" id="projectName" class="file-name" value="Untitled reel" spellcheck="false">
           <span class="file-draft" id="saveState">Saved</span>
         </div>
@@ -33,7 +35,7 @@
         <button class="btn ghost" id="btnNew" type="button">New</button>
         <button class="btn" id="btnSave" type="button">Save</button>
         <button class="btn" id="btnApplyCode" type="button" hidden>Apply code</button>
-        <button class="btn share" id="btnRender" type="button">Export MP4</button>
+        <button class="btn action" id="btnRender" type="button">Export MP4</button>
       </div>
     </header>
 
@@ -94,7 +96,7 @@
           <div class="code-actions">
             <span class="code-dirty hidden" id="codeDirty">Unsaved</span>
             <button class="btn sm" id="btnReloadCode" type="button">Reload</button>
-            <button class="btn sm share" id="btnSaveCode" type="button">Save &amp; preview</button>
+            <button class="btn sm primary" id="btnSaveCode" type="button">Save &amp; preview</button>
           </div>
         </div>
         <textarea id="codeEditor" class="code-editor" spellcheck="false" wrap="off" placeholder="HTML source will appear here…"></textarea>

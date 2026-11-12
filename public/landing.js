@@ -162,31 +162,88 @@ try {
 
 const testimonialTrack = document.getElementById("testimonialTrack");
 const testimonialCards = [...(testimonialTrack?.querySelectorAll(".testimonial-card") || [])];
+const testimonialViewport = document.getElementById("testimonialViewport");
+const testimonialDots = [...document.querySelectorAll(".testimonial-dot")];
 const testimonialPrev = document.getElementById("testimonialPrev");
 const testimonialNext = document.getElementById("testimonialNext");
-if (testimonialTrack && testimonialCards.length) {
+if (testimonialTrack && testimonialViewport && testimonialCards.length) {
   let testimonialIndex = 0;
-  let shiftTimeout;
-  const isMobileTestimonials = () => window.matchMedia("(max-width: 700px)").matches;
+  let slidePosition = 1;
+  let touchStartX = null;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const getSlideStep = () => {
+    const first = testimonialTrack.children[0];
+    const second = testimonialTrack.children[1];
+    if (!first || !second) return first?.getBoundingClientRect().width || 0;
+    return second.getBoundingClientRect().left - first.getBoundingClientRect().left;
+  };
+  const setSlidePosition = (position) => {
+    slidePosition = position;
+    testimonialTrack.style.transform = `translate3d(${-getSlideStep() * slidePosition}px, 0, 0)`;
+  };
+  const cloneCard = (card) => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    clone.inert = true;
+    return clone;
+  };
+  if (testimonialCards.length > 1) {
+    testimonialTrack.prepend(cloneCard(testimonialCards[testimonialCards.length - 1]));
+    for (let index = 0; index < Math.min(2, testimonialCards.length); index += 1) {
+      testimonialTrack.append(cloneCard(testimonialCards[index]));
+    }
+  }
+  setSlidePosition(slidePosition);
+  requestAnimationFrame(() => testimonialTrack.classList.add("is-ready"));
+  const updateTestimonialDots = () => {
+    testimonialDots.forEach((dot, index) => {
+      const active = index === testimonialIndex;
+      dot.classList.toggle("is-active", active);
+      if (active) dot.setAttribute("aria-current", "true");
+      else dot.removeAttribute("aria-current");
+    });
+  };
   const showTestimonial = (nextIndex) => {
     testimonialIndex = (nextIndex + testimonialCards.length) % testimonialCards.length;
-    if (!isMobileTestimonials()) return;
-    const card = testimonialCards[testimonialIndex];
-    testimonialTrack.scrollTo({ left: card.offsetLeft - testimonialTrack.offsetLeft, behavior: "smooth" });
+    setSlidePosition(testimonialIndex + 1);
+    updateTestimonialDots();
   };
   const rotateTestimonials = (direction) => {
-    if (isMobileTestimonials()) {
-      showTestimonial(testimonialIndex + direction);
-      return;
-    }
-
-    testimonialTrack.classList.remove("is-shifting");
-    if (direction > 0) testimonialTrack.append(testimonialCards.shift());
-    else testimonialTrack.prepend(testimonialCards.pop());
-    testimonialTrack.classList.add("is-shifting");
-    window.clearTimeout(shiftTimeout);
-    shiftTimeout = window.setTimeout(() => testimonialTrack.classList.remove("is-shifting"), 400);
+    if (testimonialCards.length === 1) return;
+    testimonialIndex = (testimonialIndex + direction + testimonialCards.length) % testimonialCards.length;
+    slidePosition = reducedMotion.matches
+      ? testimonialIndex + 1
+      : testimonialIndex === 0 && direction > 0
+        ? testimonialCards.length + 1
+        : testimonialIndex === testimonialCards.length - 1 && direction < 0
+          ? 0
+          : testimonialIndex + 1;
+    setSlidePosition(slidePosition);
+    updateTestimonialDots();
   };
+  testimonialTrack.addEventListener("transitionend", (event) => {
+    if (event.target !== testimonialTrack || event.propertyName !== "transform") return;
+    if (slidePosition === testimonialCards.length + 1 || slidePosition === 0) {
+      const position = slidePosition === 0 ? testimonialCards.length : 1;
+      testimonialTrack.classList.remove("is-ready");
+      setSlidePosition(position);
+      void testimonialTrack.offsetWidth;
+      requestAnimationFrame(() => testimonialTrack.classList.add("is-ready"));
+    }
+  });
+  testimonialDots.forEach((dot, index) => {
+    dot.addEventListener("click", () => showTestimonial(index));
+  });
+  testimonialViewport.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "touch") touchStartX = event.clientX;
+  });
+  testimonialViewport.addEventListener("pointerup", (event) => {
+    if (touchStartX === null) return;
+    const distance = event.clientX - touchStartX;
+    touchStartX = null;
+    if (Math.abs(distance) > 48) rotateTestimonials(distance < 0 ? 1 : -1);
+  });
+  testimonialViewport.addEventListener("pointercancel", () => { touchStartX = null; });
   testimonialPrev?.addEventListener("click", () => rotateTestimonials(-1));
   testimonialNext?.addEventListener("click", () => rotateTestimonials(1));
 
@@ -197,14 +254,88 @@ if (testimonialTrack && testimonialCards.length) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     carouselTimer = window.setInterval(() => rotateTestimonials(1), 5000);
   };
-  testimonialTrack.addEventListener("pointerenter", pauseCarousel);
-  testimonialTrack.addEventListener("pointerleave", resumeCarousel);
-  testimonialTrack.addEventListener("focusin", pauseCarousel);
-  testimonialTrack.addEventListener("focusout", resumeCarousel);
+  testimonialViewport.addEventListener("pointerenter", pauseCarousel);
+  testimonialViewport.addEventListener("pointerleave", resumeCarousel);
+  testimonialViewport.addEventListener("focusin", pauseCarousel);
+  testimonialViewport.addEventListener("focusout", resumeCarousel);
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) pauseCarousel();
     else resumeCarousel();
   });
-  window.addEventListener("resize", resumeCarousel, { passive: true });
+  window.addEventListener("resize", () => {
+    testimonialTrack.classList.remove("is-ready");
+    setSlidePosition(slidePosition);
+    requestAnimationFrame(() => testimonialTrack.classList.add("is-ready"));
+    resumeCarousel();
+  }, { passive: true });
+  const updateMotionPreference = () => {
+    testimonialTrack.classList.toggle("is-reduced-motion", reducedMotion.matches);
+    if (reducedMotion.matches) setSlidePosition(testimonialIndex + 1);
+    else resumeCarousel();
+  };
+  reducedMotion.addEventListener("change", updateMotionPreference);
+  updateMotionPreference();
   resumeCarousel();
+}
+
+const trustedMarquee = document.getElementById("trustedMarquee");
+const trustedTrack = document.getElementById("trustedTrack");
+const trustedLogos = document.getElementById("trustedLogos");
+
+if (trustedMarquee && trustedTrack && trustedLogos) {
+  const trustedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const logoSeed = trustedLogos.innerHTML;
+  let trustedResizeTimer;
+
+  const setupTrustedMarquee = () => {
+    trustedTrack.classList.remove("is-ready");
+    trustedTrack.replaceChildren();
+
+    const gap = window.matchMedia("(max-width: 700px)").matches ? 52 : 72;
+    trustedTrack.style.gap = `${gap}px`;
+
+    const buildRow = () => {
+      const row = document.createElement("ul");
+      row.className = "platform-list";
+      row.innerHTML = logoSeed;
+      row.style.gap = `${gap}px`;
+      return row;
+    };
+
+    const primary = buildRow();
+    trustedTrack.appendChild(primary);
+
+    // Keep cloning until one segment always covers the visible strip.
+    const targetWidth = Math.max(trustedMarquee.clientWidth * 2, 900);
+    let guard = 0;
+    while (primary.scrollWidth < targetWidth && guard < 20) {
+      primary.insertAdjacentHTML("beforeend", logoSeed);
+      guard += 1;
+    }
+
+    const clone = primary.cloneNode(true);
+    trustedTrack.appendChild(clone);
+
+    const shift = primary.getBoundingClientRect().width + gap;
+    trustedTrack.style.setProperty("--trusted-shift", `${Math.round(shift)}px`);
+    trustedTrack.style.setProperty(
+      "--trusted-duration",
+      `${Math.max(28, Math.round(shift / 42))}s`
+    );
+
+    if (!trustedMotion.matches) {
+      requestAnimationFrame(() => trustedTrack.classList.add("is-ready"));
+    }
+  };
+
+  const scheduleTrustedSetup = () => {
+    window.clearTimeout(trustedResizeTimer);
+    trustedResizeTimer = window.setTimeout(setupTrustedMarquee, 60);
+  };
+
+  setupTrustedMarquee();
+  requestAnimationFrame(setupTrustedMarquee);
+  window.addEventListener("resize", scheduleTrustedSetup, { passive: true });
+  window.addEventListener("load", setupTrustedMarquee, { once: true });
+  trustedMotion.addEventListener("change", setupTrustedMarquee);
 }
