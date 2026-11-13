@@ -142,22 +142,24 @@ document.querySelectorAll(".feature-card").forEach((card) => {
 });
 
 const templatesContainer = document.getElementById("tpls");
-try {
-  const response = await fetch("/api/templates");
-  if (!response.ok) throw new Error(`Could not load templates (${response.status})`);
-  const templates = await response.json();
-  if (!Array.isArray(templates)) throw new Error("The template list was not in the expected format");
-  templatesContainer.innerHTML = templates.map((template) => {
-    const id = encodeURIComponent(template.id);
-    const thumbnail = encodeURIComponent(template.thumbnail || "preview.svg");
-    return `
+if (templatesContainer) {
+  try {
+    const response = await fetch("/api/templates");
+    if (!response.ok) throw new Error(`Could not load templates (${response.status})`);
+    const templates = await response.json();
+    if (!Array.isArray(templates)) throw new Error("The template list was not in the expected format");
+    templatesContainer.innerHTML = templates.map((template) => {
+      const id = encodeURIComponent(template.id);
+      const thumbnail = encodeURIComponent(template.thumbnail || "preview.svg");
+      return `
       <a class="tpl-card" href="/app/new?template=${id}">
         <img src="/templates/${id}/${thumbnail}" alt="" loading="lazy">
         <div><b>${escapeHtml(template.name)}</b><span>${escapeHtml(template.description || "")}</span></div>
       </a>`;
-  }).join("");
-} catch (error) {
-  templatesContainer.innerHTML = `<p class="template-loading" role="status">${escapeHtml(error.message)}. You can still <a href="/app/new">browse templates in the studio ↗</a>.</p>`;
+    }).join("");
+  } catch (error) {
+    templatesContainer.innerHTML = `<p class="template-loading" role="status">${escapeHtml(error.message)}. You can still <a href="/app/new">browse templates in the studio ↗</a>.</p>`;
+  }
 }
 
 const testimonialTrack = document.getElementById("testimonialTrack");

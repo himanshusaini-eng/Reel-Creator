@@ -19,6 +19,26 @@ export class PagesController {
     return this.send(res, "landing.html");
   }
 
+  @Get("features")
+  features(@Res() res: Response) {
+    return this.send(res, "features.html");
+  }
+
+  @Get("about")
+  about(@Res() res: Response) {
+    return this.send(res, "about.html");
+  }
+
+  @Get("templates")
+  templates(@Res() res: Response) {
+    return this.send(res, "templates.html");
+  }
+
+  @Get("pricing")
+  pricing(@Res() res: Response) {
+    return this.send(res, "pricing.html");
+  }
+
   @Get(["signin", "signup"])
   auth(@Req() req: AuthedRequest, @Res() res: Response) {
     if (req.user) return res.redirect("/app");

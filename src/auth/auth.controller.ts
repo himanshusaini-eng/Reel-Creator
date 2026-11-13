@@ -35,7 +35,7 @@ export class AuthController {
     try {
       const user = this.auth.signup(body || {});
       if (this.auth.userCount() === 1) this.projects.claimOrphanProjects(user.id);
-      this.auth.startSession(res, user.id);
+      this.au th.startSession(res, user.id);
       res.status(201);
       return this.auth.publicUser(user);
     } catch (e) {

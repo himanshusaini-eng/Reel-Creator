@@ -12,8 +12,8 @@ import type { Response } from "express";
 export class ApiExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const res = host.switchToHttp().getResponse<Response>();
-    const status = exception.getStatus?.() ?? HttpStatus.INTERNAL_SERVER_ERROR;
     const body = exception.getResponse();
+    const status = exception.getStatus?.() ?? HttpStatus.INTERNAL_SERVER_ERROR;
 
     if (typeof body === "string") {
       return res.status(status).json({ error: body });

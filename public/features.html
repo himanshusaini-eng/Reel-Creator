@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>Features — Reel Creator</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/landing.css">
+</head>
+<body class="landing">
+  <header class="site-head">
+    <a class="brand" href="/" aria-label="Reel Creator home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+      </span>
+      <span class="brand-text">reelcreator</span>
+    </a>
+    <nav class="head-nav" id="siteNav" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/features" aria-current="page">Features</a>
+      <a href="/about">About</a>
+      <a href="/templates">Templates</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/signin" class="nav-login">Log in</a>
+      <a class="btn primary nav-menu-cta" href="/signup">Start free <span aria-hidden="true">→</span></a>
+    </nav>
+    <div class="head-actions">
+      <a class="btn primary nav-cta" href="/signup">Start free <span aria-hidden="true">→</span></a>
+    </div>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="siteNav">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+  <div class="site-head-spacer" aria-hidden="true"></div>
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+  <main>
+    <section class="hero" aria-labelledby="featHeroTitle">
+      <div class="hero-copy reveal">
+        <p class="hero-eyebrow"><span aria-hidden="true">✦</span> Features</p>
+        <h1 id="featHeroTitle">The full studio for app promo videos.</h1>
+        <p class="hero-sub">Record the flow, shape the story, lock the brand, and export a cut that is ready for the store and the feed — without jumping between tools.</p>
+        <div class="hero-ctas">
+          <a class="btn primary lg" href="/signup">Start free <span aria-hidden="true">→</span></a>
+          <a class="btn ghost lg" href="#chapters">See every tool</a>
+        </div>
+        <ul class="feat-hero-stats" aria-label="Studio at a glance">
+          <li><strong data-count="8">0</strong><span>tools on one timeline</span></li>
+          <li><strong data-count="3">0</strong><span>export ratios from one story</span></li>
+          <li><strong data-count="1">0</strong><span>workspace, record to render</span></li>
+        </ul>
+      </div>
+      <div class="hero-art">
+        <div class="feat-stage" data-feat-stage>
+          <div class="feat-stage-tabs" role="tablist" aria-label="Preview a step">
+            <button type="button" role="tab" id="stageTabRecord" data-stage-tab="record" aria-selected="true" aria-controls="stagePanelRecord">Record</button>
+            <button type="button" role="tab" id="stageTabEdit" data-stage-tab="edit" aria-selected="false" aria-controls="stagePanelEdit">Edit</button>
+            <button type="button" role="tab" id="stageTabExport" data-stage-tab="export" aria-selected="false" aria-controls="stagePanelExport">Export</button>
+          </div>
+          <div class="feat-stage-screen">
+            <div class="feat-stage-panel" id="stagePanelRecord" role="tabpanel" aria-labelledby="stageTabRecord" data-stage-panel="record">
+              <img src="/assets/screen.png" alt="App screen ready to record" width="960" height="640">
+              <button class="feat-rec" type="button" data-rec aria-pressed="false"><i></i><span>Start recording</span></button>
+              <div class="feat-scrub" aria-hidden="true"><span data-scrub></span></div>
+            </div>
+            <div class="feat-stage-panel" id="stagePanelEdit" role="tabpanel" aria-labelledby="stageTabEdit" data-stage-panel="edit" hidden>
+              <div class="feat-stage-head">
+                <p class="feat-stage-label">AI suggestions</p>
+                <span class="feat-stage-chip">4 ready</span>
+              </div>
+              <ul class="feat-suggest" data-pick>
+                <li data-pick-item><em>Trim</em><b>Remove 1.4s of idle before the tap</b></li>
+                <li class="is-on" data-pick-item><em>Zoom</em><b>Hold on “Start trial” for 12 frames</b></li>
+                <li data-pick-item><em>Pace</em><b>Tighten the feature scene to the beat</b></li>
+                <li data-pick-item><em>Join</em><b>Crossfade hook into the product shot</b></li>
+              </ul>
+            </div>
+            <div class="feat-stage-panel" id="stagePanelExport" role="tabpanel" aria-labelledby="stageTabExport" data-stage-panel="export" hidden>
+              <div class="feat-stage-head">
+                <p class="feat-stage-label">Choose a ratio</p>
+                <span class="feat-stage-chip" data-ratio-chip>1080 × 1920</span>
+              </div>
+              <div class="feat-ratios feat-ratios-live" data-ratios>
+                <button type="button" class="is-on" data-ratio="9:16"><span class="ratio-916"></span><span class="ratio-name"><b>9:16</b> Feed</span></button>
+                <button type="button" data-ratio="1:1"><span class="ratio-11"></span><span class="ratio-name"><b>1:1</b> Ad</span></button>
+                <button type="button" data-ratio="16:9"><span class="ratio-169"></span><span class="ratio-name"><b>16:9</b> Preview</span></button>
+              </div>
+              <p class="feat-ratio-note" data-ratio-note>Master stays put. This frame is the feed cut.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section features-section" id="features" aria-labelledby="featuresTitle">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Overview</p>
+        <h2 id="featuresTitle">Every tool, on one timeline.</h2>
+        <p>Start here, then read each chapter for how capture, edit, brand, and export fit together.</p>
+      </div>
+      <div class="feature-list">
+        <a class="feature-row reveal" href="#record" data-feature="record">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradRecord" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#ff8a5c"/><stop offset="1" stop-color="#ff5a1f"/>
+                </linearGradient>
+              </defs>
+              <rect class="fi-frame" x="3.5" y="6" width="17" height="12" rx="2.5" stroke="url(#fiGradRecord)"/>
+              <path class="fi-play" d="m10 10 5 2-5 2v-4Z" fill="url(#fiGradRecord)" stroke="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Screen Recording</h3>
+            <p>Capture crisp app flows ready for the timeline.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal reveal-delay" href="#ai-edit" data-feature="ai">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradAi" x1="5" y1="3" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#d4b7ff"/><stop offset=".55" stop-color="#a78bfa"/><stop offset="1" stop-color="#7c5cff"/>
+                </linearGradient>
+              </defs>
+              <path class="fi-spark-a" d="m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7L12 3Z" fill="url(#fiGradAi)" stroke="none"/>
+              <path class="fi-spark-b" d="m19 16 .8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16Z" fill="#f0abfc" stroke="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3>AI Editing</h3>
+            <p>Trim, enhance, and land soft transitions automatically.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal" href="#templates" data-feature="templates">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradTpl" x1="4" y1="3" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#7dd3fc"/><stop offset="1" stop-color="#3b82f6"/>
+                </linearGradient>
+              </defs>
+              <path class="fi-layer-a" d="m12 3 8 4-8 4-8-4 8-4Z" fill="url(#fiGradTpl)" stroke="none" opacity=".95"/>
+              <path class="fi-layer-b" d="m4 11 8 4 8-4" stroke="#60a5fa" stroke-width="1.8"/>
+              <path class="fi-layer-c" d="m4 15 8 4 8-4" stroke="#93c5fd" stroke-width="1.8"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Promo Templates</h3>
+            <p>Start from polished layouts built for app launches.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal reveal-delay" href="#export" data-feature="export">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <defs>
+                <linearGradient id="fiGradExport" x1="6" y1="3" x2="18" y2="22" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#6ee7b7"/><stop offset="1" stop-color="#10b981"/>
+                </linearGradient>
+              </defs>
+              <path class="fi-arrow" d="M12 15V3m0 0L8 7m4-4 4 4" stroke="url(#fiGradExport)" stroke-width="1.9"/>
+              <path class="fi-tray" d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" stroke="#34d399" stroke-width="1.8"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Export &amp; Share</h3>
+            <p>Render in HD and ship to every platform fast.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal" href="#sound" data-feature="captions">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="3.5" y="5" width="17" height="14" rx="2.5" stroke="#c4b5fd" stroke-width="1.7"/>
+              <path d="M7 10.5h10M7 14h6" stroke="#a78bfa" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Auto captions</h3>
+            <p>Burn in readable lines that stay in the safe area of vertical video.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal reveal-delay" href="#sound" data-feature="music">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M9 17V6l10-2v11" stroke="#7dd3fc" stroke-width="1.7" stroke-linejoin="round"/>
+              <circle cx="7" cy="17" r="2.2" stroke="#38bdf8" stroke-width="1.7"/>
+              <circle cx="17" cy="15" r="2.2" stroke="#38bdf8" stroke-width="1.7"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Music &amp; pacing</h3>
+            <p>Match cuts to a beat so the promo feels finished, not stitched together.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal" href="#brand" data-feature="brand">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="7.5" stroke="#f9a8d4" stroke-width="1.7"/>
+              <circle cx="12" cy="12" r="3" fill="#f472b6"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Brand kit</h3>
+            <p>Keep type, color, and logo consistent across every launch cut.</p>
+          </div>
+        </a>
+        <a class="feature-row reveal reveal-delay" href="#brand" data-feature="formats">
+          <span class="feature-index" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="8" y="3.5" width="8" height="17" rx="2" stroke="#6ee7b7" stroke-width="1.7"/>
+              <path d="M10 18.5h4" stroke="#34d399" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <div>
+            <h3>Store-ready formats</h3>
+            <p>9:16, 1:1, and 16:9 from the same story — no rebuild for each channel.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section outcomes-section" id="studio-details" aria-labelledby="detailsTitle">
+      <div class="outcomes-head reveal">
+        <p class="section-kicker">In the studio</p>
+        <h2 id="detailsTitle">More than a recorder. A full promo pass.</h2>
+        <p>The tools sit on one timeline so you can shape the story, then export without leaving the cut.</p>
+      </div>
+      <div class="outcomes-grid">
+        <article class="outcomes-card reveal">
+          <h3>Scene blocks</h3>
+          <p>Open, product, proof, and close. Drop screens into a structure that already knows how an app promo should land.</p>
+        </article>
+        <article class="outcomes-card reveal reveal-delay">
+          <h3>Highlight calls</h3>
+          <p>Zoom, labels, and cursor emphasis on the tap that matters — so viewers see the feature, not the whole screen.</p>
+        </article>
+        <article class="outcomes-card reveal">
+          <h3>Review without the mess</h3>
+          <p>Share a cut, note a scene, and update the same project. The timeline stays the source of truth.</p>
+        </article>
+        <article class="outcomes-card reveal reveal-delay">
+          <h3>Export presets</h3>
+          <p>App Store preview, paid social, and a silent cut for autoplay — sized and captioned before you hit render.</p>
+        </article>
+      </div>
+    </section>
+
+    <div class="feat-chapters" id="chapters">
+      <section class="feat-chapter" id="record" aria-labelledby="recordTitle">
+        <div class="feat-chapter-copy">
+          <p class="section-kicker">01 — Capture</p>
+          <h2 id="recordTitle">Screen recording that lands on the timeline clean.</h2>
+          <p class="feat-lead">Record the flow once. The studio keeps the tap, the scroll, and the pause so the edit starts from a real session, not a folder of clips.</p>
+          <ul class="feat-points">
+            <li><strong>Device-true capture</strong><span>Phone and desktop frames stay sharp enough for a store preview.</span></li>
+            <li><strong>Marked moments</strong><span>Flag the tap that matters while you record, then jump to it in the cut.</span></li>
+            <li><strong>Quiet audio lane</strong><span>Keep voice, mute the room, or drop in a later voiceover on the same scene.</span></li>
+          </ul>
+        </div>
+        <div class="feat-panel" aria-hidden="true">
+          <div class="feat-panel-bar"><span></span><span></span><span></span><b>Capture · iPhone flow</b></div>
+          <div class="feat-panel-stage">
+            <img src="/assets/screen.png" alt="" width="960" height="640">
+            <span class="feat-rec"><i></i> REC 00:18</span>
+          </div>
+          <div class="feat-panel-meta">
+            <span>1080 × 1920</span>
+            <span>60 fps</span>
+            <span>Safe area on</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="feat-chapter is-flip" id="ai-edit" aria-labelledby="aiTitle">
+        <div class="feat-chapter-copy">
+          <p class="section-kicker">02 — AI edit</p>
+          <h2 id="aiTitle">Cuts, zooms, and transitions that follow the story.</h2>
+          <p class="feat-lead">AI trims the dead air and lands the emphasis on the feature. You still own the timeline — nothing ships until the cut feels right.</p>
+          <ul class="feat-points">
+            <li><strong>Smart trim</strong><span>Drop hesitations and repeated taps without slicing the scene by hand.</span></li>
+            <li><strong>Focus zooms</strong><span>Push in on the control the viewer should notice, then ease back out.</span></li>
+            <li><strong>Soft joins</strong><span>Match the pace between hook, product, and close so it reads as one film.</span></li>
+          </ul>
+        </div>
+        <div class="feat-panel">
+          <div class="feat-panel-bar"><span></span><span></span><span></span><b>AI pass · pick a suggestion</b></div>
+          <ul class="feat-suggest" data-pick>
+            <li data-pick-item><button type="button"><em>Trim</em><b>Remove 1.4s of idle before the tap</b></button></li>
+            <li class="is-on" data-pick-item><button type="button" aria-pressed="true"><em>Zoom</em><b>Hold on “Start trial” for 12 frames</b></button></li>
+            <li data-pick-item><button type="button"><em>Pace</em><b>Tighten the feature scene to the beat</b></button></li>
+            <li data-pick-item><button type="button"><em>Join</em><b>Crossfade hook into the product shot</b></button></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="feat-chapter" id="templates" aria-labelledby="tplChapterTitle">
+        <div class="feat-chapter-copy">
+          <p class="section-kicker">03 — Templates</p>
+          <h2 id="tplChapterTitle"><span class="feat-heading-line">Launch layouts that</span><span class="feat-heading-line">already know the story shape.</span></h2>
+          <p class="feat-lead">Start from a promo built for app launches: hook, product, proof, close. Swap in your screens and the structure stays.</p>
+          <ul class="feat-points">
+            <li><strong>Scene blocks</strong><span>Open, feature, social proof, and call to action are already ordered.</span></li>
+            <li><strong>Swap, don’t rebuild</strong><span>Drop your recording into the frame. Type, motion, and timing stay put.</span></li>
+            <li><strong>Made for stores and feeds</strong><span>The same template exports as a preview, a square, and a vertical cut.</span></li>
+          </ul>
+        </div>
+        <div class="feat-panel">
+          <div class="feat-panel-bar"><span></span><span></span><span></span><b>Template · Launch 18s</b></div>
+          <ol class="feat-scenes" data-pick>
+            <li data-pick-item><button type="button"><b>01</b> Hook<span>0:00</span></button></li>
+            <li class="is-on" data-pick-item><button type="button" aria-pressed="true"><b>02</b> Feature<span>0:04</span></button></li>
+            <li data-pick-item><button type="button"><b>03</b> Proof<span>0:09</span></button></li>
+            <li data-pick-item><button type="button"><b>04</b> Close<span>0:14</span></button></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="feat-chapter is-flip" id="sound" aria-labelledby="soundTitle">
+        <div class="feat-chapter-copy">
+          <p class="section-kicker">04 — Sound &amp; captions</p>
+          <h2 id="soundTitle">Lines people can read, and a pace they can feel.</h2>
+          <p class="feat-lead">Most of a feed is watched on mute. Captions stay inside the safe area, and the cut can still lock to a beat when sound is on.</p>
+          <ul class="feat-points">
+            <li><strong>Auto captions</strong><span>Burn in short lines sized for a phone, not a desktop subtitle track.</span></li>
+            <li><strong>Beat match</strong><span>Place cuts on the music so the promo feels finished, not assembled.</span></li>
+            <li><strong>Silent cut</strong><span>Export a version that still makes sense with the sound off.</span></li>
+          </ul>
+        </div>
+        <div class="feat-panel feat-panel-caption">
+          <div class="feat-phone">
+            <img src="/assets/screen.png" alt="" width="540" height="960">
+            <p data-caption>Tap once.<br>Your reel is live.</p>
+          </div>
+          <div class="feat-sound-controls">
+            <button type="button" data-caption-toggle aria-pressed="true">Captions on</button>
+            <div class="feat-wave" data-wave><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="feat-chapter" id="brand" aria-labelledby="brandTitle">
+        <div class="feat-chapter-copy">
+          <p class="section-kicker">05 — Brand &amp; formats</p>
+          <h2 id="brandTitle">One look, three ratios, no second edit.</h2>
+          <p class="feat-lead">Lock type, color, and logo once. Reframe the same story for the App Store, a square ad, and a 9:16 feed.</p>
+          <ul class="feat-points">
+            <li><strong>Brand kit</strong><span>Colors, type, and logo travel with every new project.</span></li>
+            <li><strong>Safe zones</strong><span>Captions and buttons stay clear of platform chrome.</span></li>
+            <li><strong>9:16, 1:1, 16:9</strong><span>Reframe from the master cut instead of rebuilding each channel.</span></li>
+          </ul>
+        </div>
+        <div class="feat-ratios feat-ratios-live" data-ratios>
+          <button type="button" class="is-on" data-ratio="9:16"><span class="ratio-916"></span>9:16 Feed</button>
+          <button type="button" data-ratio="1:1"><span class="ratio-11"></span>1:1 Ad</button>
+          <button type="button" data-ratio="16:9"><span class="ratio-169"></span>16:9 Preview</button>
+        </div>
+      </section>
+
+      <section class="feat-chapter is-flip" id="export" aria-labelledby="exportTitle">
+        <div class="feat-chapter-copy">
+          <p class="section-kicker">06 — Export</p>
+          <h2 id="exportTitle">Render once. Ship it where the launch lives.</h2>
+          <p class="feat-lead">Presets carry the size, the caption style, and the silent version so the handoff is a file, not a checklist.</p>
+          <ul class="feat-points">
+            <li><strong>Store preview</strong><span>A cut sized for App Store and Play listing video.</span></li>
+            <li><strong>Paid social</strong><span>Square and vertical masters with the end card intact.</span></li>
+            <li><strong>Share link</strong><span>Send a review cut, then export the final from the same project.</span></li>
+          </ul>
+        </div>
+        <ul class="feat-exports" data-pick>
+          <li class="is-on" data-pick-item><button type="button" aria-pressed="true"><b>App Store</b><span>1080×1920 · 30s</span><em>Ready</em></button></li>
+          <li data-pick-item><button type="button"><b>Reels / Shorts</b><span>1080×1920 · captions</span><em>Ready</em></button></li>
+          <li data-pick-item><button type="button"><b>Square ad</b><span>1080×1080 · silent</span><em>Ready</em></button></li>
+          <li data-pick-item><button type="button"><b>Review link</b><span>Watermarked preview</span><em>Shared</em></button></li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="section feat-faq" id="feature-faq" aria-labelledby="faqTitle">
+      <div class="section-heading reveal">
+        <p class="section-kicker">Details</p>
+        <h2 id="faqTitle">What the studio covers before you export.</h2>
+      </div>
+      <div class="feat-faq-list">
+        <details open>
+          <summary>Do I need a separate editor after I record?</summary>
+          <p>No. Capture, scenes, captions, brand, and export stay in the same project. The timeline is the cut.</p>
+        </details>
+        <details>
+          <summary>Can one story cover the store and social?</summary>
+          <p>Yes. Reframe the master into 9:16, 1:1, and 16:9, including a silent version for autoplay.</p>
+        </details>
+        <details>
+          <summary>Does AI replace the edit?</summary>
+          <p>It proposes trims, zooms, and joins. You accept what belongs in the story and leave the rest.</p>
+        </details>
+        <details>
+          <summary>Where do templates fit?</summary>
+          <p>A template is a finished story shape. You drop your screens in and keep the pacing, type, and end card.</p>
+        </details>
+        <details>
+          <summary>Can someone else review the cut?</summary>
+          <p>Share a preview from the project, note the scene, and update the same timeline before the final render.</p>
+        </details>
+      </div>
+    </section>
+
+<section class="section workflow-section" id="workflow" aria-labelledby="workflowTitle">
+      <div class="section-heading reveal">
+        <p class="section-kicker">How it works</p>
+        <h2 id="workflowTitle">Create your promo reel in 3 simple steps.</h2>
+      </div>
+      <div class="workflow-grid">
+        <article class="workflow-card reveal">
+          <span class="workflow-num"><span aria-hidden="true">▣</span><b>1</b></span>
+          <h3>Record</h3>
+          <p>Capture your app in action.</p>
+        </article>
+        <article class="workflow-card reveal reveal-delay">
+          <span class="workflow-num"><span aria-hidden="true">☷</span><b>2</b></span>
+          <h3>Edit</h3>
+          <p>Enhance with AI tools and templates.</p>
+        </article>
+        <article class="workflow-card reveal reveal-delay-more">
+          <span class="workflow-num"><span aria-hidden="true">↑</span><b>3</b></span>
+          <h3>Export</h3>
+          <p>Get a high-quality reel and share anywhere.</p>
+        </article>
+      </div>
+    </section>
+
+<section class="section workspace-section" id="workspace" aria-labelledby="studioTitle">
+      <div class="workspace-glow" aria-hidden="true"></div>
+      <div class="workspace-grid">
+        <div class="workspace-copy" id="workspaceCopy">
+          <p class="workspace-label">
+            <span class="workspace-label-rule" aria-hidden="true"></span>
+            THE WORKSPACE
+          </p>
+          <h2 id="studioTitle">
+            Timeline, canvas, and export<br>
+            in <span class="workspace-accent">one screen</span>
+          </h2>
+          <p class="workspace-lead">Built to stay out of the way while you finish the cut.</p>
+
+          <ul class="workspace-features">
+            <li class="workspace-feature">
+              <span class="workspace-feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M13 3 4 14h7l-1 7 10-13h-7l1-5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+              </span>
+              <div>
+                <h3>Edit faster</h3>
+                <p>A clean, focused workspace.</p>
+              </div>
+            </li>
+            <li class="workspace-feature">
+              <span class="workspace-feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="4" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="10.5" width="16" height="4" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="16" width="16" height="4" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg>
+              </span>
+              <div>
+                <h3>All in one</h3>
+                <p>Timeline, canvas and tools together.</p>
+              </div>
+            </li>
+            <li class="workspace-feature">
+              <span class="workspace-feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 15V5m0 0 4 4m-4-4-4 4M5 19h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <div>
+                <h3>Export instantly</h3>
+                <p>Share your reel in the right format.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="workspace-visual" id="workspaceVisual">
+          <div class="workspace-stage" id="workspaceStage">
+            <div class="workspace-editor" id="workspaceEditor">
+              <img
+                class="workspace-screen"
+                src="/assets/screen.png"
+                alt="Reel Creator workspace with scenes, canvas, properties, and timeline"
+                width="1600"
+                height="1100"
+                decoding="async"
+                loading="lazy"
+              >
+              <div class="workspace-mascot" id="workspaceMascot" aria-hidden="true">
+                <div class="workspace-mascot-face">
+                  <img
+                    class="workspace-mascot-img"
+                    src="/assets/characterlap.png"
+                    alt=""
+                    width="420"
+                    height="420"
+                    decoding="async"
+                    loading="lazy"
+                  >
+                  <span class="workspace-lids">
+                    <span class="workspace-lid workspace-lid-l"></span>
+                    <span class="workspace-lid workspace-lid-r"></span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="workspace-base-glow" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="final-cta-content reveal">
+        <div class="cta-mascot" aria-hidden="true"><img src="/assets/characterlap.png" alt="" width="360" height="360" loading="lazy" decoding="async"></div>
+        <div class="cta-copy"><h2>Ready to create your app promo?</h2>
+        <p>Join thousands of creators using ReelCreator to turn their apps into high-converting videos.</p></div>
+        <a href="/signup" class="btn primary lg">Start Free Now <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <footer class="site-foot">
+    <div class="footer-shell">
+      <div class="footer-top">
+        <div class="footer-brand-block">
+          <a class="brand footer-brand" href="/" aria-label="Reel Creator home">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+            </span>
+            <span>reelcreator</span>
+          </a>
+          <p class="footer-tagline">The studio for app promos that convert — record, polish, and export in one place.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-col">
+            <h3>Product</h3>
+            <a href="/features">Features</a>
+            <a href="/templates">Templates</a>
+            <a href="/pricing">Pricing</a>
+          </div>
+          <div class="footer-col">
+            <h3>Explore</h3>
+            <a href="/about">About</a>
+            <a href="/">Home</a>
+          </div>
+          <div class="footer-col">
+            <h3>Get started</h3>
+            <a href="/signin">Log in</a>
+            <a href="/signup">Start free</a>
+            <a href="/pricing">View plans</a>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src="/landing.js"></script>
+  <script type="module" src="/workspace.js"></script>
+  <script type="module" src="/features.js"></script>
+</body>
+</html>
