@@ -32,6 +32,8 @@ The HTTP server is **NestJS** (`src/`). Frontend pages in `public/` are unchange
 
 Accounts and sessions are stored in `data/users.json` and `data/sessions.json`, with scrypt password hashes. Sessions last 30 days. Set `NODE_ENV=production` to mark the cookie `Secure` (needs HTTPS).
 
+Launch setup (billing, email, analytics, legal pages, and deploy steps) is documented in [docs/architecture.md](docs/architecture.md) and [docs/deployment.md](docs/deployment.md). Copy `.env.example` to `.env` before running in production. `npm start` is cross-platform and serves the built app.
+
 The **first account created** takes over all existing projects from before accounts were added, and their exports are moved into that account's output folder.
 
 ### Elements (drag-and-drop overlays)

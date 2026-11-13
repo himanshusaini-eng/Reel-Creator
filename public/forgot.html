@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Reset your Reel Creator password.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Forgot password — Reel Creator</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/landing.css">
+  <link rel="stylesheet" href="/auth.css?v=p1">
+</head>
+<body class="landing auth-page" data-auth-mode="forgot">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head auth-head">
+    <a class="brand" href="/" aria-label="Reel Creator home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+      </span>
+      <span class="brand-text">reelcreator</span>
+    </a>
+    <a class="btn ghost sm auth-home-link" href="/">Back to Home</a>
+  </header>
+
+  <main id="main" class="auth-shell">
+    <section class="auth-panel auth-panel-brand" aria-labelledby="authBrandTitle">
+      <div class="auth-brand-glow" aria-hidden="true"></div>
+      <div class="auth-brand-inner">
+        <p class="hero-eyebrow"><span aria-hidden="true">✦</span> Account</p>
+        <h1 id="authBrandTitle">We’ll get you back in.</h1>
+        <p class="auth-brand-sub">Enter the email on your account. If it matches, we’ll send a reset link that expires in one hour.</p>
+        <ul class="auth-benefits">
+          <li>
+            <strong>Same studio, same projects</strong>
+            <span>Your drafts stay attached to your account.</span>
+          </li>
+          <li>
+            <strong>Secure by default</strong>
+            <span>We never ask for your password over email chat.</span>
+          </li>
+          <li>
+            <strong>Need help now?</strong>
+            <span>Email hello@reelcreator.app and we’ll assist.</span>
+          </li>
+        </ul>
+        <div class="auth-mascot" aria-hidden="true">
+          <img src="/assets/character.png" alt="" width="240" height="240" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <section class="auth-panel auth-panel-form" aria-labelledby="title">
+      <form class="auth-card" id="forgotForm" novalidate>
+        <h2 id="title">Forgot password</h2>
+        <p class="sub">Enter your email and we’ll help you regain access.</p>
+        <label class="field"><span>Email</span>
+          <input class="input" id="email" name="email" type="email" autocomplete="email" required placeholder="you@company.com">
+        </label>
+        <div class="error" id="error" role="alert"></div>
+        <div class="auth-success hidden" id="success" role="status"></div>
+        <button class="btn primary auth-submit" id="submit" type="submit">Send reset link</button>
+        <div class="switch">
+          Remembered it? <a href="/signin">Sign in</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script type="module" src="/auth.js?v=p1"></script>
+</body>
+</html>

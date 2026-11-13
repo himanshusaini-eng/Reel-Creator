@@ -45,6 +45,7 @@ const V = {
   fps: 30, resolution: "1080", quality: "high",
   ...(project.video || {}),
 };
+if (process.env.REEL_FORCE_720 === "1") V.resolution = "720";
 const FPS = [24, 30, 60].includes(Number(V.fps)) ? Number(V.fps) : 30;
 const CRF = { high: 17, balanced: 21, small: 26 }[V.quality] ?? 17;
 
@@ -104,7 +105,16 @@ const chromeCandidates = [
   "/Applications/Chromium.app/Contents/MacOS/Chromium",
   "/usr/bin/google-chrome",
   "/usr/bin/chromium",
+  "/usr/bin/google-chrome-stable",
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+  "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+  "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
 ].filter(Boolean);
+
+if (process.env.LOCALAPPDATA) {
+  chromeCandidates.push(`${process.env.LOCALAPPDATA}\\Google\\Chrome\\Application\\chrome.exe`);
+}
 
 const chrome = chromeCandidates.find((p) => existsSync(p));
 if (!chrome) {
@@ -179,6 +189,25 @@ try {
     window.__overlays.setGlobal(video);
   }, overlays, V);
   if (overlays.length) log(`${overlays.length} overlay element(s)`);
+  if (process.env.REEL_WATERMARK === "1") {
+    await page.evaluate(() => {
+      const mark = document.createElement("div");
+      mark.textContent = "reelcreator";
+      mark.setAttribute("data-watermark", "1");
+      Object.assign(mark.style, {
+        position: "fixed",
+        right: "36px",
+        bottom: "48px",
+        zIndex: "2147483646",
+        color: "rgba(255,255,255,.78)",
+        font: "600 28px sans-serif",
+        letterSpacing: "0.04em",
+        textShadow: "0 2px 12px rgba(0,0,0,.45)",
+        pointerEvents: "none",
+      });
+      document.body.appendChild(mark);
+    });
+  }
 
   // Templates that synthesize their own soundtrack hand it over as a WAV
   if (V.templateAudio !== false) {

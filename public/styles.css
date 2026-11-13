@@ -1055,3 +1055,104 @@ a.proj:hover { text-decoration: none; }
   outline: 2px dashed rgba(255, 90, 31, 0.8);
   outline-offset: -2px;
 }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Phase 3 editor polish ---------- */
+.panel-empty {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  background: rgba(255,255,255,.03);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+.panel-empty b {
+  color: var(--text);
+  font-size: 13px;
+}
+.panel-empty .btn { justify-self: start; margin-top: 4px; }
+
+.timeline-track {
+  position: relative;
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+.timeline-rail {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 6px;
+  overflow: hidden;
+  pointer-events: none;
+  background: rgba(255,255,255,.06);
+  border-radius: 99px;
+}
+.timeline-rail i {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(124,92,255,.35), rgba(124,92,255,.85));
+  border-radius: inherit;
+  transition: width .08s linear;
+}
+.timeline input[type="range"] {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.timeline input[type="range"]:focus-visible {
+  outline: 2px solid rgba(124,92,255,.55);
+  outline-offset: 2px;
+}
+.timeline-play {
+  transition: transform .15s ease, background .15s ease;
+}
+.timeline-play:hover { transform: scale(1.06); }
+.timeline-play.is-playing {
+  color: #fff;
+  background: rgba(124,92,255,.25);
+}
+
+.phone-frame.is-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(20,20,24,.2) 25%, rgba(40,40,48,.45) 50%, rgba(20,20,24,.2) 75%);
+  background-size: 200% 100%;
+  animation: editorShimmer 1.1s ease infinite;
+}
+@keyframes editorShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.icon-btn:focus-visible,
+.btn:focus-visible,
+.panel-tab:focus-visible,
+.view-tab:focus-visible,
+.file-name:focus-visible {
+  outline: 2px solid rgba(124,92,255,.55);
+  outline-offset: 2px;
+}

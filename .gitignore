@@ -9,3 +9,15 @@ uploads/*
 .reel-frames/
 .DS_Store
 *.log
+.env
+.env.*
+!.env.example
+data/users.json
+data/sessions.json
+data/tokens.json
+data/billing.json
+data/support.json
+data/outbox.json
+data/analytics.jsonl
+data/.ip-salt
+data/*.tmp

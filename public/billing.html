@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Billing — Reel Creator</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head">
+    <a class="brand" href="/app" aria-label="Reel Creator home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg></span>reelcreator</a>
+    <div class="head-actions">
+      <span class="who" id="who"></span>
+      <a class="btn ghost" href="/app/settings">Settings</a>
+      <button class="btn ghost" id="btnSignOut" type="button">Sign out</button>
+    </div>
+  </header>
+  <main id="main" class="page">
+    <div class="page-head"><div class="page-head-copy"><h1>Billing</h1><p class="page-head-sub">Free, Pro, Team, and Enterprise. Card charging starts when a payment processor is connected.</p></div></div>
+    <div class="settings-stack">
+      <section class="settings-card" aria-labelledby="planTitle">
+        <h2 id="planTitle">Current plan</h2>
+        <p><strong id="currentPlan">…</strong></p>
+        <p id="currentMeta"></p>
+        <div class="settings-actions">
+          <button class="btn ghost" id="cancel" type="button">Cancel at period end</button>
+          <button class="btn" id="resume" type="button" hidden>Resume subscription</button>
+        </div>
+      </section>
+      <section class="settings-card" aria-labelledby="plansTitle">
+        <h2 id="plansTitle">Plans</h2>
+        <label class="field"><span>Billing period</span>
+          <select class="input" id="interval">
+            <option value="month">Monthly</option>
+            <option value="year">Yearly</option>
+          </select>
+        </label>
+        <div id="plans"></div>
+      </section>
+      <section class="settings-card" aria-labelledby="invoiceTitle">
+        <h2 id="invoiceTitle">Invoices</h2>
+        <div id="invoices"><p>Loading…</p></div>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="/billing.js"></script>
+</body>
+</html>

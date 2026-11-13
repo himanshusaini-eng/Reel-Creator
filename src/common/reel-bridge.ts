@@ -28,7 +28,7 @@ export function ensureReelBridge(html: string) {
   var _raf = window.requestAnimationFrame.bind(window);
   window.requestAnimationFrame = function (cb) {
     return _raf(function (now) {
-      if (external) return;  
+      if (external) return;
       cb(now);
     });
   };
@@ -43,7 +43,7 @@ export function ensureReelBridge(html: string) {
     var r = getRender();
     if (r) r(controlT);
   }
-  window.__reel = { DUR: DUR, setTime: setTime, render: setTime,__stub: true };
+  window.__reel = { DUR: DUR, setTime: setTime, render: setTime, __stub: true };
 })();
 </script>`;
   return out.includes("</body>") ? out.replace("</body>", `${bridge}</body>`) : out + bridge;

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Contact Reel Creator support.">
+  <link rel="canonical" href="https://reelcreator.app/contact">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Contact — Reel Creator</title>
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head">
+    <a class="brand" href="/">reelcreator</a>
+    <div class="head-actions"><a class="btn ghost" href="/help">Help</a><a class="btn primary" href="/signup">Start free</a></div>
+  </header>
+  <main id="main" class="page">
+    <div class="page-head"><div class="page-head-copy"><h1>Contact</h1><p class="page-head-sub">Sales, privacy, and product questions. You can also email <a href="mailto:hello@reelcreator.app">hello@reelcreator.app</a>.</p></div></div>
+    <form class="settings-card" data-support="contact" style="max-width:640px">
+      <label class="field"><span>Name</span><input class="input" name="name" autocomplete="name" required maxlength="80"></label>
+      <label class="field"><span>Email</span><input class="input" name="email" type="email" autocomplete="email" required></label>
+      <label class="field"><span>Topic</span>
+        <select class="input" name="topic">
+          <option value="general">General</option>
+          <option value="billing">Billing</option>
+          <option value="privacy">Privacy</option>
+          <option value="team">Team</option>
+          <option value="enterprise">Enterprise</option>
+          <option value="press">Press</option>
+        </select>
+      </label>
+      <label class="field"><span>Message</span><textarea class="input" name="message" required minlength="8" maxlength="5000"></textarea></label>
+      <div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+      <button class="btn primary" type="submit">Send</button>
+    </form>
+  </main>
+  <script type="module" src="/forms.js"></script>
+</body>
+</html>

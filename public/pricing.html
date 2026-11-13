@@ -4,13 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#000000">
+  <meta name="description" content="Simple pricing for Reel Creator. Start free, upgrade anytime. Monthly or yearly plans for creators and teams.">
+  <link rel="canonical" href="https://reelcreator.app/pricing">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Reel Creator">
+  <meta property="og:title" content="Pricing — Reel Creator">
+  <meta property="og:description" content="Simple pricing for Reel Creator. Start free, upgrade anytime. Monthly or yearly plans for creators and teams.">
+  <meta property="og:url" content="https://reelcreator.app/pricing">
+  <meta property="og:image" content="https://reelcreator.app/assets/hero-poster.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Pricing — Reel Creator">
+  <meta name="twitter:description" content="Simple pricing for Reel Creator. Start free, upgrade anytime. Monthly or yearly plans for creators and teams.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
   <title>Pricing — Reel Creator</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
   <link rel="stylesheet" href="/landing.css">
+  <link rel="stylesheet" href="/pricing.css?v=p1">
 </head>
-<body class="landing">
+<body class="landing price-page">
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-head">
     <a class="brand" href="/" aria-label="Reel Creator home">
       <span class="brand-mark" aria-hidden="true">
@@ -36,62 +51,177 @@
   </header>
   <div class="site-head-spacer" aria-hidden="true"></div>
   <div class="nav-backdrop" id="navBackdrop" hidden></div>
-  <main>
-    <section class="section pricing-section" id="pricing" aria-labelledby="pricingTitle">
-      <div class="section-heading reveal">
-        <p class="section-kicker">Pricing</p>
-        <h2 id="pricingTitle">Simple and transparent pricing.</h2>
+
+  <main id="main">
+    <section class="price-hero" aria-labelledby="priceHeroTitle">
+      <div class="price-hero-glow" aria-hidden="true"></div>
+      <div class="price-hero-copy reveal">
+        <p class="hero-eyebrow"><span aria-hidden="true">✦</span> Pricing</p>
+        <h1 id="priceHeroTitle">Simple pricing for creators of every size.</h1>
+        <p class="price-hero-sub">Start free, ship your first promo, and upgrade when you need longer cuts, cleaner exports, and team seats. Cancel anytime.</p>
+        <div class="hero-ctas">
+          <a class="btn primary lg" href="/signup">Start Free <span aria-hidden="true">→</span></a>
+          <a class="btn ghost lg" href="#compare">Compare Plans</a>
+        </div>
       </div>
-      <div class="billing-toggle" role="group" aria-label="Billing period">
-        <button class="billing-option is-active" type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-        <button class="billing-option" type="button" data-billing="yearly" aria-pressed="false">Yearly <span>Save 20%</span></button>
+    </section>
+
+    <section class="price-plans" id="plans" aria-labelledby="plansTitle">
+      <div class="price-plans-head reveal">
+        <h2 id="plansTitle" class="visually-hidden">Choose a plan</h2>
+        <div class="billing-toggle" role="group" aria-label="Billing period">
+          <button class="billing-option is-active" type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+          <button class="billing-option" type="button" data-billing="yearly" aria-pressed="false">Yearly <span>Save 20%</span></button>
+        </div>
       </div>
-      <div class="pricing-grid">
-        <article class="price-card reveal">
+
+      <div class="price-grid">
+        <article class="price-card price-card-rich reveal">
           <p class="plan-name">Free</p>
-          <p class="plan-desc">Perfect for getting started.</p>
-          <h3 class="plan-price" data-monthly="0" data-yearly="0" aria-label="Free">$0<small>/month</small></h3>
-          <ul>
+          <p class="plan-desc">Perfect for trying the studio and shipping your first cut.</p>
+          <h3 class="plan-price" data-monthly="0" data-yearly="0" aria-label="Free">$0<small>/mo</small></h3>
+          <p class="plan-billing-note" data-note-monthly="Forever free" data-note-yearly="Forever free">Forever free</p>
+          <ul class="plan-features" aria-label="Included">
             <li>Basic editing tools</li>
-            <li>Watermarked export</li>
+            <li>Core templates</li>
+            <li>720p export</li>
+            <li>1 project at a time</li>
+          </ul>
+          <ul class="plan-limits" aria-label="Limits">
+            <li>Watermarked exports</li>
+            <li>No brand kit</li>
+            <li>Community support</li>
           </ul>
           <a class="btn block" href="/signup">Get Started</a>
         </article>
-        <article class="price-card price-pro reveal reveal-delay">
-          <span class="popular-badge">Most Popular</span>
+
+        <article class="price-card price-card-rich price-pro reveal reveal-delay">
+          <span class="popular-badge">Recommended</span>
           <p class="plan-name">Pro</p>
-          <p class="plan-desc">For serious creators and teams.</p>
-          <h3 class="plan-price" data-monthly="14" data-yearly="11" aria-label="$14 per month">$14<small>/month</small></h3>
-          <ul>
+          <p class="plan-desc">For founders and marketers who ship promos every week.</p>
+          <h3 class="plan-price" data-monthly="14" data-yearly="11" aria-label="$14 per month">$14<small>/mo</small></h3>
+          <p class="plan-billing-note" data-note-monthly="Billed monthly" data-note-yearly="Billed annually">Billed monthly</p>
+          <ul class="plan-features" aria-label="Included">
             <li>AI editing &amp; enhancements</li>
-            <li>Premium templates</li>
-            <li>1080P export (no watermark)</li>
+            <li>Full template library</li>
+            <li>1080p export, no watermark</li>
+            <li>Unlimited projects</li>
+            <li>Brand kit</li>
+            <li>Commercial license</li>
           </ul>
-          <a class="btn primary block" href="/signup">Start Pro Free</a>
-        </article>
-        <article class="price-card reveal reveal-delay-more">
-          <p class="plan-name">Team</p>
-          <p class="plan-desc">For teams and growing businesses.</p>
-          <h3 class="plan-price" data-monthly="49" data-yearly="39" aria-label="$49 per month">$49<small>/month</small></h3>
-          <ul>  
-            <li>Everything in Pro</li>
-            <li>Team collaboration</li>
-            <li>Priority support</li>
+          <ul class="plan-limits" aria-label="Limits">
+            <li>Single seat</li>
+            <li>Standard support queue</li>
           </ul>
-          <a class="btn block" href="mailto:hello@reelcreator.app">Contact Sales</a>
+          <a class="btn primary block" href="/signup">Start Pro Free <span aria-hidden="true">→</span></a>
         </article>
+      </div>
+    </section>
+
+    <section class="price-compare" id="compare" aria-labelledby="compareTitle">
+      <div class="price-compare-head reveal">
+        <p class="section-kicker">Compare</p>
+        <h2 id="compareTitle">Everything, side by side.</h2>
+        <p>See what changes when you move from Free to Pro — and what teams unlock with Enterprise.</p>
+      </div>
+      <div class="price-table-wrap reveal" role="region" aria-label="Plan comparison" tabindex="0">
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Free</th>
+              <th scope="col">Pro</th>
+              <th scope="col">Enterprise</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">AI Generations</th><td>5 / mo</td><td>Unlimited</td><td>Unlimited + priority</td></tr>
+            <tr><th scope="row">Video Length</th><td>Up to 15s</td><td>Up to 60s</td><td>Custom</td></tr>
+            <tr><th scope="row">Templates</th><td>Core set</td><td>Full library</td><td>Full + custom</td></tr>
+            <tr><th scope="row">Exports</th><td>720p</td><td>1080p</td><td>1080p + batch</td></tr>
+            <tr><th scope="row">Watermark</th><td>Yes</td><td>No</td><td>No</td></tr>
+            <tr><th scope="row">Storage</th><td>1 GB</td><td>50 GB</td><td>Custom</td></tr>
+            <tr><th scope="row">Brand Kit</th><td>—</td><td>✓</td><td>✓</td></tr>
+            <tr><th scope="row">Commercial License</th><td>—</td><td>✓</td><td>✓</td></tr>
+            <tr><th scope="row">Support</th><td>Community</td><td>Email</td><td>Priority</td></tr>
+            <tr><th scope="row">Priority Queue</th><td>—</td><td>—</td><td>✓</td></tr>
+            <tr><th scope="row">Team Collaboration</th><td>—</td><td>—</td><td>✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="price-enterprise" id="enterprise" aria-labelledby="enterpriseTitle">
+      <div class="price-enterprise-inner reveal">
+        <div class="price-enterprise-copy">
+          <p class="section-kicker">Team &amp; Enterprise</p>
+          <h2 id="enterpriseTitle">Built for product and growth teams.</h2>
+          <p>Shared brand kits, seat management, priority export queue, and a partner who helps you ship launch weeks without rebuilding every cut.</p>
+          <ul class="price-enterprise-list">
+            <li>Multi-seat workspaces with roles</li>
+            <li>Shared templates and brand assets</li>
+            <li>Priority support and onboarding</li>
+            <li>Custom limits for volume launches</li>
+          </ul>
+          <div class="hero-ctas">
+            <a class="btn primary lg" href="mailto:hello@reelcreator.app">Contact Sales <span aria-hidden="true">→</span></a>
+            <a class="btn ghost lg" href="/signup">Start Free instead</a>
+          </div>
+        </div>
+        <aside class="price-enterprise-aside" aria-label="Enterprise starting point">
+          <p class="plan-name">Enterprise</p>
+          <p class="price-enterprise-price">From $49<span>/seat</span></p>
+          <p class="plan-billing-note">Custom annual agreements available</p>
+          <a class="btn block" href="mailto:hello@reelcreator.app">Talk to us</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="price-faq section" id="faq" aria-labelledby="priceFaqTitle">
+      <div class="section-heading reveal">
+        <p class="section-kicker">FAQ</p>
+        <h2 id="priceFaqTitle">Questions before you start.</h2>
+      </div>
+      <div class="price-faq-list feat-faq-list reveal">
+        <details open>
+          <summary>Can I cancel anytime?</summary>
+          <p>Yes. You can cancel from your account settings. You keep access through the end of the billing period.</p>
+        </details>
+        <details>
+          <summary>Is there a free plan?</summary>
+          <p>Yes. Free includes core editing, starter templates, and watermarked 720p exports so you can try the studio before upgrading.</p>
+        </details>
+        <details>
+          <summary>Is there a watermark?</summary>
+          <p>Free exports include a Reel Creator watermark. Pro and Enterprise remove it and unlock 1080p exports.</p>
+        </details>
+        <details>
+          <summary>Can I upgrade later?</summary>
+          <p>Anytime. Your projects stay with you — upgrading unlocks longer cuts, the full template library, and cleaner exports.</p>
+        </details>
+        <details>
+          <summary>Do you offer refunds?</summary>
+          <p>If something goes wrong in your first 7 days on Pro, email hello@reelcreator.app and we’ll make it right.</p>
+        </details>
+        <details>
+          <summary>Can teams collaborate?</summary>
+          <p>Team seats and shared brand kits ship with Enterprise. Contact sales if you need multi-seat access today.</p>
+        </details>
       </div>
     </section>
 
     <section class="final-cta">
       <div class="final-cta-content reveal">
         <div class="cta-mascot" aria-hidden="true"><img src="/assets/characterlap.png" alt="" width="360" height="360" loading="lazy" decoding="async"></div>
-        <div class="cta-copy"><h2>Ready to create your app promo?</h2>
-        <p>Join thousands of creators using ReelCreator to turn their apps into high-converting videos.</p></div>
+        <div class="cta-copy">
+          <h2>Start free. Ship your first promo today.</h2>
+          <p>No card required. Upgrade when you’re ready for longer cuts and watermark-free exports.</p>
+        </div>
         <a href="/signup" class="btn primary lg">Start Free Now <span aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
+
   <footer class="site-foot">
     <div class="footer-shell">
       <div class="footer-top">
@@ -124,9 +254,21 @@
           </div>
         </nav>
       </div>
+      <div class="footer-bottom">
+        <p><span id="year"></span> Reel Creator. Built for founders &amp; marketers.</p>
+        <div class="footer-meta">
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/cookies">Cookies</a>
+          <a href="/refunds">Refunds</a>
+          <a href="/help">Help</a>
+          <a href="#top">Back to top</a>
+        </div>
+      </div>
     </div>
   </footer>
+
   <script type="module" src="/landing.js"></script>
-  
+  <script type="module" src="/pricing.js?v=p1"></script>
 </body>
 </html>

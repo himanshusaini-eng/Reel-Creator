@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Settings — Reel Creator</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head">
+    <a class="brand" href="/app" aria-label="Reel Creator home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg></span>reelcreator</a>
+    <div class="head-actions">
+      <span class="who" id="who"></span>
+      <a class="btn ghost" href="/app/billing">Billing</a>
+      <a class="btn ghost" href="/help">Help</a>
+      <button class="btn ghost" id="btnSignOut" type="button">Sign out</button>
+    </div>
+  </header>
+  <main id="main" class="page">
+    <div class="page-head"><div class="page-head-copy"><h1>Settings</h1><p class="page-head-sub">Profile, security, notifications, and privacy for this account.</p></div></div>
+    <div class="settings-stack">
+      <section class="settings-card" aria-labelledby="profileTitle">
+        <h2 id="profileTitle">Profile</h2>
+        <p>Plan: <strong id="planLabel">free</strong> · <a href="/app/billing">Manage billing</a></p>
+        <div class="settings-actions" style="margin-bottom:16px">
+          <img class="avatar-preview" id="avatar" alt="">
+          <label class="btn sm">Upload photo<input class="hp" id="avatarInput" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label>
+          <button class="btn sm ghost" id="clearAvatar" type="button">Remove</button>
+        </div>
+        <form id="profileForm">
+          <label class="field"><span>Name</span><input class="input" id="name" name="name" autocomplete="name" required maxlength="80"></label>
+          <label class="field"><span>Email</span><input class="input" id="email" type="email" autocomplete="email" disabled></label>
+          <p id="pending" class="muted"></p>
+          <button class="btn primary" type="submit">Save profile</button>
+        </form>
+      </section>
+
+      <section class="settings-card" aria-labelledby="passwordTitle">
+        <h2 id="passwordTitle">Password</h2>
+        <form id="passwordForm">
+          <label class="field"><span>Current password</span><input class="input" id="currentPassword" type="password" autocomplete="current-password" required></label>
+          <label class="field"><span>New password</span><input class="input" id="nextPassword" type="password" autocomplete="new-password" required minlength="8"></label>
+          <label class="field"><span>Confirm new password</span><input class="input" id="confirmPassword" type="password" autocomplete="new-password" required minlength="8"></label>
+          <button class="btn primary" type="submit">Update password</button>
+        </form>
+      </section>
+
+      <section class="settings-card" aria-labelledby="emailTitle">
+        <h2 id="emailTitle">Email</h2>
+        <p>The new address is used after you confirm it.</p>
+        <form id="emailForm">
+          <label class="field"><span>New email</span><input class="input" id="nextEmail" type="email" autocomplete="email" required></label>
+          <label class="field"><span>Current password</span><input class="input" id="emailPassword" type="password" autocomplete="current-password" required></label>
+          <div class="settings-actions">
+            <button class="btn primary" type="submit">Send confirmation</button>
+            <button class="btn ghost" id="resend" type="button">Resend verification</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="settings-card" aria-labelledby="prefTitle">
+        <h2 id="prefTitle">Notifications, theme, and privacy</h2>
+        <form id="prefsForm">
+          <label class="field"><span>Theme</span>
+            <select class="input" id="theme">
+              <option value="dark">Dark</option>
+              <option value="system">System</option>
+            </select>
+          </label>
+          <label class="field"><span>Language</span>
+            <select class="input" id="language" disabled>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <p class="muted">More languages later. The studio palette stays dark.</p>
+          <label class="check"><input type="checkbox" name="notify-product"> Product updates</label>
+          <label class="check"><input type="checkbox" name="notify-billing"> Billing emails</label>
+          <label class="check"><input type="checkbox" name="notify-exportReady"> Export ready</label>
+          <label class="check"><input type="checkbox" name="notify-marketing"> Occasional notes</label>
+          <label class="check"><input type="checkbox" name="privacy-analytics"> Product analytics</label>
+          <label class="check"><input type="checkbox" name="privacy-crashReports"> Crash reports</label>
+          <button class="btn primary" type="submit">Save preferences</button>
+        </form>
+      </section>
+
+      <section class="settings-card" aria-labelledby="sessionTitle">
+        <h2 id="sessionTitle">Sessions</h2>
+        <div id="sessions"></div>
+        <button class="btn ghost" id="revokeOthers" type="button">Sign out other sessions</button>
+      </section>
+
+      <section class="settings-card" aria-labelledby="connectTitle">
+        <h2 id="connectTitle">Connected accounts</h2>
+        <p>Social sign-in is not connected yet.</p>
+        <div id="connections"></div>
+      </section>
+
+      <section class="settings-card" aria-labelledby="dataTitle">
+        <h2 id="dataTitle">Your data</h2>
+        <p>Download a copy of your profile, projects, and invoices. Password hashes are not included.</p>
+        <button class="btn" id="exportData" type="button">Export data</button>
+      </section>
+
+      <section class="settings-card" aria-labelledby="deleteTitle">
+        <h2 id="deleteTitle">Delete account</h2>
+        <p>This removes your sign-in and studio projects. Type DELETE to confirm.</p>
+        <form id="deleteForm">
+          <label class="field"><span>Password</span><input class="input" id="deletePassword" type="password" autocomplete="current-password" required></label>
+          <label class="field"><span>Type DELETE</span><input class="input" id="deleteConfirm" autocomplete="off" required></label>
+          <button class="btn danger" type="submit">Delete account</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="/settings.js"></script>
+</body>
+</html>

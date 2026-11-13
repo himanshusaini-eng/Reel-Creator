@@ -5,8 +5,10 @@
   "description": "App demo reel studio — edit templates, preview, export 9:16 MP4",
   "scripts": {
     "dev": "nest start --watch",
-    "start": "NODE_ENV=production node dist/main.js",
+    "start": "node scripts/start.mjs",
     "build": "nest build",
+    "qa": "node scripts/qa.mjs",
+    "check": "node scripts/deploy-check.mjs",
     "render": "node worker/render.mjs"
   },
   "engines": {

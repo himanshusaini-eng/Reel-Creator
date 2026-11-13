@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My projects · Reel Creator</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Your Reel Creator studio — projects, templates, and exports.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Studio — Reel Creator</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/app-ui.css?v=p3">
 </head>
 <body>
-  <header class="site-head">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head" aria-label="Studio header">
     <a class="brand" href="/app" aria-label="Reel Creator home">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
@@ -18,51 +24,102 @@
     </a>
     <div class="head-actions">
       <span class="who" id="who"></span>
+      <a class="btn primary" href="/app/new">New project</a>
+      <a class="btn ghost" href="/app/settings">Settings</a>
       <button class="btn ghost" id="btnSignOut" type="button">Sign out</button>
     </div>
   </header>
 
-  <main class="page">
-    <div class="page-head">
-      <div class="page-head-copy">
-        <h1>My projects</h1>
-        <p class="page-head-sub">Your app promo studio — compose scenes, refine with AI, and export launch-ready reels.</p>
+  <main id="main" class="page">
+    <section class="dash-welcome reveal-in" aria-labelledby="welcomeTitle">
+      <div class="dash-welcome-glow" aria-hidden="true"></div>
+      <div class="dash-welcome-inner">
+        <p class="dash-kicker">Your studio</p>
+        <h1 id="welcomeTitle">Welcome back<span id="welcomeName"></span></h1>
+        <p>Ready to create your next viral reel? Pick up a project, start from a template, or bring your own HTML cut into the studio.</p>
+        <div class="dash-welcome-actions">
+          <a class="btn primary lg" href="/app/new">Create New Reel <span aria-hidden="true">→</span></a>
+          <a class="btn ghost lg" href="/app/new?source=template">Browse Templates</a>
+        </div>
       </div>
-      <a class="btn primary" href="/app/new">New project</a>
-    </div>
-
-    <section class="studio-guide" aria-label="How Reel Creator works">
-      <article class="studio-guide-card">
-        <span class="studio-guide-step">01</span>
-        <h2>Start from a template</h2>
-        <p>Pick a proven promo structure or bring your own HTML reel into the studio.</p>
-      </article>
-      <article class="studio-guide-card">
-        <span class="studio-guide-step">02</span>
-        <h2>Compose &amp; polish</h2>
-        <p>Tune captions, pacing, and scenes in one calm workspace before export.</p>
-      </article>
-      <article class="studio-guide-card">
-        <span class="studio-guide-step">03</span>
-        <h2>Export launch-ready</h2>
-        <p>Ship 9:16 social cuts and store-ready promos without leaving the app.</p>
-      </article>
     </section>
 
-    <div class="error" id="error" role="alert"></div>
-    <div id="list"></div>
+    <section class="quick-actions" aria-label="Quick actions">
+      <a class="quick-card reveal-in" href="/app/new">
+        <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <strong>Create New Reel</strong>
+        <span>Start a promo from scratch with a template or upload.</span>
+      </a>
+      <a class="quick-card reveal-in d1" href="/app/new?source=template">
+        <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        <strong>Browse Templates</strong>
+        <span>Launch layouts that already know hook → proof → close.</span>
+      </a>
+      <a class="quick-card reveal-in d2" href="/app/new?source=upload">
+        <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V7m0 0 3.5 3.5M12 7 8.5 10.5M5 16.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <strong>Upload HTML Reel</strong>
+        <span>Drop your index.html and assets into the studio.</span>
+      </a>
+        <button class="quick-card is-soon reveal-in d3" type="button" disabled title="Coming soon" data-track="ai_generation">
+        <span class="qa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6L12 3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span>
+        <strong>Generate with AI</strong>
+        <span>Coming soon — prompt-to-reel is on the roadmap.</span>
+      </button>
+    </section>
+
+    <section class="dash-section" aria-labelledby="projectsTitle">
+      <div class="dash-section-head">
+        <div>
+          <h2 id="projectsTitle">Recent projects</h2>
+          <p>Continue editing where you left off.</p>
+        </div>
+        <a href="/app/new">New project</a>
+      </div>
+      <div class="error" id="error" role="alert"></div>
+      <div id="list" aria-live="polite">
+        <div class="skeleton-grid" aria-hidden="true">
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-thumb"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line w60"></div><div class="skeleton-line w40"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dash-section" id="templatesSection" aria-labelledby="templatesTitle" hidden>
+      <div class="dash-section-head">
+        <div>
+          <h2 id="templatesTitle">Suggested templates</h2>
+          <p>Fresh layouts to start your next cut.</p>
+        </div>
+        <a href="/app/new?source=template">See all</a>
+      </div>
+      <div class="suggest-row" id="suggestTemplates"></div>
+    </section>
+
+    <section class="dash-section" id="exportsSection" aria-labelledby="exportsTitle" hidden>
+      <div class="dash-section-head">
+        <div>
+          <h2 id="exportsTitle">Recent exports</h2>
+          <p>Downloads from your latest renders.</p>
+        </div>
+      </div>
+      <div class="suggest-row" id="recentExports"></div>
+    </section>
   </main>
 
   <script type="module">
-    import { $, api, escapeHtml, timeAgo, mountAccount } from "/site.js";
+    import { $, api, escapeHtml, timeAgo, mountAccount, mountOfflineBanner } from "/site.js";
+    import { confirmDialog, promptDialog, noticeDialog, friendlyError } from "/dialogs.js";
+    mountOfflineBanner();
 
     let projects = [];
+    let templates = [];
 
     function card(p) {
       const isHtml = p.sourceType === "html" && (!p.templateId || p.templateId === "custom-html");
       const thumb = isHtml
         ? `<div class="html-tile">HTML REEL</div>`
-        : `<img src="/templates/${encodeURIComponent(p.templateId)}/preview.svg" alt="" onerror="this.remove()">`;
+        : `<img src="/templates/${encodeURIComponent(p.templateId)}/preview.svg" alt="${escapeHtml(p.name)} preview" loading="lazy" onerror="this.remove()">`;
       const kind = p.sourceType === "html" ? "Custom HTML" : p.templateId;
       const exported = p.lastOutput
         ? `<a href="${escapeHtml(p.lastOutput)}" download>Download latest</a> <span class="muted">· ${p.exportCount} export${p.exportCount === 1 ? "" : "s"}</span>`
@@ -70,12 +127,13 @@
       const href = `/app/projects/${p.id}`;
       return `
         <article class="pcard" data-id="${p.id}">
-          <a class="pthumb" href="${href}" aria-label="Open ${escapeHtml(p.name)}">${thumb}</a>
+          <a class="pthumb" href="${href}" aria-label="Continue editing ${escapeHtml(p.name)}">${thumb}</a>
           <div class="pbody">
             <a class="pname" href="${href}" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</a>
             <div class="pmeta">${escapeHtml(kind)} · edited ${timeAgo(p.updatedAt)}</div>
             <div class="pexport">${exported}</div>
             <div class="pactions">
+              <a class="btn sm primary" href="${href}">Continue</a>
               <button class="btn sm ghost" data-act="rename" type="button">Rename</button>
               <button class="btn sm ghost" data-act="duplicate" type="button">Duplicate</button>
               <button class="btn sm ghost danger" data-act="delete" type="button">Delete</button>
@@ -84,17 +142,56 @@
         </article>`;
     }
 
-    function render() {
+    function renderProjects() {
       $("list").innerHTML = projects.length
         ? `<div class="grid">${projects.map(card).join("")}</div>`
-        : `<div class="empty"><h2>Create your first reel</h2>
-             <p>Turn app screens into a polished promo video. Start from a template or upload HTML you already have.</p>
-             <a class="btn primary lg" href="/app/new">New project</a></div>`;
+        : `<div class="empty-state">
+            <img src="/assets/characterlap.png" alt="" width="160" height="160" loading="lazy">
+            <h2>No projects yet</h2>
+            <p>Create your first reel from a template, or upload an HTML promo you already have.</p>
+            <div class="empty-state-actions">
+              <a class="btn primary lg" href="/app/new">Create New Reel</a>
+              <a class="btn ghost lg" href="/app/new?source=template">Browse Templates</a>
+            </div>
+          </div>`;
+    }
+
+    function renderSuggestions() {
+      if (!templates.length) return;
+      $("templatesSection").hidden = false;
+      $("suggestTemplates").innerHTML = templates.slice(0, 3).map((t) => `
+        <a class="suggest-card" href="/app/new?template=${encodeURIComponent(t.id)}">
+          <img src="/templates/${encodeURIComponent(t.id)}/${escapeHtml(t.thumbnail || "preview.svg")}" alt="${escapeHtml(t.name)} template preview" loading="lazy">
+          <div><b>${escapeHtml(t.name)}</b><span>${escapeHtml(t.description || "Ready-made promo layout")}</span></div>
+        </a>`).join("");
+    }
+
+    function renderExports() {
+      const withExports = projects.filter((p) => p.lastOutput).slice(0, 3);
+      if (!withExports.length) return;
+      $("exportsSection").hidden = false;
+      $("recentExports").innerHTML = withExports.map((p) => `
+        <a class="suggest-card" href="${escapeHtml(p.lastOutput)}" download>
+          <div class="qa-icon" aria-hidden="true" style="width:56px;height:56px;border-radius:10px;flex:none"><svg viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M12 4v10m0 0 3.5-3.5M12 14 8.5 10.5M5 18h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div><b>${escapeHtml(p.name)}</b><span>${p.exportCount || 1} export${(p.exportCount || 1) === 1 ? "" : "s"} · download MP4</span></div>
+        </a>`).join("");
     }
 
     async function load() {
-      projects = await api("/api/projects");
-      render();
+      try {
+        [projects, templates] = await Promise.all([api("/api/projects"), api("/api/templates")]);
+        renderProjects();
+        renderSuggestions();
+        renderExports();
+      } catch (err) {
+        $("error").textContent = friendlyError(err);
+        $("list").innerHTML = `<div class="empty-state">
+          <h2>We couldn’t load your projects</h2>
+          <p>${escapeHtml(friendlyError(err))}</p>
+          <div class="empty-state-actions"><button class="btn primary" id="retryLoad" type="button">Retry</button></div>
+        </div>`;
+        $("retryLoad")?.addEventListener("click", () => location.reload());
+      }
     }
 
     $("list").addEventListener("click", async (e) => {
@@ -105,22 +202,41 @@
       $("error").textContent = "";
       try {
         if (btn.dataset.act === "rename") {
-          const name = prompt("Project name", p.name);
-          if (!name || !name.trim() || name.trim() === p.name) return;
-          await api(`/api/projects/${id}`, { method: "PUT", body: JSON.stringify({ name: name.trim() }) });
+          const name = await promptDialog({
+            title: "Rename project",
+            message: "Choose a clear name you’ll recognize later.",
+            value: p.name,
+            label: "Project name",
+            confirmLabel: "Save name",
+          });
+          if (!name || name === p.name) return;
+          await api(`/api/projects/${id}`, { method: "PUT", body: JSON.stringify({ name }) });
+          await noticeDialog({ title: "Project renamed", message: `Saved as “${name}”.`, kind: "success", confirmLabel: "Done" });
         } else if (btn.dataset.act === "duplicate") {
           await api(`/api/projects/${id}/duplicate`, { method: "POST", body: "{}" });
+          await noticeDialog({ title: "Project duplicated", message: "A copy was added to your studio.", kind: "success", confirmLabel: "Nice" });
         } else if (btn.dataset.act === "delete") {
-          if (!confirm(`Delete “${p.name}”? This removes the project and its HTML files. Exported MP4s you've downloaded are not affected.`)) return;
+          const ok = await confirmDialog({
+            title: "Delete project?",
+            message: `“${p.name}” and its HTML files will be removed. Exported MP4s you’ve already downloaded stay on your device.`,
+            confirmLabel: "Delete project",
+            danger: true,
+          });
+          if (!ok) return;
           await api(`/api/projects/${id}`, { method: "DELETE" });
         }
         await load();
       } catch (err) {
-        $("error").textContent = err.message;
+        $("error").textContent = friendlyError(err);
       }
     });
 
-    mountAccount().then(load).catch((e) => ($("error").textContent = e.message));
+    mountAccount()
+      .then((me) => {
+        if (me?.name) $("welcomeName").textContent = `, ${me.name.split(" ")[0]}`;
+        return load();
+      })
+      .catch((e) => ($("error").textContent = friendlyError(e)));
   </script>
 </body>
 </html>

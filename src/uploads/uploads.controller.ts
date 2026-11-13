@@ -2,12 +2,14 @@ import {
   BadRequestException,
   Controller,
   HttpCode,
+  Inject,
   Post,
   Req,
   UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
+  forwardRef,
 } from "@nestjs/common";
 import { FileFieldsInterceptor, FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
@@ -20,6 +22,7 @@ import { CurrentUser } from "../auth/user.decorator";
 import type { User } from "../auth/auth.types";
 import { HTML_UPLOADS, USER_UPLOADS } from "../paths";
 import { ProjectsService } from "../projects/projects.service";
+import { BillingService } from "../billing/billing.service";
 
 type HtmlUploadRequest = Request & {
   user?: User;
@@ -30,7 +33,11 @@ type HtmlUploadRequest = Request & {
 @Controller("api")
 @UseGuards(AuthGuard)
 export class UploadsController {
-  constructor(private readonly projects: ProjectsService) {}
+  constructor(
+    private readonly projects: ProjectsService,
+    @Inject(forwardRef(() => BillingService))
+    private readonly billing: BillingService,
+  ) {}
 
   @Post("upload")
   @UseInterceptors(
@@ -48,6 +55,15 @@ export class UploadsController {
         },
       }),
       limits: { fileSize: 200 * 1024 * 1024 },
+      fileFilter: (_req, file, cb) => {
+        const ext = extname(file.originalname).toLowerCase();
+        const allowed = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".mp4", ".webm", ".mov", ".m4v", ".mp3", ".wav", ".m4a", ".aac"];
+        if (!allowed.includes(ext) || file.originalname.includes("..") || file.originalname.includes("\0")) {
+          cb(new Error("That file type isn’t supported."), false);
+          return;
+        }
+        cb(null, true);
+      },
     }),
   )
   upload(@CurrentUser() user: User, @UploadedFile() file?: Express.Multer.File) {
@@ -86,6 +102,20 @@ export class UploadsController {
           },
         }),
         limits: { fileSize: 15 * 1024 * 1024 },
+        fileFilter: (_req, file, cb) => {
+          const name = file.originalname;
+          const ext = extname(name).toLowerCase();
+          if (name.includes("..") || name.includes("\0") || name.includes("/") || name.includes("\\")) {
+            cb(new Error("That file name isn’t allowed."), false);
+            return;
+          }
+          const blocked = [".exe", ".dll", ".bat", ".cmd", ".ps1", ".sh", ".msi"];
+          if (blocked.includes(ext)) {
+            cb(new Error("That file type isn’t supported."), false);
+            return;
+          }
+          cb(null, true);
+        },
       },
     ),
   )
@@ -101,6 +131,14 @@ export class UploadsController {
         rmSync(req.htmlUploadDir, { recursive: true, force: true });
       }
       throw new BadRequestException({ error: "Upload an .html file (field name: html)" });
+    }
+    try {
+      this.billing.assertCanCreate(user.id, this.projects.listProjects(user.id).length);
+    } catch (error) {
+      if (req.htmlUploadDir && existsSync(req.htmlUploadDir)) {
+        rmSync(req.htmlUploadDir, { recursive: true, force: true });
+      }
+      throw error;
     }
 
     return this.projects.createFromHtmlUpload(user.id, {

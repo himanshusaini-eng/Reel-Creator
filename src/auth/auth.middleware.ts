@@ -8,8 +8,11 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private readonly auth: AuthService) {}
 
   use(req: AuthedRequest, _res: Response, next: NextFunction) {
-    const user = this.auth.resolveUser(req);
-    if (user) req.user = user;
+    const resolved = this.auth.resolve(req);
+    if (resolved) {
+      req.user = resolved.user;
+      req.sessionId = resolved.sessionId;
+    }
     next();
   }
 }

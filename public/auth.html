@@ -3,77 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign in · Reel Creator</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Sign in to Reel Creator — the studio for app promo videos that convert.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://reelcreator.app/signin">
+  <meta property="og:title" content="Sign in — Reel Creator">
+  <meta property="og:description" content="Sign in to Reel Creator — the studio for app promo videos that convert.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Sign in — Reel Creator</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/landing.css">
+  <link rel="stylesheet" href="/auth.css?v=p1">
 </head>
-<body>
-  <header class="site-head">
+<body class="landing auth-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head auth-head">
     <a class="brand" href="/" aria-label="Reel Creator home">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
       </span>
-      reelcreator
+      <span class="brand-text">reelcreator</span>
     </a>
+    <a class="btn ghost sm auth-home-link" href="/">Back to Home</a>
   </header>
 
-  <main class="auth-wrap">
-    <form class="card" id="form" novalidate>
-      <h1 id="title">Sign in</h1>
-      <p class="sub" id="sub">Welcome back. Pick up where you left off.</p>
-      <label class="field hidden" id="nameField"><span>Name</span>
-        <input class="input" id="name" name="name" autocomplete="name">
-      </label>
-      <label class="field"><span>Email</span>
-        <input class="input" id="email" name="email" type="email" autocomplete="email" required>
-      </label>
-      <label class="field"><span>Password</span>
-        <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
-      </label>
-      <div class="error" id="error" role="alert"></div>
-      <button class="btn primary" id="submit" type="submit">Sign in</button>
-      <div class="switch" id="switch"></div>
-    </form>
+  <main id="main" class="auth-shell">
+    <section class="auth-panel auth-panel-brand" aria-labelledby="authBrandTitle">
+      <div class="auth-brand-glow" aria-hidden="true"></div>
+      <div class="auth-brand-inner">
+        <p class="hero-eyebrow"><span aria-hidden="true">✦</span> Early access</p>
+        <h1 id="authBrandTitle">Your app. A promo that converts.</h1>
+        <p class="auth-brand-sub">Record, polish, and export launch-ready reels in one studio — built for founders and marketers.</p>
+        <ul class="auth-benefits">
+          <li>
+            <strong>Templates that know the story</strong>
+            <span>Hook → feature → proof → close, ready to swap your screens into.</span>
+          </li>
+          <li>
+            <strong>AI polish when you need it</strong>
+            <span>Enhance captions, pacing, and cuts without rebuilding from scratch.</span>
+          </li>
+          <li>
+            <strong>Export for every channel</strong>
+            <span>Ship 9:16, 1:1, and 16:9 from one master.</span>
+          </li>
+        </ul>
+        <div class="auth-mascot" aria-hidden="true">
+          <img src="/assets/characterlap.png" alt="" width="280" height="280" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <section class="auth-panel auth-panel-form" aria-labelledby="title">
+      <form class="auth-card" id="form" novalidate>
+        <h2 id="title">Sign in</h2>
+        <p class="sub" id="sub">Welcome back. Pick up where you left off.</p>
+
+        <div class="auth-oauth" aria-label="Social sign-in">
+          <button type="button" class="btn auth-oauth-btn" data-oauth="google" disabled title="Coming soon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 10.2v3.6h5.1c-.2 1.2-.9 2.3-1.9 3l3.1 2.4c1.8-1.7 2.9-4.1 2.9-7 0-.7-.1-1.3-.2-1.9H12z"/><path fill="#34A853" d="M6.6 14.3l-.8.6-2.7 2.1C4.8 19.7 8.1 21.6 12 21.6c2.4 0 4.4-.8 5.9-2.1l-3.1-2.4c-.8.6-1.9.9-2.8.9-2.2 0-4-1.5-4.7-3.5z"/><path fill="#4A90E2" d="M3.1 7.1C2.4 8.5 2 10 2 11.6s.4 3.1 1.1 4.5l3.5-2.7c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8L3.1 7.1z"/><path fill="#FBBC05" d="M12 5.4c1.3 0 2.5.5 3.4 1.3l2.6-2.6C16.4 2.5 14.4 1.6 12 1.6 8.1 1.6 4.8 3.5 3.1 7.1l3.5 2.7C7.9 6.9 9.8 5.4 12 5.4z"/></svg>
+            Continue with Google
+          </button>
+          <button type="button" class="btn auth-oauth-btn" data-oauth="github" disabled title="Coming soon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.2 6.8 9.5.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.4-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1 .8-.2 1.6-.3 2.4-.3s1.6.1 2.4.3c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5C19.1 20.2 22 16.4 22 12c0-5.5-4.5-10-10-10z"/></svg>
+            Continue with GitHub
+          </button>
+          <p class="auth-oauth-note">Social sign-in is coming soon.</p>
+        </div>
+
+        <div class="auth-divider" aria-hidden="true"><span>or</span></div>
+
+        <label class="field hidden" id="nameField"><span>Name</span>
+          <input class="input" id="name" name="name" autocomplete="name" placeholder="Your name">
+        </label>
+        <label class="field"><span>Email</span>
+          <input class="input" id="email" name="email" type="email" autocomplete="email" required placeholder="you@company.com">
+        </label>
+        <label class="field"><span>Password</span>
+          <div class="auth-password">
+            <input class="input" id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••" minlength="8">
+            <button type="button" class="auth-eye" id="togglePassword" aria-label="Show password" aria-pressed="false">Show</button>
+          </div>
+        </label>
+
+        <div class="auth-row" id="authExtras">
+          <label class="auth-check">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Remember me</span>
+          </label>
+          <a class="auth-forgot" href="/forgot-password">Forgot password?</a>
+        </div>
+
+        <p class="auth-legal hidden" id="legal">
+          By creating an account you agree to our
+          <a href="/terms">Terms</a>, <a href="/privacy">Privacy Policy</a>, and <a href="/cookies">Cookies</a>.
+        </p>
+
+        <div class="error" id="error" role="alert"></div>
+        <button class="btn primary auth-submit" id="submit" type="submit">Sign in</button>
+        <div class="switch" id="switch"></div>
+      </form>
+    </section>
   </main>
 
-  <script type="module">
-    import { $, api } from "/site.js";
-
-    const signup = location.pathname === "/signup";
-    const params = new URLSearchParams(location.search);
-    const raw = params.get("next") || "";
-    // Only follow same-site paths back after sign-in
-    const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/app";
-    const carry = raw ? `?next=${encodeURIComponent(raw)}` : "";
-
-    if (signup) {
-      document.title = "Create account · Reel Creator";
-      $("title").textContent = "Create your account";
-      $("sub").textContent = "Free. Your projects and exports stay private to you.";
-      $("nameField").classList.remove("hidden");
-      $("password").autocomplete = "new-password";
-      $("password").placeholder = "At least 8 characters";
-      $("submit").textContent = "Create account";
-      $("switch").innerHTML = `Already have an account? <a href="/signin${carry}">Sign in</a>`;
-    } else {
-      $("switch").innerHTML = `New here? <a href="/signup${carry}">Create a free account</a>`;
-    }
-
-    $("form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      $("error").textContent = "";
-      $("submit").disabled = true;
-      try {
-        const body = { email: $("email").value, password: $("password").value };
-        if (signup) body.name = $("name").value;
-        await api(signup ? "/api/auth/signup" : "/api/auth/signin", { method: "POST", body: JSON.stringify(body) });
-        location.href = next;
-      } catch (err) {
-        $("error").textContent = err.message;
-        $("submit").disabled = false;
-      }
-    });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script type="module" src="/auth.js?v=p1"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+import { spawnSync } from "child_process";
 import { existsSync, mkdirSync } from "fs";
 import { join } from "path";
 
@@ -19,5 +20,9 @@ export function ensureDirs() {
 }
 
 export function ffmpegAvailable() {
-  return existsSync("/opt/homebrew/bin/ffmpeg") || !!process.env.FFMPEG_PATH;
+  if (process.env.FFMPEG_PATH && existsSync(process.env.FFMPEG_PATH)) return true;
+  if (existsSync("/opt/homebrew/bin/ffmpeg")) return true;
+  const cmd = process.platform === "win32" ? "where" : "which";
+  const result = spawnSync(cmd, ["ffmpeg"], { encoding: "utf8", windowsHide: true });
+  return result.status === 0;
 }

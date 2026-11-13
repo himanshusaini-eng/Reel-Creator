@@ -88,7 +88,7 @@ export class ProjectsService {
     const project: Project = {
       id: randomUUID(),
       userId,
-      name: (name && String(name).trim()) || `${meta.name} project`,
+      name: this.clipName(name, `${meta.name} project`),
       sourceType: "template",
       templateId,
       data: data || structuredClone(meta.defaults || {}),
@@ -107,7 +107,7 @@ export class ProjectsService {
     const existing = this.requireOwned(id, userId);
     const next: Project = {
       ...existing,
-      name: body.name ?? existing.name,
+      name: body.name != null ? this.clipName(body.name, existing.name) : existing.name,
       data: body.data ?? existing.data,
       video: body.video ?? existing.video ?? null,
       overlays: Array.isArray(body.overlays) ? body.overlays : existing.overlays || [],
@@ -142,7 +142,7 @@ export class ProjectsService {
     const copy: Project = {
       ...structuredClone(src),
       id: randomUUID(),
-      name: (name && String(name).trim()) || `${src.name} copy`,
+      name: this.clipName(name, `${src.name} copy`),
       createdAt: now,
       updatedAt: now,
       lastOutput: null,
@@ -177,6 +177,19 @@ export class ProjectsService {
     } catch {
       throw Object.assign(new Error("Could not delete project"), { status: 500 });
     }
+  }
+
+  deleteAllForUser(userId: string) {
+    for (const project of [...this.listProjects(userId)]) this.delete(project.id, userId);
+  }
+
+  private clipName(value: unknown, fallback: string) {
+    const name = String(value ?? "")
+      .replace(/[\u0000-\u001F\u007F]/g, "")
+      .trim();
+    if (!name) return fallback.slice(0, 120);
+    if (name.length > 120) throw Object.assign(new Error("Name is too long"), { status: 400 });
+    return name;
   }
 
   guessDuration(html: string) {
@@ -274,10 +287,7 @@ export class ProjectsService {
     this.copyWorkspaceAssets(opts.htmlUploadDir);
     const html = readFileSync(htmlPath, "utf8");
     const duration = Number(opts.duration) || this.guessDuration(html) || 18;
-    const name =
-      (opts.name && String(opts.name).trim()) ||
-      basename(opts.originalName, extname(opts.originalName)) ||
-      "Uploaded HTML reel";
+    const name = this.clipName(opts.name, basename(opts.originalName, extname(opts.originalName)) || "Uploaded HTML reel");
     const now = new Date().toISOString();
     const project: Project = {
       id: randomUUID(),

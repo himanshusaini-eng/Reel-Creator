@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>New project · Reel Creator</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Start a new Reel Creator project from a template or upload.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>New project — Reel Creator</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/app-ui.css?v=p3">
 </head>
 <body>
-  <header class="site-head">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head" aria-label="Studio header">
     <a class="brand" href="/app" aria-label="Reel Creator home">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
@@ -18,58 +24,106 @@
     </a>
     <div class="head-actions">
       <span class="who" id="who"></span>
+      <a class="btn ghost" href="/app/settings">Settings</a>
       <button class="btn ghost" id="btnSignOut" type="button">Sign out</button>
     </div>
   </header>
 
-  <main class="page wizard">
-    <div class="page-head">
-      <h1>New project</h1>
-      <a class="btn ghost" href="/app">Cancel</a>
+  <main id="main" class="page wizard">
+    <div class="page-head reveal-in">
+      <div class="page-head-copy">
+        <h1>Start a new reel</h1>
+        <p class="page-head-sub">Choose how you want to begin — template, upload, or a copy of an existing project.</p>
+      </div>
+      <a class="btn ghost" href="/app">Back to studio</a>
     </div>
 
-    <section class="wstep">
+    <section class="wstep reveal-in d1">
       <h2><i>1</i>Name</h2>
       <input class="input" id="name" placeholder="e.g. Your App – launch reel" autocomplete="off">
     </section>
 
-    <section class="wstep">
-      <h2><i>2</i>Starting point</h2>
-      <div class="source-tabs" role="tablist">
-        <button class="source-tab on" data-source="template" type="button">Template</button>
-        <button class="source-tab" data-source="upload" type="button">Upload HTML reel</button>
-        <button class="source-tab" data-source="duplicate" type="button">Duplicate a project</button>
+    <section class="wstep reveal-in d2">
+      <h2><i>2</i>How do you want to start?</h2>
+      <div class="start-options" role="tablist" aria-label="Starting options">
+        <button class="start-option on" data-source="template" type="button">
+          <span class="so-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+          <strong>Start with Template</strong>
+          <span>Proven promo structures ready for your screens.</span>
+        </button>
+        <button class="start-option" data-source="upload" type="button">
+          <span class="so-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V7m0 0 3.5 3.5M12 7 8.5 10.5M5 16.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <strong>Upload HTML Reel</strong>
+          <span>Drop your video HTML and assets into the studio.</span>
+        </button>
+        <button class="start-option" data-source="duplicate" type="button">
+          <span class="so-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5 16V6a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          <strong>Import Existing Project</strong>
+          <span>Duplicate a project you already shipped.</span>
+        </button>
+        <button class="start-option is-soon" type="button" disabled title="Coming soon">
+          <span class="so-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6L12 3z" stroke="currentColor" stroke-width="1.4"/></svg></span>
+          <strong>Generate from AI</strong>
+          <span>Coming soon.</span>
+        </button>
+        <button class="start-option is-soon" type="button" disabled title="Coming soon">
+          <span class="so-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M5 12h14M5 17h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+          <strong>Create from Scratch</strong>
+          <span>Coming soon — blank timeline.</span>
+        </button>
+        <button class="start-option is-soon" type="button" disabled title="Coming soon">
+          <span class="so-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="m10 10 5 2-5 2v-4z" fill="currentColor"/></svg></span>
+          <strong>Upload Video</strong>
+          <span>Coming soon — MP4 / MOV import.</span>
+        </button>
       </div>
 
-      <div id="srcTemplate"><div class="tpl-grid" id="templates"></div></div>
-
-      <div id="srcUpload" class="hidden">
-        <div class="drop" id="drop">
-          <input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden>
-          <input type="file" id="assetFiles" accept="image/*,.json,.svg,.png,.jpg,.jpeg,.webp" multiple hidden>
-          <div class="drop-actions">
-            <button class="btn" id="btnPickHtml" type="button">Choose index.html</button>
-            <button class="btn ghost" id="btnPickAssets" type="button">Add assets</button>
-          </div>
-          <p>Or drop the <code>.html</code> file and its <code>assets/</code> images here.<br>
-            The reel should expose <code>window.__reel = { DUR, setTime(t) }</code>. If it doesn't, a basic one is added.</p>
-          <div class="file-list" id="fileList"></div>
+      <div id="srcTemplate">
+        <div class="tpl-grid" id="templates">
+          <div class="skeleton-grid" style="grid-column:1/-1"><div class="skeleton-card"><div class="skeleton-thumb"></div></div><div class="skeleton-card"><div class="skeleton-thumb"></div></div><div class="skeleton-card"><div class="skeleton-thumb"></div></div></div>
         </div>
       </div>
 
-      <div id="srcDuplicate" class="hidden"><div class="dup-list" id="dupList"></div></div>
+      <div id="srcUpload" class="hidden">
+        <div class="drop drop-premium" id="drop">
+          <input type="file" id="htmlFile" accept=".html,.htm,text/html" hidden>
+          <input type="file" id="assetFiles" accept="image/*,.json,.svg,.png,.jpg,.jpeg,.webp" multiple hidden>
+          <div class="drop-illu" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V7m0 0 3.5 3.5M12 7 8.5 10.5M5 16.5V18a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Drop your reel here</h3>
+          <p>or browse your files — add the HTML first, then any images from its assets folder.</p>
+          <div class="drop-actions">
+            <button class="btn primary" id="btnPickHtml" type="button">Browse HTML file</button>
+            <button class="btn ghost" id="btnPickAssets" type="button">Add assets</button>
+          </div>
+          <p class="drop-meta">Supported: .html · images · svg · json · Max 15 MB per file · up to 40 assets</p>
+          <div class="file-list" id="fileList"></div>
+          <div class="upload-progress" id="uploadProgress" aria-hidden="true"><i></i></div>
+          <div class="upload-success" id="uploadSuccess">Files ready — hit Create project to open the studio.</div>
+        </div>
+      </div>
+
+      <div id="srcDuplicate" class="hidden">
+        <div class="dup-list" id="dupList"></div>
+      </div>
     </section>
 
     <div class="error" id="error" role="alert"></div>
-    <div class="wizard-foot">
+    <div class="wizard-foot reveal-in d3">
       <button class="btn primary lg" id="btnCreate" type="button" disabled>Create project</button>
     </div>
   </main>
 
   <script type="module">
-    import { $, api, escapeHtml, timeAgo, mountAccount } from "/site.js";
+    import { $, api, escapeHtml, timeAgo, mountAccount, mountOfflineBanner } from "/site.js";
+    import { noticeDialog, friendlyError } from "/dialogs.js";
+    import { dismiss, notify } from "/notify.js";
+    import { track } from "/analytics.js";
+    mountOfflineBanner();
 
     const s = { source: "template", templateId: null, dupId: null, html: null, assets: [], templates: [], projects: [] };
+    const params = new URLSearchParams(location.search);
 
     function canCreate() {
       if (s.source === "template") return !!s.templateId;
@@ -78,11 +132,29 @@
     }
     const refresh = () => ($("btnCreate").disabled = !canCreate());
 
+    function setSource(source) {
+      if (!["template", "upload", "duplicate"].includes(source)) return;
+      s.source = source;
+      document.querySelectorAll(".start-option[data-source]").forEach((t) => t.classList.toggle("on", t.dataset.source === source));
+      $("srcTemplate").classList.toggle("hidden", source !== "template");
+      $("srcUpload").classList.toggle("hidden", source !== "upload");
+      $("srcDuplicate").classList.toggle("hidden", source !== "duplicate");
+      refresh();
+    }
+
     function renderTemplates() {
+      if (!s.templates.length) {
+        $("templates").innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+          <h2>No templates found</h2>
+          <p>We couldn’t load the template library. Try again in a moment.</p>
+          <div class="empty-state-actions"><button class="btn primary" type="button" onclick="location.reload()">Retry</button></div>
+        </div>`;
+        return;
+      }
       $("templates").innerHTML = s.templates
         .map((t) => `
           <button class="tpl-card${t.id === s.templateId ? " on" : ""}" data-id="${escapeHtml(t.id)}" type="button">
-            <img src="/templates/${encodeURIComponent(t.id)}/${escapeHtml(t.thumbnail || "preview.svg")}" alt="">
+            <img src="/templates/${encodeURIComponent(t.id)}/${escapeHtml(t.thumbnail || "preview.svg")}" alt="${escapeHtml(t.name)} template preview" loading="lazy">
             <div><b>${escapeHtml(t.name)}</b><span>${escapeHtml(t.description || "")}</span></div>
           </button>`)
         .join("");
@@ -96,7 +168,13 @@
                 <b>${escapeHtml(p.name)}</b><span>edited ${timeAgo(p.updatedAt)}</span>
               </button>`)
             .join("")
-        : `<p class="muted">You don't have any projects to copy yet.</p>`;
+        : `<div class="empty-state">
+            <img src="/assets/character.png" alt="" width="120" height="120" loading="lazy">
+            <h2>No projects to import</h2>
+            <p>Create a reel from a template first, then you can duplicate it here.</p>
+            <div class="empty-state-actions"><button class="btn primary" type="button" data-jump="template">Browse Templates</button></div>
+          </div>`;
+      $("dupList").querySelector("[data-jump]")?.addEventListener("click", () => setSource("template"));
     }
 
     function renderFiles() {
@@ -104,18 +182,12 @@
       if (s.html) rows.push(`HTML: ${escapeHtml(s.html.name)}`);
       if (s.assets.length) rows.push(`${s.assets.length} asset${s.assets.length === 1 ? "" : "s"}: ${s.assets.map((f) => escapeHtml(f.name)).join(", ")}`);
       $("fileList").innerHTML = rows.map((r) => `<div>${r}</div>`).join("");
+      $("uploadSuccess").classList.toggle("is-on", !!s.html);
       refresh();
     }
 
-    document.querySelectorAll(".source-tab").forEach((tab) =>
-      tab.addEventListener("click", () => {
-        s.source = tab.dataset.source;
-        document.querySelectorAll(".source-tab").forEach((t) => t.classList.toggle("on", t === tab));
-        $("srcTemplate").classList.toggle("hidden", s.source !== "template");
-        $("srcUpload").classList.toggle("hidden", s.source !== "upload");
-        $("srcDuplicate").classList.toggle("hidden", s.source !== "duplicate");
-        refresh();
-      })
+    document.querySelectorAll(".start-option[data-source]").forEach((tab) =>
+      tab.addEventListener("click", () => setSource(tab.dataset.source))
     );
 
     $("templates").addEventListener("click", (e) => {
@@ -143,6 +215,7 @@
       s.assets = [...($("assetFiles").files || [])];
       renderFiles();
     });
+
     const drop = $("drop");
     drop.addEventListener("dragover", (e) => {
       e.preventDefault();
@@ -165,23 +238,35 @@
       $("error").textContent = "";
       $("btnCreate").disabled = true;
       $("btnCreate").textContent = "Creating…";
+      $("uploadProgress")?.classList.toggle("is-on", s.source === "upload");
       try {
         let project;
         if (s.source === "template") {
           project = await api("/api/projects", { method: "POST", body: JSON.stringify({ templateId: s.templateId, name }) });
+          track("template_use", { template: s.templateId });
         } else if (s.source === "upload") {
           const fd = new FormData();
           fd.append("name", name);
           fd.append("html", s.html);
           for (const f of s.assets) fd.append("assets", f);
+          notify({ id: "upload", kind: "info", title: "Uploading reel", message: s.html.name, timeout: 0 });
           project = await api("/api/upload-html", { method: "POST", body: fd });
+          dismiss("upload");
         } else {
           project = await api(`/api/projects/${s.dupId}/duplicate`, { method: "POST", body: JSON.stringify({ name }) });
         }
+        track("project_create", { source: s.source });
         location.href = `/app/projects/${project.id}`;
       } catch (err) {
-        $("error").textContent = err.message;
+        $("error").textContent = friendlyError(err);
+        await noticeDialog({
+          title: "We couldn’t create the project",
+          message: friendlyError(err),
+          kind: "error",
+          confirmLabel: "Try again",
+        });
         $("btnCreate").textContent = "Create project";
+        $("uploadProgress")?.classList.remove("is-on");
         refresh();
       }
     });
@@ -189,13 +274,18 @@
     async function boot() {
       await mountAccount();
       [s.templates, s.projects] = await Promise.all([api("/api/templates"), api("/api/projects")]);
-      const wanted = new URLSearchParams(location.search).get("template");
+      const wanted = params.get("template");
       s.templateId = s.templates.some((t) => t.id === wanted) ? wanted : s.templates[0]?.id || null;
       renderTemplates();
       renderDuplicates();
-      refresh();
+      const source = params.get("source");
+      if (source) setSource(source);
+      else refresh();
     }
-    boot().catch((e) => ($("error").textContent = e.message));
+    boot().catch(async (e) => {
+      $("error").textContent = friendlyError(e);
+      await noticeDialog({ title: "Something went wrong", message: friendlyError(e), kind: "error" });
+    });
   </script>
 </body>
 </html>

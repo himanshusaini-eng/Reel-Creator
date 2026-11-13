@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Choose a new Reel Creator password.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Reset password — Reel Creator</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/landing.css">
+  <link rel="stylesheet" href="/auth.css?v=p1">
+</head>
+<body class="landing auth-page" data-auth-mode="reset">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head auth-head">
+    <a class="brand" href="/" aria-label="Reel Creator home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
+      </span>
+      <span class="brand-text">reelcreator</span>
+    </a>
+    <a class="btn ghost sm auth-home-link" href="/">Back to Home</a>
+  </header>
+
+  <main id="main" class="auth-shell">
+    <section class="auth-panel auth-panel-brand" aria-labelledby="authBrandTitle">
+      <div class="auth-brand-glow" aria-hidden="true"></div>
+      <div class="auth-brand-inner">
+        <p class="hero-eyebrow"><span aria-hidden="true">✦</span> Account</p>
+        <h1 id="authBrandTitle">Choose a new password.</h1>
+        <p class="auth-brand-sub">Choose a password you don’t use anywhere else. We’ll sign you in when it’s saved.</p>
+        <ul class="auth-benefits">
+          <li>
+            <strong>At least 8 characters</strong>
+            <span>Use a unique password you don’t reuse elsewhere.</span>
+          </li>
+          <li>
+            <strong>Signed out everywhere</strong>
+            <span>After a reset, you’ll sign in again on each device.</span>
+          </li>
+          <li>
+            <strong>Stuck?</strong>
+            <span>Write hello@reelcreator.app with the email on your account.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="auth-panel auth-panel-form" aria-labelledby="title">
+      <form class="auth-card" id="resetForm" novalidate>
+        <h2 id="title">Reset password</h2>
+        <p class="sub">Set a new password for your account.</p>
+        <label class="field"><span>New password</span>
+          <div class="auth-password">
+            <input class="input" id="password" name="password" type="password" autocomplete="new-password" required placeholder="At least 8 characters" minlength="8">
+            <button type="button" class="auth-eye" id="togglePassword" aria-label="Show password" aria-pressed="false">Show</button>
+          </div>
+        </label>
+        <label class="field"><span>Confirm password</span>
+          <input class="input" id="confirm" name="confirm" type="password" autocomplete="new-password" required placeholder="Repeat password" minlength="8">
+        </label>
+        <div class="error" id="error" role="alert"></div>
+        <div class="auth-success hidden" id="success" role="status"></div>
+        <button class="btn primary auth-submit" id="submit" type="submit">Update password</button>
+        <div class="switch">
+          <a href="/signin">Back to sign in</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script type="module" src="/auth.js?v=p1"></script>
+</body>
+</html>

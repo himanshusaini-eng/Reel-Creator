@@ -19,6 +19,7 @@ import type { User } from "../auth/auth.types";
 import { ProjectsService } from "./projects.service";
 import type { Project } from "./projects.types";
 import { JobsService } from "../jobs/jobs.service";
+import { BillingService } from "../billing/billing.service";
 
 @Controller("api")
 @UseGuards(AuthGuard)
@@ -27,6 +28,8 @@ export class ProjectsController {
     private readonly projects: ProjectsService,
     @Inject(forwardRef(() => JobsService))
     private readonly jobs: JobsService,
+    @Inject(forwardRef(() => BillingService))
+    private readonly billing: BillingService,
   ) {}
 
   @Get("projects")
@@ -56,6 +59,7 @@ export class ProjectsController {
     @CurrentUser() user: User,
     @Body() body: { templateId?: string; name?: string; data?: Record<string, unknown>; video?: unknown },
   ) {
+    this.billing.assertCanCreate(user.id, this.projects.listProjects(user.id).length);
     try {
       return this.projects.createFromTemplate(user.id, body || {});
     } catch (e) {
@@ -67,7 +71,13 @@ export class ProjectsController {
 
   @Put("projects/:id")
   update(@Param("id") id: string, @CurrentUser() user: User, @Body() body: Partial<Project>) {
-    return this.projects.update(id, user.id, body || {});
+    try {
+      return this.projects.update(id, user.id, body || {});
+    } catch (e) {
+      const err = e as Error & { status?: number };
+      if (err.status === 400) throw new BadRequestException({ error: err.message });
+      throw e;
+    }
   }
 
   @Post("projects/:id/duplicate")
@@ -77,7 +87,14 @@ export class ProjectsController {
     @CurrentUser() user: User,
     @Body() body: { name?: string },
   ) {
-    return this.projects.duplicate(id, user.id, body?.name);
+    this.billing.assertCanCreate(user.id, this.projects.listProjects(user.id).length);
+    try {
+      return this.projects.duplicate(id, user.id, body?.name);
+    } catch (e) {
+      const err = e as Error & { status?: number };
+      if (err.status === 400) throw new BadRequestException({ error: err.message });
+      throw e;
+    }
   }
 
   @Delete("projects/:id")
@@ -87,7 +104,7 @@ export class ProjectsController {
       this.projects.delete(id, user.id);
     } catch (e) {
       const err = e as Error & { status?: number };
-      if (err.status === 500) throw new InternalServerErrorException({ error: err.message });
+      if (err.status === 500) throw new InternalServerErrorException({ error: "We couldn’t delete that project. Try again." });
       throw e;
     }
   }

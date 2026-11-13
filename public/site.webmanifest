@@ -1,0 +1,17 @@
+{
+  "name": "Reel Creator",
+  "short_name": "reelcreator",
+  "description": "The studio for app promo videos that convert.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

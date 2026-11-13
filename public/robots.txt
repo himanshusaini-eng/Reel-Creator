@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /api
+Disallow: /uploads
+Disallow: /output
+Disallow: /signin
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+
+Sitemap: https://reelcreator.app/sitemap.xml

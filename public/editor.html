@@ -3,24 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reel Creator</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Edit and export your Reel Creator promo.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Editor — Reel Creator</title>
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/app-ui.css?v=p3">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="app">
-    <!-- Figma-style top bar -->
-    <header class="topbar">
+    <header class="topbar" aria-label="Editor toolbar">
       <div class="topbar-left">
-        <a class="icon-btn" href="/app" title="All projects" aria-label="All projects">
+        <a class="icon-btn" href="/app" title="Back to studio" aria-label="Back to studio">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M3 9h12M3 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </a>
         <div class="file-pill">
           <span class="file-mark" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none"><path d="M10 8.5v15l13-7.5-13-7.5Z" fill="currentColor"/><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-opacity=".5"/></svg>
           </span>
-          <input type="text" id="projectName" class="file-name" value="Untitled reel" spellcheck="false">
+          <h1 class="visually-hidden" id="editorHeading">Untitled reel</h1>
+          <input type="text" id="projectName" class="file-name" value="Untitled reel" spellcheck="false" aria-labelledby="editorHeading">
           <span class="file-draft" id="saveState">Saved</span>
         </div>
       </div>
@@ -40,11 +46,11 @@
     </header>
 
     <!-- Left panel -->
-    <aside class="left-panel">
-      <div class="panel-tabs" role="tablist">
-        <button class="panel-tab on" data-left="elements" type="button">Elements</button>
-        <button class="panel-tab" data-left="exports" type="button">Exports</button>
-        <button class="panel-tab" data-left="projects" type="button">Projects</button>
+    <aside class="left-panel" aria-label="Library panel">
+      <div class="panel-tabs" role="tablist" aria-label="Left panel">
+        <button class="panel-tab on" data-left="elements" type="button" role="tab" aria-selected="true">Elements</button>
+        <button class="panel-tab" data-left="exports" type="button" role="tab" aria-selected="false">Exports</button>
+        <button class="panel-tab" data-left="projects" type="button" role="tab" aria-selected="false">Projects</button>
       </div>
 
       <div class="panel-body" id="leftElements">
@@ -75,7 +81,7 @@
     </aside>
 
     <!-- Canvas / Code -->
-    <main class="canvas-wrap">
+    <main id="main" class="canvas-wrap" aria-label="Preview canvas">
       <div class="canvas" id="canvas">
         <div class="artboard" id="artboard">
           <div class="artboard-label">
@@ -103,27 +109,30 @@
       </div>
 
       <div class="canvas-footer">
-        <div class="timeline">
-          <button class="icon-btn" id="btnPlay" type="button" title="Play">
+        <div class="timeline" aria-label="Playback timeline">
+          <button class="icon-btn timeline-play" id="btnPlay" type="button" title="Play / Pause (Space)" aria-label="Play">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 2.2v9.6L12 7 3 2.2z"/></svg>
           </button>
-          <input type="range" id="scrub" min="0" max="180" value="0" step="1">
+          <div class="timeline-track">
+            <div class="timeline-rail" aria-hidden="true"><i id="playheadMark"></i></div>
+            <input type="range" id="scrub" min="0" max="180" value="0" step="1" aria-label="Scrub timeline">
+          </div>
           <span id="timeLabel" class="time">0.0s</span>
         </div>
-        <div class="zoom">
-          <button class="icon-btn sm" id="zoomOut" type="button">−</button>
+        <div class="zoom" role="group" aria-label="Canvas zoom">
+          <button class="icon-btn sm" id="zoomOut" type="button" aria-label="Zoom out">−</button>
           <span id="zoomLabel">100%</span>
-          <button class="icon-btn sm" id="zoomIn" type="button">+</button>
+          <button class="icon-btn sm" id="zoomIn" type="button" aria-label="Zoom in">+</button>
         </div>
       </div>
     </main>
 
     <!-- Right inspector -->
-    <aside class="right-panel">
-      <div class="panel-tabs" role="tablist">
-        <button class="panel-tab on" data-right="design" type="button">Design</button>
-        <button class="panel-tab" data-right="code" type="button">Code</button>
-        <button class="panel-tab" data-right="export" type="button">Export</button>
+    <aside class="right-panel" aria-label="Inspector panel">
+      <div class="panel-tabs" role="tablist" aria-label="Right panel">
+        <button class="panel-tab on" data-right="design" type="button" role="tab" aria-selected="true">Design</button>
+        <button class="panel-tab" data-right="code" type="button" role="tab" aria-selected="false">Code</button>
+        <button class="panel-tab" data-right="export" type="button" role="tab" aria-selected="false">Export</button>
       </div>
 
       <div class="panel-body" id="rightDesign">
@@ -187,8 +196,10 @@
   <script>
     document.querySelectorAll(".panel-tab[data-left]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".panel-tab[data-left]").forEach((b) => b.classList.remove("on"));
-        btn.classList.add("on");
+        document.querySelectorAll(".panel-tab[data-left]").forEach((b) => {
+          b.classList.toggle("on", b === btn);
+          b.setAttribute("aria-selected", String(b === btn));
+        });
         document.getElementById("leftElements").classList.toggle("hidden", btn.dataset.left !== "elements");
         document.getElementById("leftExports").classList.toggle("hidden", btn.dataset.left !== "exports");
         document.getElementById("leftProjects").classList.toggle("hidden", btn.dataset.left !== "projects");
@@ -196,8 +207,10 @@
     });
     document.querySelectorAll(".panel-tab[data-right]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll(".panel-tab[data-right]").forEach((b) => b.classList.remove("on"));
-        btn.classList.add("on");
+        document.querySelectorAll(".panel-tab[data-right]").forEach((b) => {
+          b.classList.toggle("on", b === btn);
+          b.setAttribute("aria-selected", String(b === btn));
+        });
         const mode = btn.dataset.right;
         document.getElementById("rightDesign").classList.toggle("hidden", mode !== "design");
         document.getElementById("rightCode").classList.toggle("hidden", mode !== "code");

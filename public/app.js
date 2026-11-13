@@ -1,3 +1,8 @@
+import { confirmDialog, noticeDialog, friendlyError } from "/dialogs.js";
+import { track } from "/analytics.js";
+import { dismiss, notify } from "/notify.js";
+import "/boot.js";
+
 const state = {
   templates: [],
   projects: [],
@@ -175,6 +180,8 @@ function setPlayIcon(playing) {
     ? `<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="3" y="2.5" width="3" height="9" rx="0.5"/><rect x="8" y="2.5" width="3" height="9" rx="0.5"/></svg>`
     : `<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M3 2.2v9.6L12 7 3 2.2z"/></svg>`;
   btn.title = playing ? "Pause" : "Play";
+  btn.setAttribute("aria-label", playing ? "Pause" : "Play");
+  btn.classList.toggle("is-playing", playing);
 }
 
 function fmtRange(field, v) {
@@ -184,13 +191,46 @@ function fmtRange(field, v) {
   return `${Number(v).toFixed(decimals)}${field.unit || ""}`;
 }
 
-async function uploadFile(file) {
-  const fd = new FormData();
-  fd.append("file", file);
-  const res = await fetch("/api/upload", { method: "POST", body: fd });
-  const out = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(out.error || "Upload failed");
-  return out;
+function uploadFile(file) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const fd = new FormData();
+    fd.append("file", file);
+    xhr.open("POST", "/api/upload");
+    xhr.upload.onprogress = (event) => {
+      if (!event.lengthComputable) return;
+      notify({
+        id: "upload",
+        kind: "info",
+        title: "Uploading",
+        message: file.name,
+        progress: Math.round((event.loaded / event.total) * 100),
+        timeout: 0,
+      });
+    };
+    xhr.onload = () => {
+      let out = {};
+      try { out = JSON.parse(xhr.responseText || "{}"); } catch { out = {}; }
+      if (xhr.status === 401) {
+        location.href = `/signin?next=${encodeURIComponent(location.pathname)}`;
+        reject(new Error("Sign in required"));
+        return;
+      }
+      if (xhr.status < 200 || xhr.status >= 300) {
+        notify({ id: "upload", kind: "error", title: "Upload failed", message: out.error || "Try again.", progress: 100, timeout: 4000 });
+        reject(new Error(out.error || "Upload failed"));
+        return;
+      }
+      notify({ id: "upload", kind: "success", title: "Upload complete", message: file.name, progress: 100, timeout: 2500 });
+      if (/^video\//.test(file.type) || /\.(mp4|webm|mov|m4v)$/i.test(file.name)) track("video_upload", { type: file.type || "video" });
+      resolve(out);
+    };
+    xhr.onerror = () => {
+      notify({ id: "upload", kind: "error", title: "Upload failed", message: "Check your connection and try again." });
+      reject(new Error("Upload failed"));
+    };
+    xhr.send(fd);
+  });
 }
 
 const isVideoUrl = (u) => /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(u || "");
@@ -589,7 +629,7 @@ function renderProjects() {
   const root = $("projects");
   root.innerHTML = "";
   if (!state.projects.length) {
-    root.innerHTML = `<span style="color:var(--muted);font-size:12px">No projects yet</span>`;
+    root.innerHTML = `<div class="panel-empty"><b>No projects yet</b><span>Create one from the studio home.</span><a class="btn sm primary" href="/app/new">New project</a></div>`;
     return;
   }
   for (const p of state.projects) {
@@ -633,8 +673,10 @@ function stopPlayback() {
 
 function refreshPreview() {
   stopPlayback();
+  $("phoneFrame")?.classList.add("is-loading");
 
   const onReady = () => {
+    $("phoneFrame")?.classList.remove("is-loading");
     scalePreview();
     try {
       const reel = getReel();
@@ -649,6 +691,7 @@ function refreshPreview() {
     } catch (_) {}
     pushOverlays();
     loadTemplateAudio();
+    seek(state.t);
   };
 
   if (state.sourceType === "html" && state.previewUrl) {
@@ -693,6 +736,10 @@ function seek(t) {
   state.t = Math.max(0, Math.min(state.duration, t));
   scrub.value = Math.round(state.t * 10);
   timeLabel.textContent = `${state.t.toFixed(1)}s`;
+  const mark = $("playheadMark");
+  if (mark && state.duration > 0) {
+    mark.style.width = `${Math.min(100, (state.t / state.duration) * 100)}%`;
+  }
   applyFade();
   const reel = getReel();
   if (reel?.setTime) {
@@ -782,6 +829,9 @@ async function loadProject(id) {
   state.codeLoaded = false;
   state.codeDirty = false;
   $("projectName").value = p.name;
+  const heading = $("editorHeading");
+  if (heading) heading.textContent = p.name;
+  document.title = `${p.name} — Reel Creator`;
   scrub.max = Math.round(state.duration * 10);
   setSaveState("Saved");
   renderProjects();
@@ -815,7 +865,7 @@ async function loadOutputs() {
           return `<a href="${o.url}" download>${escapeHtml(when)}${mb}</a>`;
         })
         .join("")
-    : `<span style="color:var(--muted);font-size:12px">No exports yet</span>`;
+    : `<div class="panel-empty"><b>No exports yet</b><span>When you export an MP4, it will show up here.</span></div>`;
 }
 
 function showExportTab() {
@@ -848,7 +898,13 @@ async function loadCodeEditor({ force = false } = {}) {
   const editor = $("codeEditor");
   if (!editor) return;
   if (state.codeDirty && state.codeLoaded && !force) {
-    if (!confirm("Reload and discard unsaved HTML changes?")) return;
+    const ok = await confirmDialog({
+      title: "Discard unsaved changes?",
+      message: "Reloading will throw away HTML edits you haven’t saved yet.",
+      confirmLabel: "Discard & reload",
+      danger: true,
+    });
+    if (!ok) return;
   }
   setStatus("Loading HTML…");
   try {
@@ -927,27 +983,53 @@ async function renderExport() {
   setStatus("Queued render…");
   try {
     const job = await api(`/api/projects/${state.projectId}/render`, { method: "POST", body: "{}" });
+    track("export", { status: "started" });
+    if (job.notice) $("download").textContent = job.notice;
     const poll = async () => {
       const j = await api(`/api/jobs/${job.id}`);
       bar.style.width = `${j.progress || 0}%`;
       if (j.status === "rendering" || j.status === "queued") {
         setStatus(`Rendering… ${Math.round(j.progress || 0)}%`);
+        notify({ id: "export", kind: "info", title: "Exporting reel", message: `${Math.round(j.progress || 0)}%`, progress: j.progress || 0, timeout: 0 });
         setTimeout(poll, 800);
         return;
       }
       $("btnRender").disabled = false;
+      dismiss("export");
       if (j.status === "done") {
+        track("export", { status: "complete" });
         setStatus("Export ready", "ok");
+        noticeDialog({
+          title: "Export complete",
+          message: "Your MP4 is ready. Download it from the Export tab or the link below.",
+          kind: "success",
+          confirmLabel: "Awesome",
+        });
         $("download").innerHTML = `<a class="btn primary" style="display:inline-block;text-decoration:none;margin-top:8px" href="${j.outputUrl}" download>Download MP4</a>`;
         loadOutputs();
       } else {
-        setStatus(j.error || "Render failed", "err");
+        track("error", { area: "export" });
+        const msg = friendlyError(j.error || "Render failed");
+        setStatus(msg, "err");
+        noticeDialog({
+          title: "We couldn’t export your reel",
+          message: `${msg} Please try again, or contact hello@reelcreator.app if it keeps happening.`,
+          kind: "error",
+          confirmLabel: "Try again",
+        });
       }
     };
     poll();
   } catch (e) {
     $("btnRender").disabled = false;
-    setStatus(e.message, "err");
+    const msg = friendlyError(e);
+    setStatus(msg, "err");
+    noticeDialog({
+      title: "We couldn’t export your reel",
+      message: msg,
+      kind: "error",
+      confirmLabel: "Got it",
+    });
   }
 }
 
@@ -1317,7 +1399,13 @@ function showGuide(on) {
 }
 
 addEventListener("keydown", (e) => {
-  if (!selected() || e.target.closest("input, textarea, select, [contenteditable]")) return;
+  if (e.target.closest("input, textarea, select, [contenteditable]")) return;
+  if (e.code === "Space" && state.view === "design") {
+    e.preventDefault();
+    playToggle();
+    return;
+  }
+  if (!selected()) return;
   const o = selected();
   if (e.key === "Delete" || e.key === "Backspace") {
     e.preventDefault();
@@ -1370,7 +1458,13 @@ $("btnSave").addEventListener("click", () => {
 });
 $("btnRender").addEventListener("click", renderExport);
 $("btnNew").addEventListener("click", () => (location.href = "/app/new"));
-$("projectName").addEventListener("input", scheduleAutosave);
+$("projectName").addEventListener("input", () => {
+  const name = $("projectName").value.trim() || "Untitled reel";
+  const heading = $("editorHeading");
+  if (heading) heading.textContent = name;
+  document.title = `${name} — Reel Creator`;
+  scheduleAutosave();
+});
 
 // Flush a pending autosave when the tab closes or navigates away
 addEventListener("pagehide", () => {

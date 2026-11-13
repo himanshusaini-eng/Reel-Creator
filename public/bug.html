@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Report a bug in Reel Creator.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>Report a bug — Reel Creator</title>
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-head">
+    <a class="brand" href="/help">reelcreator</a>
+    <a class="btn ghost" href="/help">Help</a>
+  </header>
+  <main id="main" class="page">
+    <div class="page-head"><div class="page-head-copy"><h1>Report a bug</h1><p class="page-head-sub">What happened, and what you expected. Include the page you were on.</p></div></div>
+    <form class="settings-card" data-support="bug" style="max-width:640px">
+      <label class="field"><span>Name</span><input class="input" name="name" autocomplete="name" maxlength="80"></label>
+      <label class="field"><span>Email</span><input class="input" name="email" type="email" autocomplete="email" required></label>
+      <label class="field"><span>Title</span><input class="input" name="title" required maxlength="80"></label>
+      <label class="field"><span>What happened</span><textarea class="input" name="message" required minlength="8" maxlength="5000"></textarea></label>
+      <div class="hp" aria-hidden="true"><label>Company<input name="company" tabindex="-1" autocomplete="off"></label></div>
+      <button class="btn primary" type="submit">Send report</button>
+    </form>
+  </main>
+  <script type="module" src="/forms.js"></script>
+</body>
+</html>

@@ -109,8 +109,18 @@ billingOptions.forEach((option) => {
     prices.forEach((price) => {
       const amount = price.dataset[yearly ? "yearly" : "monthly"];
       if (amount === undefined) return;
-      price.innerHTML = `$${amount}<small>/month</small>`;
-      price.setAttribute("aria-label", `$${amount} per month`);
+      price.innerHTML = `$${amount}<small>/mo</small>`;
+      price.setAttribute(
+        "aria-label",
+        amount === "0"
+          ? "Free"
+          : `$${amount} per month${yearly ? ", billed annually" : ""}`,
+      );
+    });
+    document.querySelectorAll(".plan-billing-note[data-note-monthly]").forEach((note) => {
+      note.textContent = yearly
+        ? note.dataset.noteYearly || "Billed annually"
+        : note.dataset.noteMonthly || "Billed monthly";
     });
   });
 });
@@ -153,7 +163,7 @@ if (templatesContainer) {
       const thumbnail = encodeURIComponent(template.thumbnail || "preview.svg");
       return `
       <a class="tpl-card" href="/app/new?template=${id}">
-        <img src="/templates/${id}/${thumbnail}" alt="" loading="lazy">
+        <img src="/templates/${id}/${thumbnail}" alt="${escapeHtml(template.name)} template preview" loading="lazy">
         <div><b>${escapeHtml(template.name)}</b><span>${escapeHtml(template.description || "")}</span></div>
       </a>`;
     }).join("");
@@ -280,64 +290,4 @@ if (testimonialTrack && testimonialViewport && testimonialCards.length) {
   resumeCarousel();
 }
 
-const trustedMarquee = document.getElementById("trustedMarquee");
-const trustedTrack = document.getElementById("trustedTrack");
-const trustedLogos = document.getElementById("trustedLogos");
-
-if (trustedMarquee && trustedTrack && trustedLogos) {
-  const trustedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const logoSeed = trustedLogos.innerHTML;
-  let trustedResizeTimer;
-
-  const setupTrustedMarquee = () => {
-    trustedTrack.classList.remove("is-ready");
-    trustedTrack.replaceChildren();
-
-    const gap = window.matchMedia("(max-width: 700px)").matches ? 52 : 72;
-    trustedTrack.style.gap = `${gap}px`;
-
-    const buildRow = () => {
-      const row = document.createElement("ul");
-      row.className = "platform-list";
-      row.innerHTML = logoSeed;
-      row.style.gap = `${gap}px`;
-      return row;
-    };
-
-    const primary = buildRow();
-    trustedTrack.appendChild(primary);
-
-    // Keep cloning until one segment always covers the visible strip.
-    const targetWidth = Math.max(trustedMarquee.clientWidth * 2, 900);
-    let guard = 0;
-    while (primary.scrollWidth < targetWidth && guard < 20) {
-      primary.insertAdjacentHTML("beforeend", logoSeed);
-      guard += 1;
-    }
-
-    const clone = primary.cloneNode(true);
-    trustedTrack.appendChild(clone);
-
-    const shift = primary.getBoundingClientRect().width + gap;
-    trustedTrack.style.setProperty("--trusted-shift", `${Math.round(shift)}px`);
-    trustedTrack.style.setProperty(
-      "--trusted-duration",
-      `${Math.max(28, Math.round(shift / 42))}s`
-    );
-
-    if (!trustedMotion.matches) {
-      requestAnimationFrame(() => trustedTrack.classList.add("is-ready"));
-    }
-  };
-
-  const scheduleTrustedSetup = () => {
-    window.clearTimeout(trustedResizeTimer);
-    trustedResizeTimer = window.setTimeout(setupTrustedMarquee, 60);
-  };
-
-  setupTrustedMarquee();
-  requestAnimationFrame(setupTrustedMarquee);
-  window.addEventListener("resize", scheduleTrustedSetup, { passive: true });
-  window.addEventListener("load", setupTrustedMarquee, { once: true });
-  trustedMotion.addEventListener("change", setupTrustedMarquee);
-}
+/* Trusted logo marquee removed in Phase 1 — early-access trust is static HTML. */
